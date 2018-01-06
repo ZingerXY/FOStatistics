@@ -6,6 +6,8 @@ ini_set('display_startup_errors', 1);*/
 
 include "config.php";
 
+$start = microtime(true);
+
 $query = "	SELECT  serv18_kills.id_killer,
 					(select serv18_chars.name from serv18_chars where serv18_chars.id=serv18_kills.id_killer) AS killer_name,
 					serv18_kills.faction_id_killer,
@@ -18,6 +20,9 @@ $query = "	SELECT  serv18_kills.id_killer,
 $result = mysqli_query($link, $query) or die(mysqli_error($link));
 for ($data_kills=[]; $row = mysqli_fetch_assoc($result); $data_kills[] = $row);
 
+$time1 = microtime(true) - $start;
+$start = microtime(true);
+
 $query = "	SELECT 	serv18_chars.id AS id,
 					serv18_chars.name AS char_name,		
 					(SELECT count(id_killer) FROM serv18_kills WHERE serv18_chars.id=serv18_kills.id_killer) AS kills,
@@ -28,6 +33,9 @@ $result = mysqli_query($link, $query) or die(mysqli_error($link));
 while($row = mysqli_fetch_assoc($result)) {
 	$data_stat[$row["id"]] = ["id" => $row["id"], "name" => $row["char_name"], "kills" => $row["kills"], "deth" => $row["deth"]];
 }
+
+$time2 = microtime(true) - $start;
+$start = microtime(true);
 
 $statchar = $data_stat;
 
@@ -60,7 +68,12 @@ foreach ($statchar as $id => $stat) {
 	$statchars[] = $stat;
 }
 
+$time3 = microtime(true) - $start;
+$start = microtime(true);
+
 usort($statchars, 'myCmp'); 
+
+$time4 = microtime(true) - $start;
 
 function myCmp($a, $b)
 {
@@ -104,6 +117,12 @@ function myCmp($a, $b)
 	</style>
 	</head>
 	<body>
+	<script>
+	console.log("Первый запрос: <?=$time1?>");
+	console.log("Второй запрос: <?=$time2?>");
+	console.log("Обработка данных: <?=$time3?>");
+	console.log("Сортировка: <?=$time4?>");
+	</script>
 	<table id='table'>
 	<tr>
 		<th class='td'>№</th>
