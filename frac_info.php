@@ -1,8 +1,8 @@
 <?php
 // Отладка
-ini_set('error_reporting', E_ALL);
+/*ini_set('error_reporting', E_ALL);
 ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
+ini_set('display_startup_errors', 1);*/
 
 include "config.php";
 
@@ -29,7 +29,10 @@ if(isset($_GET['s'])) {
 	$sess = filter_var(def($_GET['s']), FILTER_VALIDATE_INT, $filter);
 }
 
-if(isset($_REQUEST['frac_id']) && ctype_digit ($_REQUEST['frac_id'])) {
+// Проверка существования таблицы с префиксом
+$chrtbl = mysqli_query($link, "SHOW TABLES LIKE 'serv{$sess}_chars'") or die(mysqli_error($link));
+
+if(isset($_REQUEST['frac_id']) && ctype_digit ($_REQUEST['frac_id']) && mysqli_num_rows($chrtbl) > 0) {
 	$frac_id = def($_REQUEST['frac_id'],$link);
 	
 	$query = "	SELECT 	serv{$sess}_chars.id AS id,

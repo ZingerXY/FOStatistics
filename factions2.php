@@ -29,86 +29,91 @@ if(isset($_GET['s'])) {
 	$sess = filter_var(def($_GET['s']), FILTER_VALIDATE_INT, $filter);
 }
 
-$query = "	SELECT  serv{$sess}_kills.id_killer,
-					(select serv{$sess}_chars.name from serv{$sess}_chars where serv{$sess}_chars.id=serv{$sess}_kills.id_killer) AS killer_name,
-					serv{$sess}_kills.faction_id_killer,
-					(select serv{$sess}_factions.name from serv{$sess}_factions where serv{$sess}_factions.id=serv{$sess}_kills.faction_id_killer) AS killer_name_faction,
-					serv{$sess}_kills.id_victim,
-					(select serv{$sess}_chars.name from serv{$sess}_chars where serv{$sess}_chars.id=serv{$sess}_kills.id_victim) AS victim_name,
-					serv{$sess}_kills.faction_id_victim,
-					(select serv{$sess}_factions.name from serv{$sess}_factions where serv{$sess}_factions.id=serv{$sess}_kills.faction_id_victim) AS victim_name_faction
-			FROM serv{$sess}_kills
-			WHERE faction_id_killer <> 0 AND faction_id_victim <> 0";
-$result = mysqli_query($link, $query) or die(mysqli_error($link));
-for ($data_kills=[]; $row = mysqli_fetch_assoc($result); $data_kills[] = $row);
+// Проверка существования таблицы с префиксом
+$chrtbl = mysqli_query($link, "SHOW TABLES LIKE 'serv{$sess}_chars'") or die(mysqli_error($link));
 
-$query = "	SELECT 	serv{$sess}_factions.id AS id,
-			serv{$sess}_factions.name AS frac_name,		
-			(SELECT count(id_killer) FROM serv{$sess}_kills WHERE serv{$sess}_kills.faction_id_killer = serv{$sess}_factions.id AND serv{$sess}_kills.faction_id_victim <> 0) AS kills,
-			(SELECT count(id_victim) FROM serv{$sess}_kills WHERE serv{$sess}_kills.faction_id_victim = serv{$sess}_factions.id AND serv{$sess}_kills.faction_id_killer <> 0) AS deth
-	FROM serv{$sess}_factions
-	WHERE (SELECT count(id_killer) FROM serv{$sess}_kills WHERE serv{$sess}_factions.id=serv{$sess}_kills.faction_id_killer) > 0 OR (SELECT count(id_victim) FROM serv{$sess}_kills WHERE serv{$sess}_factions.id=serv{$sess}_kills.faction_id_victim) > 0 ";
-$result = mysqli_query($link, $query) or die(mysqli_error($link));
-$data_stat=[];
+if(mysqli_num_rows($chrtbl) > 0) {
 
-while($row = mysqli_fetch_assoc($result)) {
-	$data_stat[$row["id"]] = ["id" => $row["id"], "name" => $row["frac_name"], "kills" => $row["kills"], "deth" => $row["deth"]];
-}
+	$query = "	SELECT  serv{$sess}_kills.id_killer,
+						(select serv{$sess}_chars.name from serv{$sess}_chars where serv{$sess}_chars.id=serv{$sess}_kills.id_killer) AS killer_name,
+						serv{$sess}_kills.faction_id_killer,
+						(select serv{$sess}_factions.name from serv{$sess}_factions where serv{$sess}_factions.id=serv{$sess}_kills.faction_id_killer) AS killer_name_faction,
+						serv{$sess}_kills.id_victim,
+						(select serv{$sess}_chars.name from serv{$sess}_chars where serv{$sess}_chars.id=serv{$sess}_kills.id_victim) AS victim_name,
+						serv{$sess}_kills.faction_id_victim,
+						(select serv{$sess}_factions.name from serv{$sess}_factions where serv{$sess}_factions.id=serv{$sess}_kills.faction_id_victim) AS victim_name_faction
+				FROM serv{$sess}_kills
+				WHERE faction_id_killer <> 0 AND faction_id_victim <> 0";
+	$result = mysqli_query($link, $query) or die(mysqli_error($link));
+	for ($data_kills=[]; $row = mysqli_fetch_assoc($result); $data_kills[] = $row);
 
-$query = "	SELECT 	serv{$sess}_chars.id AS id,
-					serv{$sess}_chars.name AS char_name,		
-					(SELECT count(id_killer) FROM serv{$sess}_kills WHERE serv{$sess}_chars.id=serv{$sess}_kills.id_killer) AS kills,
-					(SELECT count(id_victim) FROM serv{$sess}_kills WHERE serv{$sess}_chars.id=serv{$sess}_kills.id_victim) AS deth
-			FROM serv{$sess}_chars
-			WHERE (SELECT count(id_killer) FROM serv{$sess}_kills WHERE serv{$sess}_chars.id=serv{$sess}_kills.id_killer) > 0 OR (SELECT count(id_victim) FROM serv{$sess}_kills WHERE serv{$sess}_chars.id=serv{$sess}_kills.id_victim) > 0";
-$result = mysqli_query($link, $query) or die(mysqli_error($link));
-$data_stat_char=[];
+	$query = "	SELECT 	serv{$sess}_factions.id AS id,
+				serv{$sess}_factions.name AS frac_name,		
+				(SELECT count(id_killer) FROM serv{$sess}_kills WHERE serv{$sess}_kills.faction_id_killer = serv{$sess}_factions.id AND serv{$sess}_kills.faction_id_victim <> 0) AS kills,
+				(SELECT count(id_victim) FROM serv{$sess}_kills WHERE serv{$sess}_kills.faction_id_victim = serv{$sess}_factions.id AND serv{$sess}_kills.faction_id_killer <> 0) AS deth
+		FROM serv{$sess}_factions
+		WHERE (SELECT count(id_killer) FROM serv{$sess}_kills WHERE serv{$sess}_factions.id=serv{$sess}_kills.faction_id_killer) > 0 OR (SELECT count(id_victim) FROM serv{$sess}_kills WHERE serv{$sess}_factions.id=serv{$sess}_kills.faction_id_victim) > 0 ";
+	$result = mysqli_query($link, $query) or die(mysqli_error($link));
+	$data_stat=[];
 
-while($row = mysqli_fetch_assoc($result)) {
-	$data_stat_char[$row["id"]] = ["id" => $row["id"], "name" => $row["char_name"], "kills" => $row["kills"], "deth" => $row["deth"]];
-}
-
-$statfrac = [];
-
-foreach ($data_stat as $id => $stat) {
-	$raiting = 0;
-	if($id != 0) {
-		foreach ($data_kills as $dkills) {
-			if($id == $dkills["faction_id_killer"] AND $dkills["faction_id_victim"] != 0) {			
-				$info = $data_stat_char[$dkills["id_victim"]];	
-				$kills = $info["kills"];
-				$score = 0;
-				if($kills > 0) {
-					$deth = $info["deth"];
-					$score = ($kills / ($kills + $deth));
-				}
-				$raiting += $score;
-			}
-			if($id == $dkills["faction_id_victim"] AND $dkills["faction_id_killer"] != 0) {
-				$info = $data_stat_char[$dkills["id_killer"]];	
-				$deth = $info["deth"];
-				$score = 0;
-				if($deth > 0) {
-					$kills = $info["kills"];
-					$score = -($deth / ($kills + $deth));
-				}
-				$raiting += $score;
-			}
-			
-		}
-		if($id == 243161)
-			$stat["name"] = "ЖЖЖЖЖЖЖЖЖЖ...";
-		$stat["raiting"] = $raiting;
-		$statfrac[] = $stat;
+	while($row = mysqli_fetch_assoc($result)) {
+		$data_stat[$row["id"]] = ["id" => $row["id"], "name" => $row["frac_name"], "kills" => $row["kills"], "deth" => $row["deth"]];
 	}
-}
 
-usort($statfrac, 'myCmp'); 
+	$query = "	SELECT 	serv{$sess}_chars.id AS id,
+						serv{$sess}_chars.name AS char_name,		
+						(SELECT count(id_killer) FROM serv{$sess}_kills WHERE serv{$sess}_chars.id=serv{$sess}_kills.id_killer) AS kills,
+						(SELECT count(id_victim) FROM serv{$sess}_kills WHERE serv{$sess}_chars.id=serv{$sess}_kills.id_victim) AS deth
+				FROM serv{$sess}_chars
+				WHERE (SELECT count(id_killer) FROM serv{$sess}_kills WHERE serv{$sess}_chars.id=serv{$sess}_kills.id_killer) > 0 OR (SELECT count(id_victim) FROM serv{$sess}_kills WHERE serv{$sess}_chars.id=serv{$sess}_kills.id_victim) > 0";
+	$result = mysqli_query($link, $query) or die(mysqli_error($link));
+	$data_stat_char=[];
 
-function myCmp($a, $b)
-{
-	return ($b["raiting"]*1000) - ($a["raiting"]*1000);
-}
+	while($row = mysqli_fetch_assoc($result)) {
+		$data_stat_char[$row["id"]] = ["id" => $row["id"], "name" => $row["char_name"], "kills" => $row["kills"], "deth" => $row["deth"]];
+	}
+
+	$statfrac = [];
+
+	foreach ($data_stat as $id => $stat) {
+		$raiting = 0;
+		if($id != 0) {
+			foreach ($data_kills as $dkills) {
+				if($id == $dkills["faction_id_killer"] AND $dkills["faction_id_victim"] != 0) {			
+					$info = $data_stat_char[$dkills["id_victim"]];	
+					$kills = $info["kills"];
+					$score = 0;
+					if($kills > 0) {
+						$deth = $info["deth"];
+						$score = ($kills / ($kills + $deth));
+					}
+					$raiting += $score;
+				}
+				if($id == $dkills["faction_id_victim"] AND $dkills["faction_id_killer"] != 0) {
+					$info = $data_stat_char[$dkills["id_killer"]];	
+					$deth = $info["deth"];
+					$score = 0;
+					if($deth > 0) {
+						$kills = $info["kills"];
+						$score = -($deth / ($kills + $deth));
+					}
+					$raiting += $score;
+				}
+				
+			}
+			if($id == 243161)
+				$stat["name"] = "ЖЖЖЖЖЖЖЖЖЖ...";
+			$stat["raiting"] = $raiting;
+			$statfrac[] = $stat;
+		}
+	}
+
+	usort($statfrac, 'myCmp'); 
+
+	function myCmp($a, $b)
+	{
+		return ($b["raiting"]*1000) - ($a["raiting"]*1000);
+	}
 ?>
 <html>
 	<head>
@@ -231,3 +236,5 @@ foreach($statfrac as $id => $sfrac)
 	</script>
 	</body>
 </html>
+<?
+}

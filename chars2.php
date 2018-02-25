@@ -29,79 +29,84 @@ if(isset($_GET['s'])) {
 	$sess = filter_var(def($_GET['s']), FILTER_VALIDATE_INT, $filter);
 }
 
-$start = microtime(true);
+// Проверка существования таблицы с префиксом
+$chrtbl = mysqli_query($link, "SHOW TABLES LIKE 'serv{$sess}_chars'") or die(mysqli_error($link));
 
-$query = "	SELECT  serv{$sess}_kills.id_killer,
-					(select serv{$sess}_chars.name from serv{$sess}_chars where serv{$sess}_chars.id=serv{$sess}_kills.id_killer) AS killer_name,
-					serv{$sess}_kills.faction_id_killer,
-					(select serv{$sess}_factions.name from serv{$sess}_factions where serv{$sess}_factions.id=serv{$sess}_kills.faction_id_killer) AS killer_name_faction,
-					serv{$sess}_kills.id_victim,
-					(select serv{$sess}_chars.name from serv{$sess}_chars where serv{$sess}_chars.id=serv{$sess}_kills.id_victim) AS victim_name,
-					serv{$sess}_kills.faction_id_victim,
-					(select serv{$sess}_factions.name from serv{$sess}_factions where serv{$sess}_factions.id=serv{$sess}_kills.faction_id_victim) AS victim_name_faction
-			FROM serv{$sess}_kills";
-$result = mysqli_query($link, $query) or die(mysqli_error($link));
-for ($data_kills=[]; $row = mysqli_fetch_assoc($result); $data_kills[] = $row);
+if(mysqli_num_rows($chrtbl) > 0) {
 
-$time1 = microtime(true) - $start;
-$start = microtime(true);
+	$start = microtime(true);
 
-$query = "	SELECT 	serv{$sess}_chars.id AS id,
-					serv{$sess}_chars.name AS char_name,		
-					(SELECT count(id_killer) FROM serv{$sess}_kills WHERE serv{$sess}_chars.id=serv{$sess}_kills.id_killer) AS kills,
-					(SELECT count(id_victim) FROM serv{$sess}_kills WHERE serv{$sess}_chars.id=serv{$sess}_kills.id_victim) AS deth
-			FROM serv{$sess}_chars
-			WHERE (SELECT count(id_killer) FROM serv{$sess}_kills WHERE serv{$sess}_chars.id=serv{$sess}_kills.id_killer) > 0 OR (SELECT count(id_victim) FROM serv{$sess}_kills WHERE serv{$sess}_chars.id=serv{$sess}_kills.id_victim) > 0";
-$result = mysqli_query($link, $query) or die(mysqli_error($link));
-while($row = mysqli_fetch_assoc($result)) {
-	$data_stat[$row["id"]] = ["id" => $row["id"], "name" => $row["char_name"], "kills" => $row["kills"], "deth" => $row["deth"]];
-}
+	$query = "	SELECT  serv{$sess}_kills.id_killer,
+						(select serv{$sess}_chars.name from serv{$sess}_chars where serv{$sess}_chars.id=serv{$sess}_kills.id_killer) AS killer_name,
+						serv{$sess}_kills.faction_id_killer,
+						(select serv{$sess}_factions.name from serv{$sess}_factions where serv{$sess}_factions.id=serv{$sess}_kills.faction_id_killer) AS killer_name_faction,
+						serv{$sess}_kills.id_victim,
+						(select serv{$sess}_chars.name from serv{$sess}_chars where serv{$sess}_chars.id=serv{$sess}_kills.id_victim) AS victim_name,
+						serv{$sess}_kills.faction_id_victim,
+						(select serv{$sess}_factions.name from serv{$sess}_factions where serv{$sess}_factions.id=serv{$sess}_kills.faction_id_victim) AS victim_name_faction
+				FROM serv{$sess}_kills";
+	$result = mysqli_query($link, $query) or die(mysqli_error($link));
+	for ($data_kills=[]; $row = mysqli_fetch_assoc($result); $data_kills[] = $row);
 
-$time2 = microtime(true) - $start;
-$start = microtime(true);
+	$time1 = microtime(true) - $start;
+	$start = microtime(true);
 
-$statchar = $data_stat;
-
-$statchars = [];
-foreach ($statchar as $id => $stat) {
-	$raiting = 0;
-	foreach ($data_kills as $dkills) {
-		if($id == $dkills["id_killer"] && isset($dkills["id_victim"]) && isset($statchar[$dkills["id_victim"]])) {
-			$info = $statchar[$dkills["id_victim"]];
-			$kills = $info["kills"];
-			$score = 0;
-			if($kills > 0) {
-				$deth = $info["deth"];
-				$score = ($kills / ($kills + $deth));
-			}
-			$raiting += $score;
-		}
-		if($id == $dkills["id_victim"] && isset($dkills["id_killer"]) && isset($statchar[$dkills["id_killer"]])) {
-			$info = $statchar[$dkills["id_killer"]];
-			$deth = $info["deth"];
-			$score = 0;
-			if($deth > 0) {
-				$kills = $info["kills"];
-				$score = -($deth / ($kills + $deth));
-			}
-			$raiting += $score;
-		}		
+	$query = "	SELECT 	serv{$sess}_chars.id AS id,
+						serv{$sess}_chars.name AS char_name,		
+						(SELECT count(id_killer) FROM serv{$sess}_kills WHERE serv{$sess}_chars.id=serv{$sess}_kills.id_killer) AS kills,
+						(SELECT count(id_victim) FROM serv{$sess}_kills WHERE serv{$sess}_chars.id=serv{$sess}_kills.id_victim) AS deth
+				FROM serv{$sess}_chars
+				WHERE (SELECT count(id_killer) FROM serv{$sess}_kills WHERE serv{$sess}_chars.id=serv{$sess}_kills.id_killer) > 0 OR (SELECT count(id_victim) FROM serv{$sess}_kills WHERE serv{$sess}_chars.id=serv{$sess}_kills.id_victim) > 0";
+	$result = mysqli_query($link, $query) or die(mysqli_error($link));
+	while($row = mysqli_fetch_assoc($result)) {
+		$data_stat[$row["id"]] = ["id" => $row["id"], "name" => $row["char_name"], "kills" => $row["kills"], "deth" => $row["deth"]];
 	}
-	$stat["raiting"] = $raiting;
-	$statchars[] = $stat;
-}
 
-$time3 = microtime(true) - $start;
-$start = microtime(true);
+	$time2 = microtime(true) - $start;
+	$start = microtime(true);
 
-usort($statchars, 'myCmp'); 
+	$statchar = $data_stat;
 
-$time4 = microtime(true) - $start;
+	$statchars = [];
+	foreach ($statchar as $id => $stat) {
+		$raiting = 0;
+		foreach ($data_kills as $dkills) {
+			if($id == $dkills["id_killer"] && isset($dkills["id_victim"]) && isset($statchar[$dkills["id_victim"]])) {
+				$info = $statchar[$dkills["id_victim"]];
+				$kills = $info["kills"];
+				$score = 0;
+				if($kills > 0) {
+					$deth = $info["deth"];
+					$score = ($kills / ($kills + $deth));
+				}
+				$raiting += $score;
+			}
+			if($id == $dkills["id_victim"] && isset($dkills["id_killer"]) && isset($statchar[$dkills["id_killer"]])) {
+				$info = $statchar[$dkills["id_killer"]];
+				$deth = $info["deth"];
+				$score = 0;
+				if($deth > 0) {
+					$kills = $info["kills"];
+					$score = -($deth / ($kills + $deth));
+				}
+				$raiting += $score;
+			}		
+		}
+		$stat["raiting"] = $raiting;
+		$statchars[] = $stat;
+	}
 
-function myCmp($a, $b)
-{
-	return ($b["raiting"]*1000) - ($a["raiting"]*1000);
-}
+	$time3 = microtime(true) - $start;
+	$start = microtime(true);
+
+	usort($statchars, 'myCmp'); 
+
+	$time4 = microtime(true) - $start;
+
+	function myCmp($a, $b)
+	{
+		return ($b["raiting"]*1000) - ($a["raiting"]*1000);
+	}
 ?>
 <html>
 	<head>
@@ -230,3 +235,5 @@ function myCmp($a, $b)
 	</script>
 	</body>
 </html>
+<?
+}
