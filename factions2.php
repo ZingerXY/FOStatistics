@@ -15,6 +15,11 @@ function def($text,$linksql = false) {
 	return $result;
 }
 
+function myCmp($a, $b)
+{
+	return ($b["raiting"]*1000) - ($a["raiting"]*1000);
+}
+
 $filter = array(
 	'options' => array(
 		'default' => 0, // значение, возвращаемое, если фильтрация завершилась неудачей
@@ -109,11 +114,6 @@ if(mysqli_num_rows($chrtbl) > 0) {
 	}
 
 	usort($statfrac, 'myCmp'); 
-
-	function myCmp($a, $b)
-	{
-		return ($b["raiting"]*1000) - ($a["raiting"]*1000);
-	}
 ?>
 <html>
 	<head>
