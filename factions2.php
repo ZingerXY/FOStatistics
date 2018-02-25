@@ -1,29 +1,53 @@
 <?php
-include "config.php";
-
+// Отладка
 /*ini_set('error_reporting', E_ALL);
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);*/
 
-$query = "	SELECT  serv18_kills.id_killer,
-					(select serv18_chars.name from serv18_chars where serv18_chars.id=serv18_kills.id_killer) AS killer_name,
-					serv18_kills.faction_id_killer,
-					(select serv18_factions.name from serv18_factions where serv18_factions.id=serv18_kills.faction_id_killer) AS killer_name_faction,
-					serv18_kills.id_victim,
-					(select serv18_chars.name from serv18_chars where serv18_chars.id=serv18_kills.id_victim) AS victim_name,
-					serv18_kills.faction_id_victim,
-					(select serv18_factions.name from serv18_factions where serv18_factions.id=serv18_kills.faction_id_victim) AS victim_name_faction
-			FROM serv18_kills
+include "config.php";
+
+// защита БД от SQL иньекций
+function def($text,$linksql = false) {
+	$result = strip_tags($text);
+	$result = htmlspecialchars($result);
+	if($linksql)
+		$result = mysqli_real_escape_string ($linksql, $result);
+	return $result;
+}
+
+$filter = array(
+	'options' => array(
+		'default' => 0, // значение, возвращаемое, если фильтрация завершилась неудачей
+		// другие параметры
+		'min_range' => 0
+	),
+	'flags' => FILTER_FLAG_ALLOW_OCTAL,
+);
+
+$sess = 18;
+if(isset($_GET['s'])) {
+	$sess = filter_var(def($_GET['s']), FILTER_VALIDATE_INT, $filter);
+}
+
+$query = "	SELECT  serv{$sess}_kills.id_killer,
+					(select serv{$sess}_chars.name from serv{$sess}_chars where serv{$sess}_chars.id=serv{$sess}_kills.id_killer) AS killer_name,
+					serv{$sess}_kills.faction_id_killer,
+					(select serv{$sess}_factions.name from serv{$sess}_factions where serv{$sess}_factions.id=serv{$sess}_kills.faction_id_killer) AS killer_name_faction,
+					serv{$sess}_kills.id_victim,
+					(select serv{$sess}_chars.name from serv{$sess}_chars where serv{$sess}_chars.id=serv{$sess}_kills.id_victim) AS victim_name,
+					serv{$sess}_kills.faction_id_victim,
+					(select serv{$sess}_factions.name from serv{$sess}_factions where serv{$sess}_factions.id=serv{$sess}_kills.faction_id_victim) AS victim_name_faction
+			FROM serv{$sess}_kills
 			WHERE faction_id_killer <> 0 AND faction_id_victim <> 0";
 $result = mysqli_query($link, $query) or die(mysqli_error($link));
 for ($data_kills=[]; $row = mysqli_fetch_assoc($result); $data_kills[] = $row);
 
-$query = "	SELECT 	serv18_factions.id AS id,
-			serv18_factions.name AS frac_name,		
-			(SELECT count(id_killer) FROM serv18_kills WHERE serv18_kills.faction_id_killer = serv18_factions.id AND serv18_kills.faction_id_victim <> 0) AS kills,
-			(SELECT count(id_victim) FROM serv18_kills WHERE serv18_kills.faction_id_victim = serv18_factions.id AND serv18_kills.faction_id_killer <> 0) AS deth
-	FROM serv18_factions
-	WHERE (SELECT count(id_killer) FROM serv18_kills WHERE serv18_factions.id=serv18_kills.faction_id_killer) > 0 OR (SELECT count(id_victim) FROM serv18_kills WHERE serv18_factions.id=serv18_kills.faction_id_victim) > 0 ";
+$query = "	SELECT 	serv{$sess}_factions.id AS id,
+			serv{$sess}_factions.name AS frac_name,		
+			(SELECT count(id_killer) FROM serv{$sess}_kills WHERE serv{$sess}_kills.faction_id_killer = serv{$sess}_factions.id AND serv{$sess}_kills.faction_id_victim <> 0) AS kills,
+			(SELECT count(id_victim) FROM serv{$sess}_kills WHERE serv{$sess}_kills.faction_id_victim = serv{$sess}_factions.id AND serv{$sess}_kills.faction_id_killer <> 0) AS deth
+	FROM serv{$sess}_factions
+	WHERE (SELECT count(id_killer) FROM serv{$sess}_kills WHERE serv{$sess}_factions.id=serv{$sess}_kills.faction_id_killer) > 0 OR (SELECT count(id_victim) FROM serv{$sess}_kills WHERE serv{$sess}_factions.id=serv{$sess}_kills.faction_id_victim) > 0 ";
 $result = mysqli_query($link, $query) or die(mysqli_error($link));
 $data_stat=[];
 
@@ -31,12 +55,12 @@ while($row = mysqli_fetch_assoc($result)) {
 	$data_stat[$row["id"]] = ["id" => $row["id"], "name" => $row["frac_name"], "kills" => $row["kills"], "deth" => $row["deth"]];
 }
 
-$query = "	SELECT 	serv18_chars.id AS id,
-					serv18_chars.name AS char_name,		
-					(SELECT count(id_killer) FROM serv18_kills WHERE serv18_chars.id=serv18_kills.id_killer) AS kills,
-					(SELECT count(id_victim) FROM serv18_kills WHERE serv18_chars.id=serv18_kills.id_victim) AS deth
-			FROM serv18_chars
-			WHERE (SELECT count(id_killer) FROM serv18_kills WHERE serv18_chars.id=serv18_kills.id_killer) > 0 OR (SELECT count(id_victim) FROM serv18_kills WHERE serv18_chars.id=serv18_kills.id_victim) > 0";
+$query = "	SELECT 	serv{$sess}_chars.id AS id,
+					serv{$sess}_chars.name AS char_name,		
+					(SELECT count(id_killer) FROM serv{$sess}_kills WHERE serv{$sess}_chars.id=serv{$sess}_kills.id_killer) AS kills,
+					(SELECT count(id_victim) FROM serv{$sess}_kills WHERE serv{$sess}_chars.id=serv{$sess}_kills.id_victim) AS deth
+			FROM serv{$sess}_chars
+			WHERE (SELECT count(id_killer) FROM serv{$sess}_kills WHERE serv{$sess}_chars.id=serv{$sess}_kills.id_killer) > 0 OR (SELECT count(id_victim) FROM serv{$sess}_kills WHERE serv{$sess}_chars.id=serv{$sess}_kills.id_victim) > 0";
 $result = mysqli_query($link, $query) or die(mysqli_error($link));
 $data_stat_char=[];
 
@@ -139,7 +163,7 @@ foreach($statfrac as $id => $sfrac)
 	?>
 	<tr>
 		<td class='td'><?=$num++?></td>
-		<td class='td'><a href='frac_info.php?frac_id=<?=$sfrac['id']?>'><?=$sfrac['name']?></a></td>
+		<td class='td'><a href='frac_info.php?s=<?=$sess?>&frac_id=<?=$sfrac['id']?>'><?=$sfrac['name']?></a></td>
 		<td class='td'><?=$sfrac['kills']?></td>
 		<td class='td'><?=$sfrac['deth']?></td>
 		<td class='td'><span class="<?=($resreit<0?"red":"green")?>"><?=$resreit?></span></td>

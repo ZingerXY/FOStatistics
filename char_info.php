@@ -1,10 +1,11 @@
 <?php
-
+// Отладка
 /*ini_set('error_reporting', E_ALL);
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);*/
 
 include "config.php";
+
 // защита БД от SQL иньекций
 function def($text,$linksql = false) {
 	$result = strip_tags($text);
@@ -14,15 +15,29 @@ function def($text,$linksql = false) {
 	return $result;
 }
 
+$filter = array(
+	'options' => array(
+		'default' => 0, // значение, возвращаемое, если фильтрация завершилась неудачей
+		// другие параметры
+		'min_range' => 0
+	),
+	'flags' => FILTER_FLAG_ALLOW_OCTAL,
+);
+
+$sess = 18;
+if(isset($_GET['s'])) {
+	$sess = filter_var(def($_GET['s']), FILTER_VALIDATE_INT, $filter);
+}
+
 if(isset($_REQUEST['char_id']) && ctype_digit ($_REQUEST['char_id'])) {
 	$char_id = def($_REQUEST['char_id'],$link);
 	
-	$query = "	SELECT 	serv18_chars.id AS id,
-						serv18_chars.name AS char_name,		
-						(SELECT count(id_killer) FROM serv18_kills WHERE serv18_chars.id=serv18_kills.id_killer) AS kills,
-						(SELECT count(id_victim) FROM serv18_kills WHERE serv18_chars.id=serv18_kills.id_victim) AS deth
-				FROM serv18_chars
-				WHERE (SELECT count(id_killer) FROM serv18_kills WHERE serv18_chars.id=serv18_kills.id_killer) > 0 OR (SELECT count(id_victim) FROM serv18_kills WHERE serv18_chars.id=serv18_kills.id_victim) > 0";
+	$query = "	SELECT 	serv{$sess}_chars.id AS id,
+						serv{$sess}_chars.name AS char_name,		
+						(SELECT count(id_killer) FROM serv{$sess}_kills WHERE serv{$sess}_chars.id=serv{$sess}_kills.id_killer) AS kills,
+						(SELECT count(id_victim) FROM serv{$sess}_kills WHERE serv{$sess}_chars.id=serv{$sess}_kills.id_victim) AS deth
+				FROM serv{$sess}_chars
+				WHERE (SELECT count(id_killer) FROM serv{$sess}_kills WHERE serv{$sess}_chars.id=serv{$sess}_kills.id_killer) > 0 OR (SELECT count(id_victim) FROM serv{$sess}_kills WHERE serv{$sess}_chars.id=serv{$sess}_kills.id_victim) > 0";
 	$result = mysqli_query($link, $query) or die(mysqli_error($link));
 	$data_stat=[];
 
@@ -30,21 +45,21 @@ if(isset($_REQUEST['char_id']) && ctype_digit ($_REQUEST['char_id'])) {
 		$data_stat[$row["id"]] = ["id" => $row["id"], "name" => $row["char_name"], "kills" => $row["kills"], "deth" => $row["deth"]];
 	}
 
-	$query = "SELECT DISTINCT serv18_kills.id_killer AS killer_id,
-					(select serv18_chars.name from serv18_chars where serv18_chars.id=serv18_kills.id_killer) AS killer_name,
-					serv18_kills.faction_id_killer,
-					(select serv18_factions.name from serv18_factions where serv18_factions.id=serv18_kills.faction_id_killer) AS killer_name_faction,
-					serv18_kills.id_victim AS victim_id,		
-					(select count(id_victim) from serv18_kills where id_killer = '$char_id' AND serv18_kills.id_victim=victim_id) AS counts_kills,
-					(select serv18_chars.name from serv18_chars where serv18_chars.id=serv18_kills.id_victim) AS victim_name,
-					serv18_kills.faction_id_victim,
-					(select serv18_factions.name from serv18_factions where serv18_factions.id=serv18_kills.faction_id_victim) AS victim_name_faction
-			FROM serv18_kills
+	$query = "SELECT DISTINCT serv{$sess}_kills.id_killer AS killer_id,
+					(select serv{$sess}_chars.name from serv{$sess}_chars where serv{$sess}_chars.id=serv{$sess}_kills.id_killer) AS killer_name,
+					serv{$sess}_kills.faction_id_killer,
+					(select serv{$sess}_factions.name from serv{$sess}_factions where serv{$sess}_factions.id=serv{$sess}_kills.faction_id_killer) AS killer_name_faction,
+					serv{$sess}_kills.id_victim AS victim_id,		
+					(select count(id_victim) from serv{$sess}_kills where id_killer = '$char_id' AND serv{$sess}_kills.id_victim=victim_id) AS counts_kills,
+					(select serv{$sess}_chars.name from serv{$sess}_chars where serv{$sess}_chars.id=serv{$sess}_kills.id_victim) AS victim_name,
+					serv{$sess}_kills.faction_id_victim,
+					(select serv{$sess}_factions.name from serv{$sess}_factions where serv{$sess}_factions.id=serv{$sess}_kills.faction_id_victim) AS victim_name_faction
+			FROM serv{$sess}_kills
 			WHERE id_killer = '$char_id'
 			ORDER BY counts_kills DESC";	
 	$result = mysqli_query($link, $query) or die(mysqli_error($link));
 	
-	$reschar = mysqli_query($link, "SELECT id,name FROM serv18_chars WHERE id = '$char_id'");
+	$reschar = mysqli_query($link, "SELECT id,name FROM serv{$sess}_chars WHERE id = '$char_id'");
 	$char_info = mysqli_fetch_assoc($reschar);
 	
 	$player_name = "";
@@ -85,7 +100,7 @@ if(isset($_REQUEST['char_id']) && ctype_digit ($_REQUEST['char_id'])) {
 		if(!$victim_name)
 			$victim_name = "<span class='red'>delete</span>";
 		$kills .= 	"<tr>
-						<td class='td' title='".$row['victim_id']."'><a href='char_info.php?char_id=".$row['victim_id']."'>".$victim_name."</a></td>
+						<td class='td' title='".$row['victim_id']."'><a href='char_info.php?s={$sess}&char_id=".$row['victim_id']."'>".$victim_name."</a></td>
 						<td class='td' title='".$row['faction_id_victim']."'>".$row['victim_name_faction']."</td>	
 						<td class='td'>".$row['counts_kills']."</td>
 						<td class='td green' title='$formula'>".round($score, 3)."</td>
@@ -96,16 +111,16 @@ if(isset($_REQUEST['char_id']) && ctype_digit ($_REQUEST['char_id'])) {
 					<td class='td green'>".round($raitingkills, 3)."</td>
 				</tr>";
 
-	$query = "SELECT DISTINCT serv18_kills.id_killer AS killer_id,
-					(select serv18_chars.name from serv18_chars where serv18_chars.id=serv18_kills.id_killer) AS killer_name,
-					serv18_kills.faction_id_killer,
-					(select serv18_factions.name from serv18_factions where serv18_factions.id=serv18_kills.faction_id_killer) AS killer_name_faction,
-					serv18_kills.id_victim AS victim_id,		
-					(select count(id_victim) from serv18_kills where id_killer = killer_id AND serv18_kills.id_victim=$char_id) AS counts_kills,
-					(select serv18_chars.name from serv18_chars where serv18_chars.id=serv18_kills.id_victim) AS victim_name,
-					serv18_kills.faction_id_victim,
-					(select serv18_factions.name from serv18_factions where serv18_factions.id=serv18_kills.faction_id_victim) AS victim_name_faction
-			FROM serv18_kills
+	$query = "SELECT DISTINCT serv{$sess}_kills.id_killer AS killer_id,
+					(select serv{$sess}_chars.name from serv{$sess}_chars where serv{$sess}_chars.id=serv{$sess}_kills.id_killer) AS killer_name,
+					serv{$sess}_kills.faction_id_killer,
+					(select serv{$sess}_factions.name from serv{$sess}_factions where serv{$sess}_factions.id=serv{$sess}_kills.faction_id_killer) AS killer_name_faction,
+					serv{$sess}_kills.id_victim AS victim_id,		
+					(select count(id_victim) from serv{$sess}_kills where id_killer = killer_id AND serv{$sess}_kills.id_victim=$char_id) AS counts_kills,
+					(select serv{$sess}_chars.name from serv{$sess}_chars where serv{$sess}_chars.id=serv{$sess}_kills.id_victim) AS victim_name,
+					serv{$sess}_kills.faction_id_victim,
+					(select serv{$sess}_factions.name from serv{$sess}_factions where serv{$sess}_factions.id=serv{$sess}_kills.faction_id_victim) AS victim_name_faction
+			FROM serv{$sess}_kills
 			WHERE id_victim = $char_id
 			ORDER BY counts_kills DESC";
 	$result = mysqli_query($link, $query) or die(mysqli_error($link));
@@ -134,7 +149,7 @@ if(isset($_REQUEST['char_id']) && ctype_digit ($_REQUEST['char_id'])) {
 		if(!$killer_name)
 			$killer_name = "<span class='red'>delete</span>";
 		$victim .= 	"<tr>
-						<td class='td' title='".$row['killer_id']."'><a href='char_info.php?char_id=".$row['killer_id']."'>".$killer_name."</a></td>
+						<td class='td' title='".$row['killer_id']."'><a href='char_info.php?s={$sess}&char_id=".$row['killer_id']."'>".$killer_name."</a></td>
 						<td class='td' title='".$row['faction_id_killer']."'>".$row["killer_name_faction"]."</td>
 						<td class='td'>".$row['counts_kills']."</td>
 						<td class='td red' title='$formula'>".round($score, 3)."</td>
@@ -188,7 +203,7 @@ if(isset($_REQUEST['char_id']) && ctype_digit ($_REQUEST['char_id'])) {
 	</head>
 	<body>
 	<div id="title">
-		<a href="chars2.php">Character statistics</a>	
+		<a href="chars2.php?s=<?=$sess?>">Character statistics</a>	
 		<div>Character: <?=$player_name?></div>
 		<div>Faction: <?=($player_frac?$player_frac:"-")?></div>		
 		<div>Kills: <?=$player_kill?></div>

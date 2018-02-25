@@ -1,34 +1,57 @@
 <?php
-
+// Отладка
 /*ini_set('error_reporting', E_ALL);
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);*/
 
 include "config.php";
 
+// защита БД от SQL иньекций
+function def($text,$linksql = false) {
+	$result = strip_tags($text);
+	$result = htmlspecialchars($result);
+	if($linksql)
+		$result = mysqli_real_escape_string ($linksql, $result);
+	return $result;
+}
+
+$filter = array(
+	'options' => array(
+		'default' => 0, // значение, возвращаемое, если фильтрация завершилась неудачей
+		// другие параметры
+		'min_range' => 0
+	),
+	'flags' => FILTER_FLAG_ALLOW_OCTAL,
+);
+
+$sess = 18;
+if(isset($_GET['s'])) {
+	$sess = filter_var(def($_GET['s']), FILTER_VALIDATE_INT, $filter);
+}
+
 $start = microtime(true);
 
-$query = "	SELECT  serv18_kills.id_killer,
-					(select serv18_chars.name from serv18_chars where serv18_chars.id=serv18_kills.id_killer) AS killer_name,
-					serv18_kills.faction_id_killer,
-					(select serv18_factions.name from serv18_factions where serv18_factions.id=serv18_kills.faction_id_killer) AS killer_name_faction,
-					serv18_kills.id_victim,
-					(select serv18_chars.name from serv18_chars where serv18_chars.id=serv18_kills.id_victim) AS victim_name,
-					serv18_kills.faction_id_victim,
-					(select serv18_factions.name from serv18_factions where serv18_factions.id=serv18_kills.faction_id_victim) AS victim_name_faction
-			FROM serv18_kills";
+$query = "	SELECT  serv{$sess}_kills.id_killer,
+					(select serv{$sess}_chars.name from serv{$sess}_chars where serv{$sess}_chars.id=serv{$sess}_kills.id_killer) AS killer_name,
+					serv{$sess}_kills.faction_id_killer,
+					(select serv{$sess}_factions.name from serv{$sess}_factions where serv{$sess}_factions.id=serv{$sess}_kills.faction_id_killer) AS killer_name_faction,
+					serv{$sess}_kills.id_victim,
+					(select serv{$sess}_chars.name from serv{$sess}_chars where serv{$sess}_chars.id=serv{$sess}_kills.id_victim) AS victim_name,
+					serv{$sess}_kills.faction_id_victim,
+					(select serv{$sess}_factions.name from serv{$sess}_factions where serv{$sess}_factions.id=serv{$sess}_kills.faction_id_victim) AS victim_name_faction
+			FROM serv{$sess}_kills";
 $result = mysqli_query($link, $query) or die(mysqli_error($link));
 for ($data_kills=[]; $row = mysqli_fetch_assoc($result); $data_kills[] = $row);
 
 $time1 = microtime(true) - $start;
 $start = microtime(true);
 
-$query = "	SELECT 	serv18_chars.id AS id,
-					serv18_chars.name AS char_name,		
-					(SELECT count(id_killer) FROM serv18_kills WHERE serv18_chars.id=serv18_kills.id_killer) AS kills,
-					(SELECT count(id_victim) FROM serv18_kills WHERE serv18_chars.id=serv18_kills.id_victim) AS deth
-			FROM serv18_chars
-			WHERE (SELECT count(id_killer) FROM serv18_kills WHERE serv18_chars.id=serv18_kills.id_killer) > 0 OR (SELECT count(id_victim) FROM serv18_kills WHERE serv18_chars.id=serv18_kills.id_victim) > 0";
+$query = "	SELECT 	serv{$sess}_chars.id AS id,
+					serv{$sess}_chars.name AS char_name,		
+					(SELECT count(id_killer) FROM serv{$sess}_kills WHERE serv{$sess}_chars.id=serv{$sess}_kills.id_killer) AS kills,
+					(SELECT count(id_victim) FROM serv{$sess}_kills WHERE serv{$sess}_chars.id=serv{$sess}_kills.id_victim) AS deth
+			FROM serv{$sess}_chars
+			WHERE (SELECT count(id_killer) FROM serv{$sess}_kills WHERE serv{$sess}_chars.id=serv{$sess}_kills.id_killer) > 0 OR (SELECT count(id_victim) FROM serv{$sess}_kills WHERE serv{$sess}_chars.id=serv{$sess}_kills.id_victim) > 0";
 $result = mysqli_query($link, $query) or die(mysqli_error($link));
 while($row = mysqli_fetch_assoc($result)) {
 	$data_stat[$row["id"]] = ["id" => $row["id"], "name" => $row["char_name"], "kills" => $row["kills"], "deth" => $row["deth"]];
@@ -139,7 +162,7 @@ function myCmp($a, $b)
 		?>
 		<tr>
 			<td class='td'><?=$num++?></td>
-			<td class='td'><a href='char_info.php?char_id=<?=$schar['id']?>' title='<?=$schar['id']?>'><?=$schar['name']?></a></td>
+			<td class='td'><a href='char_info.php?s=<?=$sess?>&char_id=<?=$schar['id']?>' title='<?=$schar['id']?>'><?=$schar['name']?></a></td>
 			<td class='td'><?=$schar['kills']?></td>
 			<td class='td'><?=$schar['deth']?></td>
 			<td class='td'><span class="<?=($resreit<0?"red":"green")?>"><?=$resreit?></span></td>
