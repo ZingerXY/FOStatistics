@@ -40,13 +40,13 @@ $chrtbl = mysqli_query($link, "SHOW TABLES LIKE 'serv{$sess}_chars'") or die(mys
 if(mysqli_num_rows($chrtbl) > 0) {
 
 	$query = "	SELECT  serv{$sess}_kills.id_killer,
-						(select serv{$sess}_chars.name from serv{$sess}_chars where serv{$sess}_chars.id=serv{$sess}_kills.id_killer) AS killer_name,
+						(select serv{$sess}_chars.name from serv{$sess}_chars where serv{$sess}_chars.id=serv{$sess}_kills.id_killer LIMIT 1) AS killer_name,
 						serv{$sess}_kills.faction_id_killer,
-						(select serv{$sess}_factions.name from serv{$sess}_factions where serv{$sess}_factions.id=serv{$sess}_kills.faction_id_killer) AS killer_name_faction,
+						(select serv{$sess}_factions.name from serv{$sess}_factions where serv{$sess}_factions.id=serv{$sess}_kills.faction_id_killer LIMIT 1) AS killer_name_faction,
 						serv{$sess}_kills.id_victim,
-						(select serv{$sess}_chars.name from serv{$sess}_chars where serv{$sess}_chars.id=serv{$sess}_kills.id_victim) AS victim_name,
+						(select serv{$sess}_chars.name from serv{$sess}_chars where serv{$sess}_chars.id=serv{$sess}_kills.id_victim LIMIT 1) AS victim_name,
 						serv{$sess}_kills.faction_id_victim,
-						(select serv{$sess}_factions.name from serv{$sess}_factions where serv{$sess}_factions.id=serv{$sess}_kills.faction_id_victim) AS victim_name_faction
+						(select serv{$sess}_factions.name from serv{$sess}_factions where serv{$sess}_factions.id=serv{$sess}_kills.faction_id_victim LIMIT 1) AS victim_name_faction
 				FROM serv{$sess}_kills
 				WHERE faction_id_killer <> 0 AND faction_id_victim <> 0";
 	$result = mysqli_query($link, $query) or die(mysqli_error($link));
@@ -54,10 +54,10 @@ if(mysqli_num_rows($chrtbl) > 0) {
 
 	$query = "	SELECT 	serv{$sess}_factions.id AS id,
 				serv{$sess}_factions.name AS frac_name,		
-				(SELECT count(id_killer) FROM serv{$sess}_kills WHERE serv{$sess}_kills.faction_id_killer = serv{$sess}_factions.id AND serv{$sess}_kills.faction_id_victim <> 0) AS kills,
-				(SELECT count(id_victim) FROM serv{$sess}_kills WHERE serv{$sess}_kills.faction_id_victim = serv{$sess}_factions.id AND serv{$sess}_kills.faction_id_killer <> 0) AS deth
+				(SELECT count(id_killer) FROM serv{$sess}_kills WHERE serv{$sess}_kills.faction_id_killer = serv{$sess}_factions.id AND serv{$sess}_kills.faction_id_victim <> 0 LIMIT 1) AS kills,
+				(SELECT count(id_victim) FROM serv{$sess}_kills WHERE serv{$sess}_kills.faction_id_victim = serv{$sess}_factions.id AND serv{$sess}_kills.faction_id_killer <> 0 LIMIT 1) AS deth
 		FROM serv{$sess}_factions
-		WHERE (SELECT count(id_killer) FROM serv{$sess}_kills WHERE serv{$sess}_factions.id=serv{$sess}_kills.faction_id_killer) > 0 OR (SELECT count(id_victim) FROM serv{$sess}_kills WHERE serv{$sess}_factions.id=serv{$sess}_kills.faction_id_victim) > 0 ";
+		WHERE (SELECT count(id_killer) FROM serv{$sess}_kills WHERE serv{$sess}_factions.id=serv{$sess}_kills.faction_id_killer LIMIT 1) > 0 OR (SELECT count(id_victim) FROM serv{$sess}_kills WHERE serv{$sess}_factions.id=serv{$sess}_kills.faction_id_victim LIMIT 1) > 0 ";
 	$result = mysqli_query($link, $query) or die(mysqli_error($link));
 	$data_stat=[];
 
@@ -67,10 +67,10 @@ if(mysqli_num_rows($chrtbl) > 0) {
 
 	$query = "	SELECT 	serv{$sess}_chars.id AS id,
 						serv{$sess}_chars.name AS char_name,		
-						(SELECT count(id_killer) FROM serv{$sess}_kills WHERE serv{$sess}_chars.id=serv{$sess}_kills.id_killer) AS kills,
-						(SELECT count(id_victim) FROM serv{$sess}_kills WHERE serv{$sess}_chars.id=serv{$sess}_kills.id_victim) AS deth
+						(SELECT count(id_killer) FROM serv{$sess}_kills WHERE serv{$sess}_chars.id=serv{$sess}_kills.id_killer LIMIT 1) AS kills,
+						(SELECT count(id_victim) FROM serv{$sess}_kills WHERE serv{$sess}_chars.id=serv{$sess}_kills.id_victim LIMIT 1) AS deth
 				FROM serv{$sess}_chars
-				WHERE (SELECT count(id_killer) FROM serv{$sess}_kills WHERE serv{$sess}_chars.id=serv{$sess}_kills.id_killer) > 0 OR (SELECT count(id_victim) FROM serv{$sess}_kills WHERE serv{$sess}_chars.id=serv{$sess}_kills.id_victim) > 0";
+				WHERE (SELECT count(id_killer) FROM serv{$sess}_kills WHERE serv{$sess}_chars.id=serv{$sess}_kills.id_killer LIMIT 1) > 0 OR (SELECT count(id_victim) FROM serv{$sess}_kills WHERE serv{$sess}_chars.id=serv{$sess}_kills.id_victim LIMIT 1) > 0";
 	$result = mysqli_query($link, $query) or die(mysqli_error($link));
 	$data_stat_char=[];
 

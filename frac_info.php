@@ -37,10 +37,10 @@ if(isset($_REQUEST['frac_id']) && ctype_digit ($_REQUEST['frac_id']) && mysqli_n
 	
 	$query = "	SELECT 	serv{$sess}_chars.id AS id,
 						serv{$sess}_chars.name AS char_name,		
-						(SELECT count(id_killer) FROM serv{$sess}_kills WHERE serv{$sess}_chars.id=serv{$sess}_kills.id_killer) AS kills,
-						(SELECT count(id_victim) FROM serv{$sess}_kills WHERE serv{$sess}_chars.id=serv{$sess}_kills.id_victim) AS deth
+						(SELECT count(id_killer) FROM serv{$sess}_kills WHERE serv{$sess}_chars.id=serv{$sess}_kills.id_killer LIMIT 1) AS kills,
+						(SELECT count(id_victim) FROM serv{$sess}_kills WHERE serv{$sess}_chars.id=serv{$sess}_kills.id_victim LIMIT 1) AS deth
 				FROM serv{$sess}_chars
-				WHERE (SELECT count(id_killer) FROM serv{$sess}_kills WHERE serv{$sess}_chars.id=serv{$sess}_kills.id_killer) > 0 OR (SELECT count(id_victim) FROM serv{$sess}_kills WHERE serv{$sess}_chars.id=serv{$sess}_kills.id_victim) > 0";
+				WHERE (SELECT count(id_killer) FROM serv{$sess}_kills WHERE serv{$sess}_chars.id=serv{$sess}_kills.id_killer LIMIT 1) > 0 OR (SELECT count(id_victim) FROM serv{$sess}_kills WHERE serv{$sess}_chars.id=serv{$sess}_kills.id_victim LIMIT 1) > 0";
 	$result = mysqli_query($link, $query) or die(mysqli_error($link));
 	$data_stat=[];
 
@@ -49,14 +49,14 @@ if(isset($_REQUEST['frac_id']) && ctype_digit ($_REQUEST['frac_id']) && mysqli_n
 	}
 	
 	$query = "	SELECT DISTINCT serv{$sess}_kills.id_killer AS killer_id,
-						(select serv{$sess}_chars.name from serv{$sess}_chars where serv{$sess}_chars.id=serv{$sess}_kills.id_killer) AS killer_name,
+						(select serv{$sess}_chars.name from serv{$sess}_chars where serv{$sess}_chars.id=serv{$sess}_kills.id_killer LIMIT 1) AS killer_name,
 						serv{$sess}_kills.faction_id_killer,
-						(select serv{$sess}_factions.name from serv{$sess}_factions where serv{$sess}_factions.id=serv{$sess}_kills.faction_id_killer) AS killer_name_faction,
+						(select serv{$sess}_factions.name from serv{$sess}_factions where serv{$sess}_factions.id=serv{$sess}_kills.faction_id_killer LIMIT 1) AS killer_name_faction,
 						serv{$sess}_kills.id_victim AS victim_id,		
-						(select serv{$sess}_chars.name from serv{$sess}_chars where serv{$sess}_chars.id=serv{$sess}_kills.id_victim) AS victim_name,
+						(select serv{$sess}_chars.name from serv{$sess}_chars where serv{$sess}_chars.id=serv{$sess}_kills.id_victim LIMIT 1) AS victim_name,
 						serv{$sess}_kills.faction_id_victim,
-						(select serv{$sess}_factions.name from serv{$sess}_factions where serv{$sess}_factions.id=serv{$sess}_kills.faction_id_victim) AS victim_name_faction,
-						(select count(id_victim) from serv{$sess}_kills where id_killer = killer_id AND serv{$sess}_kills.id_victim=victim_id) AS counts_kills
+						(select serv{$sess}_factions.name from serv{$sess}_factions where serv{$sess}_factions.id=serv{$sess}_kills.faction_id_victim LIMIT 1) AS victim_name_faction,
+						(select count(id_victim) from serv{$sess}_kills where id_killer = killer_id AND serv{$sess}_kills.id_victim=victim_id LIMIT 1) AS counts_kills
 				FROM serv{$sess}_kills
 				WHERE faction_id_killer = $frac_id AND faction_id_victim <> 0
 				ORDER BY counts_kills DESC";
@@ -100,14 +100,14 @@ if(isset($_REQUEST['frac_id']) && ctype_digit ($_REQUEST['frac_id']) && mysqli_n
 	}
 
 	$query = "SELECT DISTINCT serv{$sess}_kills.id_killer AS killer_id,
-					(select serv{$sess}_chars.name from serv{$sess}_chars where serv{$sess}_chars.id=serv{$sess}_kills.id_killer) AS killer_name,
+					(select serv{$sess}_chars.name from serv{$sess}_chars where serv{$sess}_chars.id=serv{$sess}_kills.id_killer LIMIT 1) AS killer_name,
 					serv{$sess}_kills.faction_id_killer,
-					(select serv{$sess}_factions.name from serv{$sess}_factions where serv{$sess}_factions.id=serv{$sess}_kills.faction_id_killer) AS killer_name_faction,
+					(select serv{$sess}_factions.name from serv{$sess}_factions where serv{$sess}_factions.id=serv{$sess}_kills.faction_id_killer LIMIT 1) AS killer_name_faction,
 					serv{$sess}_kills.id_victim AS victim_id,		
-					(select serv{$sess}_chars.name from serv{$sess}_chars where serv{$sess}_chars.id=serv{$sess}_kills.id_victim) AS victim_name,
+					(select serv{$sess}_chars.name from serv{$sess}_chars where serv{$sess}_chars.id=serv{$sess}_kills.id_victim LIMIT 1) AS victim_name,
 					serv{$sess}_kills.faction_id_victim,
-					(select serv{$sess}_factions.name from serv{$sess}_factions where serv{$sess}_factions.id=serv{$sess}_kills.faction_id_victim) AS victim_name_faction,
-					(select count(id_victim) from serv{$sess}_kills where id_killer = killer_id AND serv{$sess}_kills.id_victim=victim_id) AS counts_kills
+					(select serv{$sess}_factions.name from serv{$sess}_factions where serv{$sess}_factions.id=serv{$sess}_kills.faction_id_victim LIMIT 1) AS victim_name_faction,
+					(select count(id_victim) from serv{$sess}_kills where id_killer = killer_id AND serv{$sess}_kills.id_victim=victim_id LIMIT 1) AS counts_kills
 			FROM serv{$sess}_kills
 			WHERE faction_id_victim = $frac_id AND faction_id_killer <> 0
 			ORDER BY counts_kills DESC";
