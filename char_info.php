@@ -112,7 +112,7 @@
 					<td class='td3'>$num</td>
 					<td class='td'><a href='char_info.php?s={$sess}&char_id={$schar['id']}'>$schar[name]</td>
 					<td class='td2'><img class ='image'src='images/rating.png'></td>
-					<td class='td1'> + $resreit</span></td>
+					<td class='td1'>$resreit</span></td>
 				</tr>";
 				$num++;
 			}
@@ -128,7 +128,7 @@
 					<td class='td3'>$num1</td>
 					<td class='td'><a href='char_info.php?s={$sess}&char_id={$schar['id']}'>$schar[name]</td>
 					<td class='td2'><img class ='image'src='images/rating.png'></td>
-					<td class='td1'> - $resreit</span></td>
+					<td class='td1'>$resreit</span></td>
 				</tr>";
 				$num1++;
 			}
@@ -143,19 +143,19 @@
             <link rel='stylesheet' href='style.css'>
         </head>
         <body>	
-        	<div class="title">
-        		<?=$data_stat[$char_id]["name"]?>
-        	</div>
-            <div = class="container">
+			<div = class="container">
+				<div class="title">
+					<?=$data_stat[$char_id]["name"]?>
+				</div>     
                 <div class="block1">
                     <div class="block3">Убийства</div>
-                    <table align='center' id='table'>         
+                    <table align='center' class='table'>         
                         <?=$contKills?>
                     </table>
                 </div>
                 <div class="block2">
                     <div class="block4">Смерти</div>
-                    <table align='center' id='table'>         
+                    <table align='center' class='table'>         
                         <?=$contDeaths?>
                     </table>
                 </div>

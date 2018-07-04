@@ -136,15 +136,17 @@
 				console.log("Сортировка: <?=$time3?>");
 			</script>
         </head>
-        <body>	
-        	<div class="title">
-        		Stats of <?=$sess?> session
-        	</div>
-       		<div class="block1">
-        		<table align='center' id='table'>         
-           			<?=$content?>
-        		</table>
-        	</div>
+        <body>
+			<div = class="container">
+				<div class="title">
+					Stats of <?=$sess?> session
+				</div>
+				<div class="block1">
+					<table align='center' id='table' class='table'>         
+						<?=$content?>
+					</table>
+				</div>
+			</div>
         </body>
     </html>
 <?

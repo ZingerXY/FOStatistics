@@ -1,6 +1,6 @@
 @font-face{
 	font-family: FOnline;
-	src: url(fonts/fallout_decayed.ttf)
+	src: url(font/fallout_decayed.ttf)
 }
 body {
 	background-color: #444444;
@@ -17,15 +17,20 @@ a:hover {
 	font-size: 20px;
 	margin-left: 10px;
 }
-#table {
+.table {
 	border-collapse: collapse;
 	text-align: center;
 	/*font-size: 25pt;*/
 	font-family: 'Roboto Condensed', sans-serif;
 	font-weight: bold;
+	margin: 2px 0px;
+	min-width: 192px;
+}
+#table {
+	min-width: 400px;
 }
 .td {				
-	padding: 5px 5px;		
+	padding: 5px 0px;		
 	color: red;	
 }
 .td1 {				
@@ -42,7 +47,7 @@ a:hover {
 	text-align: left;
 }			
 .container{
-	width: 500px;
+	width: 400px;
 	margin: 0 auto;
 }
 .block {				
@@ -51,12 +56,12 @@ a:hover {
 .block1 {	
 	top: 7%;
 	float: left;
-	width: 250px;
+	width: 200px;
 }
 .block2 {
 	top: 7%;
 	float: left;
-	width: 250px;
+	width: 200px;
 }
 .block3 {
 	text-align: center;
