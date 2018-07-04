@@ -76,8 +76,11 @@ if (mysqli_num_rows($chrtbl) > 0) {
 	foreach ($statchar as $id => $stat) {
 		$raiting = 0;
 		foreach ($data_kills as $dkills) {
-			if ($id == $dkills["id_killer"] && isset($dkills["id_victim"]) && isset($statchar[$dkills["id_victim"]])) {
-				$info = $statchar[$dkills["id_victim"]];
+			$id_killer = $dkills["id_killer"];
+			$id_victim = $dkills["id_victim"];
+			
+			if ($id == $id_killer && isset($id_victim) && isset($statchar[$id_victim])) {
+				$info = $statchar[$id_victim];
 				$kills = $info["kills"];
 				$score = 0;
 				if ($kills > 0) {
@@ -86,8 +89,8 @@ if (mysqli_num_rows($chrtbl) > 0) {
 				}
 				$raiting += $score;
 			}
-			if ($id == $dkills["id_victim"] && isset($dkills["id_killer"]) && isset($statchar[$dkills["id_killer"]])) {
-				$info = $statchar[$dkills["id_killer"]];
+			if ($id == $id_victim && isset($id_killer) && isset($statchar[$id_killer])) {
+				$info = $statchar[$id_killer];
 				$deth = $info["deth"];
 				$score = 0;
 				if ($deth > 0) {
@@ -107,8 +110,23 @@ if (mysqli_num_rows($chrtbl) > 0) {
 	usort($statchars, 'myCmp'); 
 
 	$time4 = microtime(true) - $start;
+	
+	$table_res = "";
+	$num = 1;
+	foreach ($statchars as $id => $schar)
+	{
+		$resreit = round($schar['raiting'], 3);
+		$color = ($resreit<0?"red":"green");
+		$table_res .=
+		"<tr>
+			<td class='td'>{$num++}</td>
+			<td class='td'><a href='char_info.php?s={$sess}&char_id={$schar['id']}' title='{$schar['id']}'>{$schar['name']}</a></td>
+			<td class='td'>{$schar['kills']}</td>
+			<td class='td'>{$schar['deth']}</td>
+			<td class='td'><span class="{$color}">{$resreit}</span></td>
+		</tr>";
+	}
 ?>
-
 <!DOCTYPE html>
 <html>
 	<head>
@@ -161,22 +179,7 @@ if (mysqli_num_rows($chrtbl) > 0) {
 		<th class='td'>Deaths</th>
 		<th class='td'>Rating</th>
 	</tr>
-	<?
-	$num = 1;
-	foreach ($statchars as $id => $schar)
-	{
-		$resreit = round($schar['raiting'], 3);
-		?>
-		<tr>
-			<td class='td'><?=$num++?></td>
-			<td class='td'><a href='char_info.php?s=<?=$sess?>&char_id=<?=$schar['id']?>' title='<?=$schar['id']?>'><?=$schar['name']?></a></td>
-			<td class='td'><?=$schar['kills']?></td>
-			<td class='td'><?=$schar['deth']?></td>
-			<td class='td'><span class="<?=($resreit<0?"red":"green")?>"><?=$resreit?></span></td>
-		</tr>
-		<?
-	}
-	?>
+	<?=$table_res?>
 	</table>
 	<script>
 	(function(){
