@@ -23,7 +23,7 @@ a:hover {
 	/*font-size: 25pt;*/
 	font-family: 'Roboto Condensed', sans-serif;
 	font-weight: bold;
-	margin: 2px 0px;
+	margin: 0px auto;
 	min-width: 192px;
 }
 #table {
