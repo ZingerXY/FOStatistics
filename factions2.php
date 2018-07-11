@@ -153,7 +153,7 @@
         		Stats of <?=$sess?> session
         	</div>
        		<div  class="block">
-        		<table align='center' id='table'>         
+        		<table align='center' class='table'>         
            			<?=$content?>
         		</table>
         	</div>
