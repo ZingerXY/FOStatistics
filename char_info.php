@@ -33,8 +33,7 @@
 
 	
 	if(isset($_REQUEST['char_id']) && ctype_digit ($_REQUEST['char_id']) && mysqli_num_rows($chrtbl) > 0) {
-		
-		$char_id = def($_REQUEST['char_id'],$link);
+		$char_id = filter_var(def($_REQUEST['char_id'],$link), FILTER_VALIDATE_INT, $filter);
 
 		$sess = 18;
 		$query = "	SELECT  serv{$sess}_kills.id_killer,
@@ -132,8 +131,8 @@
 				</tr>";
 				$num1++;
 			}
-		}  
-?>
+		}
+	?>
 	<!DOCTYPE html>
     <html>
         <head>            
@@ -142,11 +141,11 @@
             <title>Test</title>
             <link rel='stylesheet' href='style.css'>
         </head>
-        <body>	
+        <body>
+			<div class="title"><a href="chars2.php">←</a></div>
+            <div class="title"><?=$data_stat[$char_id]["name"]?></div>
+            <div class="title"><?=round($allstats[$char_id]["raiting"],2)?></div>		
 			<div = class="container">
-				<div class="title">
-					<?=$data_stat[$char_id]["name"]?>
-				</div>     
                 <div class="block1">
                     <div class="block3">Убийства</div>
                     <table align='center' class='table'>         
@@ -162,5 +161,5 @@
        		</div>
         </body>
     </html>
-<?
+	<?
 	}
