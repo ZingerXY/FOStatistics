@@ -87,8 +87,11 @@ a:hover {
 	font-family: 'FOnline', sans-serif;
 }
 tr:nth-child(even){
-		background: #414141;
+	background: #414141;
 }
 tr:nth-child(odd){
-		background: #5a5a5a;
-}  
+	background: #5a5a5a;
+}
+.th {
+	background: #414141;
+}

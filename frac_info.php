@@ -83,29 +83,25 @@
 		$allstats = $data_stat;
 		foreach ($data_kills as $dkills)
 		{
-
 			$id_killer = $dkills["id_killer"];
 			$id_victim = $dkills["id_victim"];
 			$faction_id_killer = $dkills["faction_id_killer"];
 			$faction_id_victim = $dkills["faction_id_victim"];      
 			
-
 			if (!isset($allstats[$id_killer],$allstats[$id_victim])) continue;
 
 			$allstats[$id_killer]["kills"]++;
 			$allstats[$id_victim]["deaths"]++;
-
 
 			$killer_kills = $allstats[$id_killer]["kills"];
 			$victim_deaths = $allstats[$id_victim]["deaths"];
 			$victim_kills = $allstats[$id_victim]["kills"];
 			$killer_deaths = $allstats[$id_killer]["deaths"];
 
-
 			$allstats[$id_killer]["raiting"] += ($victim_kills / ($victim_kills + $victim_deaths));
 			$allstats[$id_victim]["raiting"] -= ($killer_deaths / ( $killer_deaths + $killer_kills));
 
-			if ($faction_id_killer ! = 0 && $faction_id_victim ! = 0 && isset($faction_stats[$faction_id_killer]) && isset($faction_stats[$faction_id_victim]))
+			if ($faction_id_killer != 0 && $faction_id_victim != 0 && isset($faction_stats[$faction_id_killer]) && isset($faction_stats[$faction_id_victim]))
 			{
 				$faction_stats[$faction_id_killer]["kills"]++;
 				$faction_stats[$faction_id_killer]["raiting"] += ($victim_kills / ($victim_kills + $victim_deaths));
@@ -136,14 +132,15 @@
 			}
 
 		}
+		
+		$faction_name = $data_faction[$frac_id]["name"];
+		$faction_rait = $faction_stats[$frac_id]["raiting"];
 
-		$faction_stats_unsort = $faction_stats;	
 		usort($faction_stats, 'myCmp');
 
-		$content = "";
-		$content1 = "";
-		$num = 1;
-	 
+
+		$content = '<td class="th" colspan="7"><div class="title">Убийства</div></td>';
+		$num = 1;	 
 		if(isset($list_of_faction_kills[$frac_id]))
 		{
 			foreach ($list_of_faction_kills[$frac_id] as $sfaction)
@@ -160,16 +157,16 @@
 					<td class='td1'> + $resreit</span></td>
 				</tr>";
 				$num++;
-				//if($num>1000) break;
 			}
 		}
+		$content .= '<td class="th" colspan="7"><div class="title">Смерти</div></td>';
 		$num1 = 1;
 		if(isset($list_of_faction_deaths[$frac_id]))
 		{
 			foreach ($list_of_faction_deaths[$frac_id] as $sfaction)
 			{
 			   $resreit = round($sfaction['raiting'], 2);
-				$content1 .= "
+				$content .= "
 				<tr>
 					<td class='td3'>$num1</td>
 					<td class='td'>$sfaction[char_name_victim]</td>
@@ -180,7 +177,6 @@
 					<td class='td1'> - $resreit</span></td>
 				</tr>";
 				$num1++;
-				//if($num>1000) break;
 			}
 		}
 	?>
@@ -195,18 +191,11 @@
         </head>
         <body>
             <div class="title"><a href="factions2.php">←</a></div>
-        	<div class="title"><?=$data_faction[$frac_id]["name"]?></div>
-            <div class="title"><?=round($faction_stats_unsort[$frac_id]["raiting"],2)?></div>
-            <div class="title">Убийства</div>
+        	<div class="title"><?=$faction_name?></div>
+            <div class="title"><?=round($faction_rait,2)?></div>
        		<div  class="block">
-        		<table align='center' id='table'>         
+        		<table align='center' class='table'>         
            			<?=$content?>
-        		</table>
-        	</div>
-            <div class="title">Смерти</div>
-            <div  class="block">
-                <table align='center' id='table1'>         
-                    <?=$content1?>
                 </table>
             </div>
         </body>
