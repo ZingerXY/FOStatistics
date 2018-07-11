@@ -29,8 +29,7 @@ a:hover {
 	min-width: 400px;
 }
 .td {				
-	padding: 5px 5px;
-	min-width: 127px;			
+	padding: 5px 5px;			
 }
 .td1 {				
 	text-align: left;
@@ -93,5 +92,5 @@ tr:nth-child(odd){
 	background: #5a5a5a;
 }
 .th {
-	background: #414141;
+	background-color: #444444;
 }
