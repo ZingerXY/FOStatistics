@@ -19,8 +19,7 @@ a:hover {
 }
 .table {
 	border-collapse: collapse;
-	text-align: center;
-	/*font-size: 25pt;*/
+	text-align: center;				
 	font-family: 'Roboto Condensed', sans-serif;
 	font-weight: bold;
 	margin: 0px auto;
@@ -30,18 +29,22 @@ a:hover {
 	min-width: 400px;
 }
 .td {				
-	padding: 5px 0px;		
-	color: red;	
+	padding: 5px 5px;
+	min-width: 127px;			
 }
 .td1 {				
 	text-align: left;
 }
 .td2 {				
-	text-align: left;
+	text-align: center;
 	padding-left: 8px;
+}
+.td2_2 {				
+	text-align: left;				
 }
 .td3 {				
 	text-align: center;
+	min-width: 30px;
 }
 .td4 {				
 	text-align: left;
