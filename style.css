@@ -29,7 +29,7 @@ a:hover {
 	min-width: 400px;
 }
 .td {				
-	padding: 5px 5px;			
+	padding: 5px 0px;
 }
 .td1 {				
 	text-align: left;
@@ -49,7 +49,7 @@ a:hover {
 	text-align: left;
 }			
 .container{
-	width: 400px;
+	width: 424px;
 	margin: 0 auto;
 }
 .block {				
@@ -58,12 +58,12 @@ a:hover {
 .block1 {	
 	top: 7%;
 	float: left;
-	width: 200px;
+	width: 212px;
 }
 .block2 {
 	top: 7%;
 	float: left;
-	width: 200px;
+	width: 212px;
 }
 .block3 {
 	text-align: center;
@@ -92,5 +92,5 @@ tr:nth-child(odd){
 	background: #5a5a5a;
 }
 .th {
-	background-color: #444444;
+	background: #444444;
 }
