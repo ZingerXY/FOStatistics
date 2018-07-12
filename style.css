@@ -52,6 +52,11 @@ a:hover {
 	width: 424px;
 	margin: 0 auto;
 }
+.container .block1 {	
+	top: 7%;
+	float: left;
+	width: 424px;
+}
 .block {				
 	top: 7%;				
 }
