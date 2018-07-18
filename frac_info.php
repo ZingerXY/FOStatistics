@@ -1,10 +1,10 @@
 <?php
 	
 	ini_set('error_reporting', E_ALL); 
- 	ini_set('display_errors', 1); 
- 	ini_set('display_startup_errors', 1);
- 	
-    include "config.php";
+	ini_set('display_errors', 1); 
+	ini_set('display_startup_errors', 1);
+	
+	include "config.php";
 
 	function myCmp($a, $b)
 	{
@@ -29,7 +29,7 @@
 		'flags' => FILTER_FLAG_ALLOW_OCTAL,
 	);
 
-    $sess = 18;
+	$sess = 18;
 	if(isset($_REQUEST['s'])) {
 		$sess = filter_var(def($_REQUEST['s']), FILTER_VALIDATE_INT, $filter);
 	}
@@ -41,9 +41,9 @@
 		$frac_id = filter_var(def($_REQUEST['frac_id'],$link), FILTER_VALIDATE_INT, $filter);
 		
 		$query = "	SELECT serv{$sess}_kills.id_killer,
-					serv{$sess}_kills.faction_id_killer,    			 				
+					serv{$sess}_kills.faction_id_killer,				 				
 					serv{$sess}_kills.id_victim,
-					serv{$sess}_kills.faction_id_victim                
+					serv{$sess}_kills.faction_id_victim				
 					FROM serv{$sess}_kills";
 
 		$result = mysqli_query($link, $query);
@@ -68,7 +68,7 @@
 
 		$result = mysqli_query($link, $query);
 		while ($row = mysqli_fetch_assoc($result)) 
-		{       
+		{
 			$data_faction[$row["id"]] = 
 			[
 				"id" => $row["id"], 
@@ -86,7 +86,7 @@
 			$id_killer = $dkills["id_killer"];
 			$id_victim = $dkills["id_victim"];
 			$faction_id_killer = $dkills["faction_id_killer"];
-			$faction_id_victim = $dkills["faction_id_victim"];      
+			$faction_id_victim = $dkills["faction_id_victim"];
 			
 			if (!isset($allstats[$id_killer],$allstats[$id_victim])) continue;
 
@@ -139,16 +139,15 @@
 		usort($faction_stats, 'myCmp');
 
 
-		$content = '<td class="th" colspan="7"><div class="title">Убийства</div></td>';
-		$num = 1;	 
+		$content = '<td class="th" colspan="6"><div class="title">Убийства</div></td>'; 
 		if(isset($list_of_faction_kills[$frac_id]))
 		{
+			krsort($list_of_faction_kills[$frac_id]);
 			foreach ($list_of_faction_kills[$frac_id] as $sfaction)
 			{
-			   $resreit = round($sfaction['raiting'], 2);
+				$resreit = round($sfaction['raiting'], 2);
 				$content .= "
 				<tr>
-					<td class='td3'>$num</td>
 					<td class='td'>$sfaction[char_name_killer]</td>
 					<td class='td2'>►</td>
 					<td class='td'>$sfaction[char_name_victim]</td>
@@ -156,19 +155,17 @@
 					<td class='td4'><img class ='image'src='images/rating.png'></td>
 					<td class='td1'> + $resreit</span></td>
 				</tr>";
-				$num++;
 			}
 		}
-		$content .= '<td class="th" colspan="7"><div class="title">Смерти</div></td>';
-		$num1 = 1;
+		$content .= '<td class="th" colspan="6"><div class="title">Смерти</div></td>';
 		if(isset($list_of_faction_deaths[$frac_id]))
 		{
+			krsort($list_of_faction_deaths[$frac_id]);
 			foreach ($list_of_faction_deaths[$frac_id] as $sfaction)
 			{
-			   $resreit = round($sfaction['raiting'], 2);
+				$resreit = round($sfaction['raiting'], 2);
 				$content .= "
 				<tr>
-					<td class='td3'>$num1</td>
 					<td class='td'>$sfaction[char_name_victim]</td>
 					<td class='td2'>◄</td>
 					<td class='td'>$sfaction[char_name_killer]</td>
@@ -176,29 +173,28 @@
 					<td class='td4'><img class ='image'src='images/rating.png'></td>
 					<td class='td1'> - $resreit</span></td>
 				</tr>";
-				$num1++;
 			}
 		}
 	?>
-    <!DOCTYPE html>
-    <html>
-        <head>
-        	<link href="https://fonts.googleapis.com/css?family=Orbitron:500" rel="stylesheet"> 
-        	<link href="https://fonts.googleapis.com/css?family=Roboto+Condensed" rel="stylesheet"> 
+	<!DOCTYPE html>
+	<html>
+		<head>
+			<link href="https://fonts.googleapis.com/css?family=Orbitron:500" rel="stylesheet"> 
+			<link href="https://fonts.googleapis.com/css?family=Roboto+Condensed" rel="stylesheet"> 
 
-            <title>Test</title>
-            <link rel='stylesheet' href='style.css'>
-        </head>
-        <body>
-            <div class="title"><a href="factions2.php">←</a></div>
-        	<div class="title"><?=$faction_name?></div>
-            <div class="title"><?=round($faction_rait,2)?></div>
-       		<div  class="block">
-        		<table align='center' class='table'>         
-           			<?=$content?>
-                </table>
-            </div>
-        </body>
-    </html>
+			<title>Test</title>
+			<link rel='stylesheet' href='style.css'>
+		</head>
+		<body>
+			<div class="title"><a href="factions2.php">←</a></div>
+			<div class="title"><?=$faction_name?></div>
+			<div class="title"><?=round($faction_rait,2)?></div>
+			<div class="block">
+				<table align='center' class='table'>		 
+					<?=$content?>
+				</table>
+			</div>
+		</body>
+	</html>
 	<?
 	}

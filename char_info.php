@@ -4,7 +4,7 @@
  	ini_set('display_errors', 1); 
  	ini_set('display_startup_errors', 1);*/
  	
-    include "config.php";
+	include "config.php";
 	
 	// защита БД от SQL иньекций
 	function def($text,$linksql = false) {
@@ -36,9 +36,9 @@
 		$char_id = filter_var(def($_REQUEST['char_id'],$link), FILTER_VALIDATE_INT, $filter);
 
 		$sess = 18;
-		$query = "	SELECT  serv{$sess}_kills.id_killer,
+		$query = "	SELECT serv{$sess}_kills.id_killer,
 					(select serv{$sess}_chars.name from serv{$sess}_chars where serv{$sess}_chars.id=serv{$sess}_kills.id_killer) 
-						AS killer_name,    				
+						AS killer_name,					
 					serv{$sess}_kills.id_victim,
 					(select serv{$sess}_chars.name from serv{$sess}_chars where serv{$sess}_chars.id=serv{$sess}_kills.id_victim) 
 						AS victim_name
@@ -72,7 +72,7 @@
 
 			$allstats[$id_killer]["kills"]++;
 			$allstats[$id_victim]["deaths"]++;
-		  
+			
 			$killer_kills = $allstats[$id_killer]["kills"];
 			$victim_deaths = $allstats[$id_victim]["deaths"];
 			$victim_kills = $allstats[$id_victim]["kills"];
@@ -100,66 +100,62 @@
 		
 		$contKills = "";
 		$contDeaths = "";
-		$num = 1;
 		if (isset($list_of_kills[$char_id]))
 		{
+			krsort($list_of_kills[$char_id]);
 			foreach ($list_of_kills[$char_id] as $schar)
 			{
-			   $resreit = round($schar['raiting'], 2);
+				$resreit = round($schar['raiting'], 2);
 				$contKills .= "
 				<tr>
-					<td class='td3'>$num</td>
 					<td class='td'><a href='char_info.php?s={$sess}&char_id={$schar['id']}'>$schar[name]</td>
-					<td class='td2'><img class ='image'src='images/rating.png'></td>
+					<td class='td2_char_info'><img class ='image'src='images/rating.png'></td>
 					<td class='td1'>$resreit</span></td>
 				</tr>";
-				$num++;
 			}
 		}
-		$num1 = 1;
 		if (isset($list_of_deaths[$char_id]))
 		{
+			krsort($list_of_deaths[$char_id]);
 			foreach ($list_of_deaths[$char_id] as $schar)
 			{
-			   $resreit = round($schar['raiting'], 2);
+				$resreit = round($schar['raiting'], 2);
 				$contDeaths .= "
 				<tr>
-					<td class='td3'>$num1</td>
 					<td class='td'><a href='char_info.php?s={$sess}&char_id={$schar['id']}'>$schar[name]</td>
-					<td class='td2'><img class ='image'src='images/rating.png'></td>
+					<td class='td2_char_info'><img class ='image'src='images/rating.png'></td>
 					<td class='td1'>$resreit</span></td>
 				</tr>";
-				$num1++;
 			}
 		}
 	?>
 	<!DOCTYPE html>
-    <html>
-        <head>            
-        	<link href="https://fonts.googleapis.com/css?family=Orbitron:500" rel="stylesheet"> 
-        	<link href="https://fonts.googleapis.com/css?family=Roboto+Condensed" rel="stylesheet"> 
-            <title>Test</title>
-            <link rel='stylesheet' href='style.css'>
-        </head>
-        <body>
+	<html>
+		<head>
+			<link href="https://fonts.googleapis.com/css?family=Orbitron:500" rel="stylesheet"> 
+			<link href="https://fonts.googleapis.com/css?family=Roboto+Condensed" rel="stylesheet"> 
+			<title>Test</title>
+			<link rel='stylesheet' href='style.css'>
+		</head>
+		<body>
 			<div class="title"><a href="chars2.php">←</a></div>
-            <div class="title"><?=$data_stat[$char_id]["name"]?></div>
-            <div class="title"><?=round($allstats[$char_id]["raiting"],2)?></div>		
+			<div class="title"><?=$data_stat[$char_id]["name"]?></div>
+			<div class="title"><?=round($allstats[$char_id]["raiting"],2)?></div>		
 			<div = class="container">
-                <div class="block1">
-                    <div class="block3">Убийства</div>
-                    <table align='center' class='table'>         
-                        <?=$contKills?>
-                    </table>
-                </div>
-                <div class="block2">
-                    <div class="block4">Смерти</div>
-                    <table align='center' class='table'>         
-                        <?=$contDeaths?>
-                    </table>
-                </div>
-       		</div>
-        </body>
-    </html>
+				<div class="block1">
+					<div class="block3">Убийства</div>
+					<table align='center' class='table'>		 
+						<?=$contKills?>
+					</table>
+				</div>
+				<div class="block2">
+					<div class="block4">Смерти</div>
+					<table align='center' class='table'>		 
+						<?=$contDeaths?>
+					</table>
+				</div>
+			</div>
+		</body>
+	</html>
 	<?
 	}

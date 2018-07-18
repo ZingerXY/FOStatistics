@@ -38,6 +38,9 @@ a:hover {
 	text-align: center;
 	padding-left: 8px;
 }
+.td2_char_info{
+	text-align: center;
+}
 .td2_2 {				
 	text-align: left;				
 }
@@ -51,11 +54,6 @@ a:hover {
 .container{
 	width: 424px;
 	margin: 0 auto;
-}
-.container .block1 {	
-	top: 7%;
-	float: left;
-	width: 424px;
 }
 .block {				
 	top: 7%;				
