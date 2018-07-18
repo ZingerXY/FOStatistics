@@ -5,7 +5,6 @@
  	ini_set('display_startup_errors', 1);
  	
     include "config.php";
-    $testtest = 1;
 
 	function myCmp($a, $b)
 	{
