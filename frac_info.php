@@ -139,16 +139,15 @@
 		usort($faction_stats, 'myCmp');
 
 
-		$content = '<td class="th" colspan="7"><div class="title">Убийства</div></td>';
-		$num = 1;	 
+		$content = '<td class="th" colspan="7"><div class="title">Убийства</div></td>'; 
 		if(isset($list_of_faction_kills[$frac_id]))
 		{
+			krsort($list_of_faction_kills[$frac_id]);
 			foreach ($list_of_faction_kills[$frac_id] as $sfaction)
 			{
 			   $resreit = round($sfaction['raiting'], 2);
 				$content .= "
 				<tr>
-					<td class='td3'>$num</td>
 					<td class='td'>$sfaction[char_name_killer]</td>
 					<td class='td2'>►</td>
 					<td class='td'>$sfaction[char_name_victim]</td>
@@ -156,19 +155,17 @@
 					<td class='td4'><img class ='image'src='images/rating.png'></td>
 					<td class='td1'> + $resreit</span></td>
 				</tr>";
-				$num++;
 			}
 		}
 		$content .= '<td class="th" colspan="7"><div class="title">Смерти</div></td>';
-		$num1 = 1;
 		if(isset($list_of_faction_deaths[$frac_id]))
 		{
+			krsort($list_of_faction_deaths[$frac_id]);
 			foreach ($list_of_faction_deaths[$frac_id] as $sfaction)
 			{
 			   $resreit = round($sfaction['raiting'], 2);
 				$content .= "
 				<tr>
-					<td class='td3'>$num1</td>
 					<td class='td'>$sfaction[char_name_victim]</td>
 					<td class='td2'>◄</td>
 					<td class='td'>$sfaction[char_name_killer]</td>
@@ -176,7 +173,6 @@
 					<td class='td4'><img class ='image'src='images/rating.png'></td>
 					<td class='td1'> - $resreit</span></td>
 				</tr>";
-				$num1++;
 			}
 		}
 	?>
