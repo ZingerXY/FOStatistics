@@ -139,7 +139,7 @@
 		usort($faction_stats, 'myCmp');
 
 
-		$content .= '<td class="th" colspan="7"><div class="title">Убийства</div></td>'; 
+		$content = '<td class="th" colspan="7"><div class="title">Убийства</div></td>'; 
 		if(isset($list_of_faction_kills[$frac_id]))
 		{
 			krsort($list_of_faction_kills[$frac_id]);
