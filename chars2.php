@@ -33,6 +33,7 @@
 	if (isset($_REQUEST['s'])) {
 		$sess = filter_var(def($_REQUEST['s']), FILTER_VALIDATE_INT, $filter);
 	}
+
 	// Проверка существования таблицы с префиксом
 	$chrtbl = mysqli_query($link, "SHOW TABLES LIKE 'serv{$sess}_chars'") or die(mysqli_error($link));
 

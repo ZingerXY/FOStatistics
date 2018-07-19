@@ -6,40 +6,41 @@
 
 	include "config.php";
 
+	// защита БД от SQL иньекций
+	function def($text,$linksql = false) {
+		$result = strip_tags($text);
+		$result = htmlspecialchars($result);
+		if ($linksql)
+			$result = mysqli_real_escape_string ($linksql, $result);
+		return $result;
+	}
+
+	$filter = [
+		'options' => [
+			'default' => 0, // значение, возвращаемое, если фильтрация завершилась неудачей
+			// другие параметры
+			'min_range' => 0
+		],
+		'flags' => FILTER_FLAG_ALLOW_OCTAL,
+	];
+
 	function myCmp($a, $b)
 	{
 		return ($b["raiting"]*1000) - ($a["raiting"]*1000);
 	}
 
-	// защита БД от SQL иньекций
-	function def($text,$linksql = false) {
-		$result = strip_tags($text);
-		$result = htmlspecialchars($result);
-		if($linksql)
-			$result = mysqli_real_escape_string ($linksql, $result);
-		return $result;
-	}
-
-	$filter = array(
-		'options' => array(
-			'default' => 0, // значение, возвращаемое, если фильтрация завершилась неудачей
-			// другие параметры
-			'min_range' => 0
-		),
-		'flags' => FILTER_FLAG_ALLOW_OCTAL,
-	);
-
 	$sess = 18;
-	if(isset($_REQUEST['s'])) {
+	if (isset($_REQUEST['s'])) {
 		$sess = filter_var(def($_REQUEST['s']), FILTER_VALIDATE_INT, $filter);
 	}
 
 	// Проверка существования таблицы с префиксом
 	$chrtbl = mysqli_query($link, "SHOW TABLES LIKE 'serv{$sess}_chars'") or die(mysqli_error($link));
 
-	if(isset($_REQUEST['frac_id']) && ctype_digit ($_REQUEST['frac_id']) && mysqli_num_rows($chrtbl) > 0) {
+	if (isset($_REQUEST['frac_id']) && ctype_digit ($_REQUEST['frac_id']) && mysqli_num_rows($chrtbl) > 0) {
+
 		$frac_id = filter_var(def($_REQUEST['frac_id'],$link), FILTER_VALIDATE_INT, $filter);
-		
+
 		$query = "	SELECT serv{$sess}_kills.id_killer,
 					serv{$sess}_kills.faction_id_killer,
 					serv{$sess}_kills.id_victim,
@@ -140,7 +141,7 @@
 
 
 		$content = '<td class="th" colspan="6"><div class="title">Убийства</div></td>';
-		if(isset($list_of_faction_kills[$frac_id]))
+		if (isset($list_of_faction_kills[$frac_id]))
 		{
 			krsort($list_of_faction_kills[$frac_id]);
 			foreach ($list_of_faction_kills[$frac_id] as $sfaction)
@@ -158,7 +159,7 @@
 			}
 		}
 		$content .= '<td class="th" colspan="6"><div class="title">Смерти</div><a name="deaths"></a></td>';
-		if(isset($list_of_faction_deaths[$frac_id]))
+		if (isset($list_of_faction_deaths[$frac_id]))
 		{
 			krsort($list_of_faction_deaths[$frac_id]);
 			foreach ($list_of_faction_deaths[$frac_id] as $sfaction)

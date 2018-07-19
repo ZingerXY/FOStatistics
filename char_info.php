@@ -15,14 +15,14 @@
 		return $result;
 	}
 
-	$filter = array(
-		'options' => array(
+	$filter = [
+		'options' => [
 			'default' => 0, // значение, возвращаемое, если фильтрация завершилась неудачей
 			// другие параметры
 			'min_range' => 0
-		),
+		],
 		'flags' => FILTER_FLAG_ALLOW_OCTAL,
-	);
+	];
 
 	$sess = 18;
 	if (isset($_GET['s'])) {

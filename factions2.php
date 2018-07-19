@@ -15,11 +15,6 @@
 		return $result;
 	}
 
-	function myCmp($a, $b)
-	{
-		return ($b["raiting"]*1000) - ($a["raiting"]*1000);
-	}
-	
 	$filter = [
 		'options' => [
 			'default' => 0, // значение, возвращаемое, если фильтрация завершилась неудачей
@@ -29,9 +24,14 @@
 		'flags' => FILTER_FLAG_ALLOW_OCTAL,
 	];
 
+	function myCmp($a, $b)
+	{
+		return ($b["raiting"]*1000) - ($a["raiting"]*1000);
+	}
+
 	$sess = 18;
-	if (isset($_GET['s'])) {
-		$sess = filter_var(def($_GET['s']), FILTER_VALIDATE_INT, $filter);
+	if (isset($_REQUEST['s'])) {
+		$sess = filter_var(def($_REQUEST['s']), FILTER_VALIDATE_INT, $filter);
 	}
 
 	// Проверка существования таблицы с префиксом
