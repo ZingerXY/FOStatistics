@@ -3,6 +3,7 @@
 	src: url(font/fallout_decayed.ttf)
 }
 body {
+	font-family: 'Roboto Condensed', sans-serif;
 	background-color: #444444;
 	color: #e2e2e2;
 }
@@ -19,8 +20,7 @@ a:hover {
 }
 .table {
 	border-collapse: collapse;
-	text-align: center;				
-	font-family: 'Roboto Condensed', sans-serif;
+	text-align: center;
 	font-weight: bold;
 	margin: 0px auto;
 	min-width: 192px;
@@ -28,37 +28,37 @@ a:hover {
 #table {
 	min-width: 400px;
 }
-.td {				
+.td {
 	padding: 5px 0px;
 }
-.td1 {				
+.td1 {
 	text-align: left;
 }
-.td2 {				
+.td2 {
 	text-align: center;
 	padding-left: 8px;
 }
 .td2_char_info{
 	text-align: center;
 }
-.td2_2 {				
-	text-align: left;				
+.td2_2 {
+	text-align: left;
 }
-.td3 {				
+.td3 {
 	text-align: center;
 	min-width: 30px;
 }
-.td4 {				
+.td4 {
 	text-align: left;
-}			
+}
 .container{
 	width: 424px;
 	margin: 0 auto;
 }
-.block {				
-	top: 7%;				
+.block {
+	top: 7%;
 }
-.block1 {	
+.block1 {
 	top: 7%;
 	float: left;
 	width: 212px;
@@ -71,12 +71,12 @@ a:hover {
 .block3 {
 	text-align: center;
 	font-size: 20pt;
-	font-family: 'FOnline', sans-serif;	
+	font-family: 'FOnline', sans-serif;
 }
 .block4 {
 	text-align: center; 
 	font-size: 20pt;
-	font-family: 'FOnline', sans-serif;	
+	font-family: 'FOnline', sans-serif;
 }
 .image{
 	width: 15px;
@@ -94,6 +94,6 @@ tr:nth-child(even){
 tr:nth-child(odd){
 	background: #5a5a5a;
 }
-.th {
+.th{
 	background: #444444;
 }
