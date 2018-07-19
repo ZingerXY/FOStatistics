@@ -142,7 +142,7 @@
 		<head>
 			<link href="https://fonts.googleapis.com/css?family=Orbitron:500" rel="stylesheet">
 			<link href="https://fonts.googleapis.com/css?family=Roboto+Condensed" rel="stylesheet">
-			<title>Test</title>
+			<title>Статистика фракций</title>
 			<link rel='stylesheet' href='style.css'>
 		</head>
 		<body>	

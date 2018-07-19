@@ -129,7 +129,7 @@
 		<head>
 			<link href="https://fonts.googleapis.com/css?family=Orbitron:500" rel="stylesheet">
 			<link href="https://fonts.googleapis.com/css?family=Roboto+Condensed" rel="stylesheet">
-			<title>Test</title>
+			<title>Статистика игроков</title>
 			<link rel='stylesheet' href='style.css'>
 			<script>
 				console.log("Запросы в бд: <?=$time1?>");

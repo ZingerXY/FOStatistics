@@ -133,7 +133,7 @@
 		<head>
 			<link href="https://fonts.googleapis.com/css?family=Orbitron:500" rel="stylesheet">
 			<link href="https://fonts.googleapis.com/css?family=Roboto+Condensed" rel="stylesheet">
-			<title>Test</title>
+			<title>Статистика <?=$data_stat[$char_id]["name"]?></title>
 			<link rel='stylesheet' href='style.css'>
 		</head>
 		<body>
