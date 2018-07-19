@@ -82,6 +82,10 @@ a:hover {
 	width: 15px;
 	/*margin-right: 5px;*/
 }
+.image_perks{
+	margin: -1px 0px 0px 0px; 
+	width: 35px;
+}
 .title{ 
 	text-align: center;
 	margin: auto;

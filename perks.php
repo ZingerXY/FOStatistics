@@ -33,23 +33,40 @@
 		$sum++;
 	}
 	
-	$content = '<tr><td class="th" colspan="2"></a><div class="title">Трейты</div></td></tr>';
+	$content = '<tr><td class="th" colspan="3"></a><div class="title">Трейты</div></td></tr>';
 	$content .= '<tbody>';
 	$class = 'trait';
+	$num = 1;
 	foreach($perk as $i => $e) {
 		if(array_key_exists($i,$stat))
 			$pr = round($stat[$i] / $sum * 100, 2);
 		else
 			$pr = 0;
-		$content .= "<tr class='$class'><td class='td'>$e</td><td class='td'>$pr %</td></tr>";
+		if ($num != 105){
+		$content .= "
+		<tr class='$class'>
+			<td ><img align ='middle' class ='image_perks' src='images/perks/$num.png'></td>
+			<td class='td'>$e</td>
+			<td class='td'>$pr%</td>
+		</tr>";
+		}
+		else {
+			$content .= "
+			<tr class='$class'>
+				<td ><img align ='middle' class ='image_perks' src='images/perks/$num.png' onmouseover='this.src = \"images/perks/easter_egg.png\"' onmouseout='this.src = \"images/perks/$num.png\"'></td>
+				<td class='td'>$e</td>
+				<td class='td'>$pr%</td>
+			</tr>";
+		}
 		if($i == 15) {
-			$content .= '</tbody><tr><td class="th" colspan="2"></a><div class="title">Перки</div></td></tr><tbody>';
+			$content .= '</tbody><tr><td class="th" colspan="3"></a><div class="title">Перки</div></td></tr><tbody>';
 			$class = 'perk';
 		}
+		$num++;
 	}
 	$content .= '</tbody>';
 	
-	$content .= "<tr><td class='td'>Всего данных</td><td class='td'>$sum</td></tr>";
+	$content .= "<tr style='background-color:#444444'><td></td><td class='td'>Всего данных</td><td class='td'>$sum</td></tr>";
 ?>
 	<!DOCTYPE html>
 	<html>
@@ -61,8 +78,8 @@
 		</head>
 		<body>
 			<div = class="container">
-				<div class="block1">
-					<table align='center' id='table' class='table'>
+				<div class="block">
+					<table align='center' class='table'>
 						<?=$content?>
 					</table>
 				</div>
