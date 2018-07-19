@@ -1,20 +1,20 @@
 ﻿<?php
 
- 	/*ini_set('error_reporting', E_ALL); 
- 	ini_set('display_errors', 1); 
- 	ini_set('display_startup_errors', 1);*/
- 	
-    include "config.php";
-	
+	/*ini_set('error_reporting', E_ALL);
+	ini_set('display_errors', 1);
+	ini_set('display_startup_errors', 1);*/
+
+	include "config.php";
+
 	// защита БД от SQL иньекций
 	function def($text,$linksql = false) {
 		$result = strip_tags($text);
 		$result = htmlspecialchars($result);
-		if($linksql)
+		if ($linksql)
 			$result = mysqli_real_escape_string ($linksql, $result);
 		return $result;
 	}
-	
+
 	$filter = [
 		'options' => [
 			'default' => 0, // значение, возвращаемое, если фильтрация завершилась неудачей
@@ -29,7 +29,7 @@
 		return ($b["raiting"]*1000) - ($a["raiting"]*1000);
 	}
 
-    $sess = 18;
+	$sess = 18;
 	if (isset($_REQUEST['s'])) {
 		$sess = filter_var(def($_REQUEST['s']), FILTER_VALIDATE_INT, $filter);
 	}
@@ -37,14 +37,14 @@
 	$chrtbl = mysqli_query($link, "SHOW TABLES LIKE 'serv{$sess}_chars'") or die(mysqli_error($link));
 
 	if (mysqli_num_rows($chrtbl) > 0) {
-		
+
 		$start = microtime(true);
-		
-		$query = "	SELECT  serv{$sess}_kills.id_killer,
-					(select serv{$sess}_chars.name from serv{$sess}_chars where serv{$sess}_chars.id=serv{$sess}_kills.id_killer) 
-						AS killer_name,    				
+
+		$query = "	SELECT serv{$sess}_kills.id_killer,
+					(select serv{$sess}_chars.name from serv{$sess}_chars where serv{$sess}_chars.id=serv{$sess}_kills.id_killer)
+						AS killer_name,
 					serv{$sess}_kills.id_victim,
-					(select serv{$sess}_chars.name from serv{$sess}_chars where serv{$sess}_chars.id=serv{$sess}_kills.id_victim) 
+					(select serv{$sess}_chars.name from serv{$sess}_chars where serv{$sess}_chars.id=serv{$sess}_kills.id_victim)
 						AS victim_name
 					FROM serv{$sess}_kills";
 
@@ -54,18 +54,18 @@
 		$query = "SELECT serv{$sess}_chars.id AS id, serv{$sess}_chars.name AS char_name FROM serv{$sess}_chars";
 
 		$result = mysqli_query($link, $query);
-		while ($row = mysqli_fetch_assoc($result)) 
-		{		
-			$data_stat[$row["id"]] = 
+		while ($row = mysqli_fetch_assoc($result))
+		{
+			$data_stat[$row["id"]] =
 			[
-				"id" => $row["id"], 
-				"name" => $row["char_name"], 
-				"kills" => 0, 
-				"deaths" => 0, 
+				"id" => $row["id"],
+				"name" => $row["char_name"],
+				"kills" => 0,
+				"deaths" => 0,
 				"raiting" => 0
 			];
 		}
-		
+
 		$time1 = microtime(true) - $start;
 		$start = microtime(true);
 
@@ -76,7 +76,7 @@
 			$id_killer = $dkills["id_killer"];
 			$id_victim = $dkills["id_victim"];
 
-			if (!isset($allstats[$id_killer],$allstats[$id_victim])) 
+			if (!isset($allstats[$id_killer],$allstats[$id_victim]))
 				continue;
 
 			$allstats[$id_killer]["kills"]++;
@@ -93,12 +93,12 @@
 			$allstats[$id_victim]["raiting"] -= ($killer_deaths / ( $killer_deaths + $killer_kills));
 
 		}
-		
+
 		$time2 = microtime(true) - $start;
 		$start = microtime(true);
-		
+
 		usort($allstats, 'myCmp');
-		
+
 		$time3 = microtime(true) - $start;
 		$start = microtime(true);
 
@@ -123,31 +123,31 @@
 			$num++;
 		}
 ?>
-    <!DOCTYPE html>
-    <html>
-        <head>
-        	<link href="https://fonts.googleapis.com/css?family=Orbitron:500" rel="stylesheet"> 
-        	<link href="https://fonts.googleapis.com/css?family=Roboto+Condensed" rel="stylesheet"> 
-            <title>Test</title>
-            <link rel='stylesheet' href='style.css'>
+	<!DOCTYPE html>
+	<html>
+		<head>
+			<link href="https://fonts.googleapis.com/css?family=Orbitron:500" rel="stylesheet">
+			<link href="https://fonts.googleapis.com/css?family=Roboto+Condensed" rel="stylesheet">
+			<title>Test</title>
+			<link rel='stylesheet' href='style.css'>
 			<script>
 				console.log("Запросы в бд: <?=$time1?>");
 				console.log("Обработка данных: <?=$time2?>");
 				console.log("Сортировка: <?=$time3?>");
 			</script>
-        </head>
-        <body>
+		</head>
+		<body>
 			<div = class="container">
 				<div class="title">
 					Stats of <?=$sess?> session
 				</div>
 				<div class="block1">
-					<table align='center' id='table' class='table'>         
+					<table align='center' id='table' class='table'>
 						<?=$content?>
 					</table>
 				</div>
 			</div>
-        </body>
-    </html>
+		</body>
+	</html>
 <?
 	}
