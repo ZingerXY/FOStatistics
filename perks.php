@@ -91,38 +91,3 @@
 	</html>
 <?
 	mysqli_close($link);
-	exit;
-/*------------------------------------------------------------------*/
-/*	ini_set('error_reporting', E_ALL); 
-	ini_set('display_errors', 1); 
-	ini_set('display_startup_errors', 1);
-	
-	include "config.php";
-	
-	$query = "SELECT id FROM `serv18_chars`";
-	$result = mysqli_query($link, $query);
-	$inputquery = "INSERT INTO `serv18_perks` (`id`, `pidlist`) VALUES \n";
-	while ($row = mysqli_fetch_assoc($result)) {
-		$listperk = '';
-		for($n = 0; $n < 140; $n++) {
-			$r = rand(0,3);
-			$listperk .= $r;
-		}
-		$inputquery .= "(" . $row["id"] . ", '" . $listperk . "'),\n";
-	}
-	$inputquery = substr($inputquery, 0, -2);
-	$inputquery .= ";\n";
-	
-	$result = mysqli_query($link, $inputquery);
-	
-	$errors = mysqli_error_list ($link);
-	if(!count($errors)) {
-		echo "Запрос выполнен без ошибок";
-	} else {
-		echo "<pre>";
-		print_r($errors);
-		echo $inputquery;
-		echo "</pre>";	
-	}
-	mysqli_close($link);*/
-	
