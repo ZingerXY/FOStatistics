@@ -104,13 +104,17 @@
 					<a href="perks.php?ck=150" class="button">150</a>
 					<a href="perks.php?ck=200" class="button">200</a>
 				</div>
-				<div class="block">
-					<table align='center' class='table'>
-						<?=$content?>
-					</table>
+				<div align="center" class="block">
+					<?
+					if ($sum > 15) 
+						echo "<table align='center' class='table'>".$content."</table>";
+					else
+						echo "<br>Недостаточно данных для вывода статистики.";
+					?>
 				</div>
 			</div>
 			<script>
+			var ch = <?=($sum > 15 ? "true" : "false")?>;
 			function sortGrid(cls) {
 				// Составить массив из TR
 				var rowsArray = document.querySelectorAll("." + cls);
@@ -127,8 +131,10 @@
 				for (var i = 0; i < rowsArray.length; i++)
 					tbody.appendChild(rowsArray[i]);
 			}
-			sortGrid("trait");
-			sortGrid("perk");
+			if (ch) {
+				sortGrid("trait");
+				sortGrid("perk");
+			}
 			</script>
 		</body>
 	</html>
