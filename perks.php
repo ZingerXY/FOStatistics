@@ -32,12 +32,15 @@
 		
 	$result = mysqli_query($link, $query);
 	$perk = [];
-	while ($row = mysqli_fetch_assoc($result)) {		
+	while ($row = mysqli_fetch_assoc($result)) {
 		$perk[] = $row["name"];
 	}
 	
+	if ($ck)
+		$query = "SELECT id,pidlist FROM serv18_perks WHERE id = (select distinct id_killer from serv18_kills where id_killer = serv18_perks.id AND (select count(id_killer) from serv18_kills where id_killer = serv18_perks.id) >= $ck)";
+	else
+		$query = "SELECT id,pidlist FROM serv18_perks";
 	
-	$query = "SELECT id,pidlist FROM serv18_perks WHERE id = (select distinct id_killer from serv18_kills where id_killer = serv18_perks.id AND (select count(id_killer) from serv18_kills where id_killer = serv18_perks.id) >= $ck)";
 	$result = mysqli_query($link, $query);
 	
 	$stat = [];
@@ -51,7 +54,7 @@
 				else
 					$stat[$i]++;
 			}
-		}		
+		}
 		$sum++;
 	}
 	
@@ -60,27 +63,20 @@
 	$class = 'trait';
 	$num = 1;
 	foreach($perk as $i => $e) {
-		if(array_key_exists($i,$stat))
+		if (array_key_exists($i,$stat))
 			$pr = round($stat[$i] / $sum * 100, 2);
 		else
 			$pr = 0;
-		if ($num != 105){
 		$content .= "
-		<tr class='$class'>
-			<td ><img align ='middle' class ='image_perks' src='images/perks/$num.png'></td>
-			<td class='td'>$e</td>
-			<td class='td'>$pr%</td>
-		</tr>";
-		}
-		else {
-			$content .= "
 			<tr class='$class'>
-				<td ><img align ='middle' class ='image_perks' src='images/perks/$num.png' onmouseover='this.src = \"images/perks/easter_egg.png\"' onmouseout='this.src = \"images/perks/$num.png\"'></td>
+				<td>
+					<img align ='middle' class ='image_perks' src='images/perks/$num.png'" . 
+					($num == 105 ? "onmouseover='this.src = \"images/perks/easter_egg.png\"' onmouseout='this.src = \"images/perks/$num.png\"'" : "") . ">
+				</td>
 				<td class='td'>$e</td>
 				<td class='td'>$pr%</td>
 			</tr>";
-		}
-		if($i == 15) {
+		if ($i == 15) {
 			$content .= '</tbody><tr><td class="th" colspan="3"></a><div class="title">Перки</div></td></tr><tbody>';
 			$class = 'perk';
 		}
@@ -101,7 +97,7 @@
 		<body>
 			<div = class="container">
 				<div align="center">
-					<a href="perks.php?ck=0" class="button">Всё</a>
+					<a href="perks.php" class="button">Всё</a>
 					<a href="perks.php?ck=25" class="button">25</a>
 					<a href="perks.php?ck=50" class="button">50</a>
 					<a href="perks.php?ck=100" class="button">100</a>
@@ -121,7 +117,7 @@
 				var tbody = rowsArray[0].parentNode;
 				rowsArray = Array.from(rowsArray);
 				// сортировать
-				rowsArray.sort(function(a,b) {			
+				rowsArray.sort(function(a,b) {
 					var compA = a.cells[2].innerText.slice(0,-1);
 					var compB = b.cells[2].innerText.slice(0,-1);
 					return compB - compA;
