@@ -109,6 +109,19 @@
 					<a href="perks.php?ck=150" class="button">150</a>
 					<a href="perks.php?ck=200" class="button">200</a>
 				</div>
+				<div align="center" style="display: none;">
+					<input onclick="hideshow(this)" id="lvl3" type="checkbox" checked>3-29
+					<input onclick="hideshow(this)" id="lvl6" type="checkbox" checked>6-29
+					<input onclick="hideshow(this)" id="lvl9" type="checkbox" checked>9-29
+					<input onclick="hideshow(this)" id="lvl12" type="checkbox" checked>12-29
+					<input onclick="hideshow(this)" id="lvl15" type="checkbox" checked>15-29
+					<input onclick="hideshow(this)" id="lvl30" type="checkbox" checked>3-30
+					<input onclick="hideshow(this)" id="lvl33" type="checkbox" checked>3-99
+					<input onclick="hideshow(this)" id="quest" type="checkbox" checked>quest
+					<input onclick="hideshow(this)" id="imp" type="checkbox" checked>imp
+					<input onclick="hideshow(this)" id="mperk" type="checkbox" checked>master
+					<input onclick="hideshow(this)" id="sys" type="checkbox" checked>system
+				</div>
 				<div align="center" class="block">
 					<?
 					if ($sum > 15) 
@@ -136,7 +149,23 @@
 				for (var i = 0; i < rowsArray.length; i++)
 					tbody.appendChild(rowsArray[i]);
 			}
+			function hideshow(e) {
+				var trs = document.querySelectorAll("tr.perk."+e.id);	
+				for(var i in trs) {
+					if(trs[i].style) {
+						if(e.checked)
+							trs[i].style.display = '';
+						else
+							trs[i].style.display = 'none';
+					}
+				}
+			}
 			if (ch) {
+				var perktype = ['','','','','','','','','','','','','','','','','lvl15','lvl33','lvl3','lvl6','lvl15','lvl3','lvl9','lvl3','lvl12','quest','lvl33','lvl6','lvl3','lvl6','lvl12','lvl33','lvl33','lvl3','lvl6','lvl12','lvl9','lvl3','lvl15','lvl15','lvl15','lvl15','lvl12','lvl12','lvl6','lvl33','lvl30','lvl30','lvl9','lvl33','lvl6','lvl6','lvl33','lvl6','lvl3','lvl12','lvl6','lvl6','lvl30','lvl15','lvl33','lvl12','lvl33','lvl3','lvl3','sys','lvl12','lvl15','lvl3','lvl12','lvl33','lvl12','lvl15','lvl33','lvl30','lvl12','lvl3','lvl3','lvl33','lvl3','lvl6','lvl6','lvl6','lvl6','lvl6','lvl6','lvl6','lvl33','lvl33','lvl3','lvl12','quest','lvl6','lvl12','lvl33','lvl33','lvl33','lvl9','lvl3','lvl33','lvl3','lvl30','lvl30','quest','quest','sys','lvl15','sys','lvl6','lvl9','lvl30','sys','quest','quest','lvl12','quest','quest','quest','quest','quest','quest','quest','lvl33','quest','lvl15','quest','imp','imp','imp','lvl15','sys','mperk','mperk','mperk','mperk','mperk','mperk','mperk','mperk','mperk','mperk','mperk','lvl12']
+				var tr = Array.from(document.querySelectorAll("tr.perk,.trait"));
+				for(var i in tr)
+					if(perktype[i])
+						tr[i].classList.add(perktype[i]);	
 				sortGrid("trait");
 				sortGrid("perk");
 			}
