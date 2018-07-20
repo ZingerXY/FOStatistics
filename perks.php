@@ -5,6 +5,28 @@
 	ini_set('display_startup_errors', 1);*/
 	
 	include "config.php";
+
+	function def($text,$linksql = false) {
+		$result = strip_tags($text);
+		$result = htmlspecialchars($result);
+		if ($linksql)
+			$result = mysqli_real_escape_string ($linksql, $result);
+		return $result;
+	}
+
+	$filter = [
+		'options' => [
+			'default' => 0, // значение, возвращаемое, если фильтрация завершилась неудачей
+			// другие параметры
+			'min_range' => 0
+		],
+		'flags' => FILTER_FLAG_ALLOW_OCTAL,
+	];
+
+	$ck = 0;
+	if (isset($_REQUEST ['ck'])) {
+		$ck = filter_var(def($_REQUEST ['ck']), FILTER_VALIDATE_INT, $filter);
+	}
 	
 	$query = "SELECT name FROM `name_perks`";
 		
@@ -15,7 +37,7 @@
 	}
 	
 	
-	$query = "SELECT * FROM `serv18_perks`";
+	$query = "SELECT id,pidlist FROM serv18_perks WHERE id = (select distinct id_killer from serv18_kills where id_killer = serv18_perks.id AND (select count(id_killer) from serv18_kills where id_killer = serv18_perks.id) >= 30)";
 	$result = mysqli_query($link, $query);
 	
 	$stat = [];
@@ -78,6 +100,13 @@
 		</head>
 		<body>
 			<div = class="container">
+				<div align="center">
+					<a href="perks.php?ck=25" class="button">25</a>
+					<a href="perks.php?ck=50" class="button">50</a>
+					<a href="perks.php?ck=100" class="button">100</a>
+					<a href="perks.php?ck=150" class="button">150</a>
+					<a href="perks.php?ck=200" class="button">200</a>
+				</div>
 				<div class="block">
 					<table align='center' class='table'>
 						<?=$content?>
