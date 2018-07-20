@@ -68,7 +68,7 @@
 		else
 			$pr = 0;
 		$content .= "
-			<tr class='$class'>
+			<tr class='$class' data-id='$i'>
 				<td>
 					<img align ='middle' class ='image_perks' src='images/perks/$num.png'" . 
 					($num == 105 ? "onmouseover='this.src = \"images/perks/easter_egg.png\"' onmouseout='this.src = \"images/perks/$num.png\"'" : "") . ">
@@ -100,7 +100,7 @@
 		</head>
 		<body>
 			<div = class="container">
-				<div align="center" class="block">Фильтр по убийствам</div><br>
+				<div align="center" class="block" style="margin: 4px 0px;">Фильтр по убийствам</div>
 				<div align="center">
 					<a href="perks.php" class="button">Всё</a>
 					<a href="perks.php?ck=25" class="button">25</a>
@@ -109,7 +109,8 @@
 					<a href="perks.php?ck=150" class="button">150</a>
 					<a href="perks.php?ck=200" class="button">200</a>
 				</div>
-				<div align="center" style="display: none;">
+				<div align="center" class="block" style="margin: 4px 0px;">Фильтр по типу перков</div>
+				<div align="center" style="margin: 0px 41px;">
 					<input onclick="hideshow(this)" id="lvl3" type="checkbox" checked>3-29
 					<input onclick="hideshow(this)" id="lvl6" type="checkbox" checked>6-29
 					<input onclick="hideshow(this)" id="lvl9" type="checkbox" checked>9-29
@@ -161,7 +162,7 @@
 				}
 			}
 			if (ch) {
-				var perktype = ['','','','','','','','','','','','','','','','','lvl15','lvl33','lvl3','lvl6','lvl15','lvl3','lvl9','lvl3','lvl12','quest','lvl33','lvl6','lvl3','lvl6','lvl12','lvl33','lvl33','lvl3','lvl6','lvl12','lvl9','lvl3','lvl15','lvl15','lvl15','lvl15','lvl12','lvl12','lvl6','lvl33','lvl30','lvl30','lvl9','lvl33','lvl6','lvl6','lvl33','lvl6','lvl3','lvl12','lvl6','lvl6','lvl30','lvl15','lvl33','lvl12','lvl33','lvl3','lvl3','sys','lvl12','lvl15','lvl3','lvl12','lvl33','lvl12','lvl15','lvl33','lvl30','lvl12','lvl3','lvl3','lvl33','lvl3','lvl6','lvl6','lvl6','lvl6','lvl6','lvl6','lvl6','lvl33','lvl33','lvl3','lvl12','quest','lvl6','lvl12','lvl33','lvl33','lvl33','lvl9','lvl3','lvl33','lvl3','lvl30','lvl30','quest','quest','sys','lvl15','sys','lvl6','lvl9','lvl30','sys','quest','quest','lvl12','quest','quest','quest','quest','quest','quest','quest','lvl33','quest','lvl15','quest','imp','imp','imp','lvl15','sys','mperk','mperk','mperk','mperk','mperk','mperk','mperk','mperk','mperk','mperk','mperk','lvl12']
+				var perktype = ['','','','','','','','','','','','','','','','','lvl15','lvl33','lvl3','lvl6','lvl15','lvl3','lvl9','lvl3','lvl12','quest','lvl33','lvl6','lvl3','lvl6','lvl12','lvl33','lvl33','lvl3','lvl6','lvl12','lvl9','lvl3','lvl15','lvl15','lvl15','lvl15','lvl12','lvl12','lvl6','lvl33','lvl30','lvl30','lvl9','lvl33','lvl6','lvl6','lvl33','lvl6','lvl3','lvl12','lvl6','lvl6','lvl30','lvl15','lvl33','lvl12','lvl33','lvl3','lvl3','sys','lvl12','lvl15','lvl3','lvl12','lvl33','lvl12','lvl15','lvl33','lvl30','lvl12','lvl3','lvl3','lvl33','lvl3','lvl6','lvl6','lvl6','lvl6','lvl6','lvl6','lvl6','lvl33','lvl33','lvl3','lvl12','quest','lvl6','lvl12','lvl33','lvl33','lvl33','lvl9','lvl3','lvl33','lvl3','lvl30','lvl30','quest','sys','sys','lvl15','sys','lvl6','lvl9','lvl30','sys','quest','quest','lvl12','quest','sys','quest','quest','quest','quest','quest','lvl33','quest','lvl15','quest','imp','imp','imp','lvl15','sys','mperk','mperk','mperk','mperk','mperk','mperk','mperk','mperk','mperk','mperk','mperk','lvl12']
 				var tr = Array.from(document.querySelectorAll("tr.perk,.trait"));
 				for(var i in tr)
 					if(perktype[i])
