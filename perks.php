@@ -37,7 +37,7 @@
 	}
 	
 	
-	$query = "SELECT id,pidlist FROM serv18_perks WHERE id = (select distinct id_killer from serv18_kills where id_killer = serv18_perks.id AND (select count(id_killer) from serv18_kills where id_killer = serv18_perks.id) >= 30)";
+	$query = "SELECT id,pidlist FROM serv18_perks WHERE id = (select distinct id_killer from serv18_kills where id_killer = serv18_perks.id AND (select count(id_killer) from serv18_kills where id_killer = serv18_perks.id) >= $ck)";
 	$result = mysqli_query($link, $query);
 	
 	$stat = [];
