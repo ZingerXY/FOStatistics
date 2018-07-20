@@ -101,6 +101,7 @@
 		<body>
 			<div = class="container">
 				<div align="center">
+					<a href="perks.php?ck=0" class="button">Всё</a>
 					<a href="perks.php?ck=25" class="button">25</a>
 					<a href="perks.php?ck=50" class="button">50</a>
 					<a href="perks.php?ck=100" class="button">100</a>
