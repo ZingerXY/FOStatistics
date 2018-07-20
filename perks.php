@@ -96,6 +96,7 @@
 		</head>
 		<body>
 			<div = class="container">
+				<div align="center" class="block">Фильтр по убийствам</div><br>
 				<div align="center">
 					<a href="perks.php" class="button">Всё</a>
 					<a href="perks.php?ck=25" class="button">25</a>
