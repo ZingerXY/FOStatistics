@@ -121,8 +121,8 @@
 				rowsArray = Array.from(rowsArray);
 				// сортировать
 				rowsArray.sort(function(a,b) {			
-					var compA = a.cells[1].innerText.slice(0,-2);
-					var compB = b.cells[1].innerText.slice(0,-2);
+					var compA = a.cells[2].innerText.slice(0,-1);
+					var compB = b.cells[2].innerText.slice(0,-1);
 					return compB - compA;
 				});
 				// добавить результат в нужном порядке в TBODY
