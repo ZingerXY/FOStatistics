@@ -84,7 +84,7 @@
 	}
 	$content .= '</tbody>';
 	
-	$content .= "<tr style='background-color:#444444'><td></td><td class='td'>Всего данных</td><td class='td'>$sum</td></tr>";
+	$content .= "<tr style='background-color:#444444;border-bottom:none;'><td></td><td class='td'>Всего данных</td><td class='td'>$sum</td></tr>";
 ?>
 	<!DOCTYPE html>
 	<html>
@@ -93,6 +93,10 @@
 			<link href="https://fonts.googleapis.com/css?family=Roboto+Condensed" rel="stylesheet">
 			<title>Статистика взятия перков</title>
 			<link rel='stylesheet' href='style.css'>
+			<style type="text/css">
+				tr:nth-child(odd){background: #414141;}
+				tr{border-bottom: solid 1px #5a5a5a;}
+			</style>
 		</head>
 		<body>
 			<div = class="container">
