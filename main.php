@@ -100,6 +100,24 @@
 					this.classList.add("selecttab");
 			  };
 			}
+			function ajax(url,func) {
+				var xhr = new XMLHttpRequest();
+				xhr.open('POST', url, true);
+				xhr.onreadystatechange = function() { // (3)
+				  if (xhr.readyState == 4) func(xhr.response);
+				}
+				xhr.responseType = "document";
+				xhr.send();
+			}
+			var links = document.querySelectorAll("a");
+			for (var i = 0; i < links.length; i++) {
+				links.onclick = function () {
+					ajax(this.href,function(res) {
+						console.log(res);
+					})
+					return false;
+				}
+			}
 			</script>
 		</body>
 	</html>
