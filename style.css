@@ -112,6 +112,8 @@ a.button {
   border: 1px solid;
   border-radius: 1px;
   transition: 0.2s;
+  color: #e2e2e2;
+  opacity: .9;
 } 
 a.button:hover { background: rgba(255,255,255,.2); }
 a.button:active { background: white; }
