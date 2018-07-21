@@ -73,7 +73,7 @@
 		<a href="perks.php?ck=200" class="button">200</a>
 	</div>
 	<div align="center" class="block" style="margin: 4px 0px;">Фильтр по типу перков</div>
-	<div align="center" style="margin: 0px 41px;">
+	<div align="center" style="margin: 0px auto;width: 300px;">
 		<input onclick="hideshow(this)" id="lvl3" type="checkbox" checked><label for="lvl3">3</label>
 		<input onclick="hideshow(this)" id="lvl6" type="checkbox" checked><label for="lvl6">6</label>
 		<input onclick="hideshow(this)" id="lvl9" type="checkbox" checked><label for="lvl9">9</label>

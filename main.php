@@ -80,10 +80,11 @@
 					<div id="frac" class="tab">Фракции</div>
 					<div id="perk" class="perk tab">Перки и трейты</div>
 				</div>
-				<div class="container">
+				<div class="box">
 					<div class="pers tabcont"><?include "chars2.php";?></div>
 					<div class="frac tabcont hide"><?include "factions2.php";?></div>
 					<div class="perk tabcont hide"><?include "perks.php";?></div>
+					<div id="ajaxpage" class="tabcont hide"></div>
 				</div>
 			</div>
 			<script>
@@ -109,14 +110,20 @@
 				xhr.responseType = "document";
 				xhr.send();
 			}
+			function relink() {
+				ajax(this.href,function(res) {
+					ajaxpage.innerHTML = res.body.innerHTML;
+					ajaxpage.classList.remove("hide");
+					var inlinks = ajaxpage.querySelectorAll("a");
+					for (var i = 0; i < inlinks.length; i++) {
+						inlinks[i].onclick = relink;
+					}
+				})
+				return false;
+			}
 			var links = document.querySelectorAll("a");
 			for (var i = 0; i < links.length; i++) {
-				links.onclick = function () {
-					ajax(this.href,function(res) {
-						console.log(res);
-					})
-					return false;
-				}
+				links[i].onclick = relink;
 			}
 			</script>
 		</body>
