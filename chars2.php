@@ -1,38 +1,4 @@
-﻿<?php
-
-	/*ini_set('error_reporting', E_ALL);
-	ini_set('display_errors', 1);
-	ini_set('display_startup_errors', 1);*/
-
-	include "config.php";
-
-	// защита БД от SQL иньекций
-	function def($text,$linksql = false) {
-		$result = strip_tags($text);
-		$result = htmlspecialchars($result);
-		if ($linksql)
-			$result = mysqli_real_escape_string ($linksql, $result);
-		return $result;
-	}
-
-	$filter = [
-		'options' => [
-			'default' => 0, // значение, возвращаемое, если фильтрация завершилась неудачей
-			// другие параметры
-			'min_range' => 0
-		],
-		'flags' => FILTER_FLAG_ALLOW_OCTAL,
-	];
-
-	function myCmp($a, $b)
-	{
-		return ($b["raiting"]*1000) - ($a["raiting"]*1000);
-	}
-
-	$sess = 18;
-	if (isset($_REQUEST['s'])) {
-		$sess = filter_var(def($_REQUEST['s']), FILTER_VALIDATE_INT, $filter);
-	}
+<?php
 
 	// Проверка существования таблицы с префиксом
 	$chrtbl = mysqli_query($link, "SHOW TABLES LIKE 'serv{$sess}_chars'") or die(mysqli_error($link));
@@ -73,7 +39,6 @@
 		$allstats = $data_stat;
 		foreach ($data_kills as $dkills)
 		{
-
 			$id_killer = $dkills["id_killer"];
 			$id_victim = $dkills["id_victim"];
 
@@ -83,16 +48,13 @@
 			$allstats[$id_killer]["kills"]++;
 			$allstats[$id_victim]["deaths"]++;
 
-
 			$killer_kills = $allstats[$id_killer]["kills"];
 			$victim_deaths = $allstats[$id_victim]["deaths"];
 			$victim_kills = $allstats[$id_victim]["kills"];
 			$killer_deaths = $allstats[$id_killer]["deaths"];
 
-
 			$allstats[$id_killer]["raiting"] += ($victim_kills / ($victim_kills + $victim_deaths));
 			$allstats[$id_victim]["raiting"] -= ($killer_deaths / ( $killer_deaths + $killer_kills));
-
 		}
 
 		$time2 = microtime(true) - $start;
@@ -124,31 +86,13 @@
 			$num++;
 		}
 ?>
-	<!DOCTYPE html>
-	<html>
-		<head>
-			<link href="https://fonts.googleapis.com/css?family=Orbitron:500" rel="stylesheet">
-			<link href="https://fonts.googleapis.com/css?family=Roboto+Condensed" rel="stylesheet">
-			<title>Статистика игроков</title>
-			<link rel='stylesheet' href='style.css'>
-			<script>
-				console.log("Запросы в бд: <?=$time1?>");
-				console.log("Обработка данных: <?=$time2?>");
-				console.log("Сортировка: <?=$time3?>");
-			</script>
-		</head>
-		<body>
-			<div = class="container">
-				<div class="title">
-					Stats of <?=$sess?> session
-				</div>
-				<div class="block1">
-					<table align='center' id='table' class='table'>
-						<?=$content?>
-					</table>
-				</div>
-			</div>
-		</body>
-	</html>
+	<div class="title">
+		Stats of <?=$sess?> session
+	</div>
+	<div class="block">
+		<table align='center' id='table' class='table'>
+			<?=$content?>
+		</table>
+	</div>
 <?
 	}
