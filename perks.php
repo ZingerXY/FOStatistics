@@ -58,7 +58,7 @@
 		$sum++;
 	}
 	
-	$content = '<tr><td class="th" colspan="3"></a><div class="title">Трейты</div></td></tr>';
+	$content = '<tr class="perks"><td class="th" colspan="3"></a><div class="title">Трейты</div></td></tr>';
 	$content .= '<tbody>';
 	$class = 'trait';
 	$num = 1;
@@ -68,7 +68,7 @@
 		else
 			$pr = 0;
 		$content .= "
-			<tr class='$class' data-id='$i'>
+			<tr class='$class perks' data-id='$i'>
 				<td>
 					<img align ='middle' class ='image_perks' src='images/perks/$num.png'" . 
 					($num == 105 ? "onmouseover='this.src = \"images/perks/easter_egg.png\"' onmouseout='this.src = \"images/perks/$num.png\"'" : "") . ">
@@ -77,7 +77,7 @@
 				<td class='td'>$pr%</td>
 			</tr>";
 		if ($i == 15) {
-			$content .= '</tbody><tr><td class="th" colspan="3"></a><div class="title">Перки</div></td></tr><tbody>';
+			$content .= '</tbody><tr class="perks"><td class="th" colspan="3"></a><div class="title">Перки</div></td></tr><tbody>';
 			$class = 'perk';
 		}
 		$num++;
@@ -93,10 +93,6 @@
 			<link href="https://fonts.googleapis.com/css?family=Roboto+Condensed" rel="stylesheet">
 			<title>Статистика взятия перков</title>
 			<link rel='stylesheet' href='style.css'>
-			<style type="text/css">
-				tr:nth-child(odd){background: #414141;}
-				tr{border-bottom: solid 1px #5a5a5a;}
-			</style>
 		</head>
 		<body>
 			<div = class="container">
@@ -111,24 +107,24 @@
 				</div>
 				<div align="center" class="block" style="margin: 4px 0px;">Фильтр по типу перков</div>
 				<div align="center" style="margin: 0px 41px;">
-					<input onclick="hideshow(this)" id="lvl3" type="checkbox" checked>3-29
-					<input onclick="hideshow(this)" id="lvl6" type="checkbox" checked>6-29
-					<input onclick="hideshow(this)" id="lvl9" type="checkbox" checked>9-29
-					<input onclick="hideshow(this)" id="lvl12" type="checkbox" checked>12-29
-					<input onclick="hideshow(this)" id="lvl15" type="checkbox" checked>15-29
-					<input onclick="hideshow(this)" id="lvl30" type="checkbox" checked>3-30
-					<input onclick="hideshow(this)" id="lvl33" type="checkbox" checked>3-99
-					<input onclick="hideshow(this)" id="quest" type="checkbox" checked>quest
-					<input onclick="hideshow(this)" id="imp" type="checkbox" checked>imp
-					<input onclick="hideshow(this)" id="mperk" type="checkbox" checked>master
-					<input onclick="hideshow(this)" id="sys" type="checkbox" checked>system
+					<input onclick="hideshow(this)" id="lvl3" type="checkbox" checked><label for="lvl3">3</label>
+					<input onclick="hideshow(this)" id="lvl6" type="checkbox" checked><label for="lvl6">6</label>
+					<input onclick="hideshow(this)" id="lvl9" type="checkbox" checked><label for="lvl9">9</label>
+					<input onclick="hideshow(this)" id="lvl12" type="checkbox" checked><label for="lvl12">12</label>
+					<input onclick="hideshow(this)" id="lvl15" type="checkbox" checked><label for="lvl15">15</label>
+					<input onclick="hideshow(this)" id="lvl30" type="checkbox" checked><label for="lvl30">30</label>
+					<input onclick="hideshow(this)" id="lvl33" type="checkbox" checked><label for="lvl33">33</label>
+					<input onclick="hideshow(this)" id="quest" type="checkbox" checked><label for="quest">quests</label>
+					<input onclick="hideshow(this)" id="imp" type="checkbox" checked><label for="imp">implant</label>
+					<input onclick="hideshow(this)" id="mperk" type="checkbox" checked><label for="mperk">masters</label>
+					<input onclick="hideshow(this)" id="sys" type="checkbox" checked><label for="sys">system</label>
 				</div>
 				<div align="center" class="block">
 					<?
 					if ($sum > 15) 
 						echo "<table align='center' class='table'>".$content."</table>";
 					else
-						echo "<br>Недостаточно данных для вывода статистики.";
+						echo "<br>Недостаточно данных для вывода статистики";
 					?>
 				</div>
 			</div>

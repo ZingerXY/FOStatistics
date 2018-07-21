@@ -115,3 +115,31 @@ a.button {
 } 
 a.button:hover { background: rgba(255,255,255,.2); }
 a.button:active { background: white; }
+
+input[type="checkbox"] { display: none; }
+input[type="checkbox"] + label {
+	position: relative;
+	color: #ddd;
+	cursor: pointer;
+	padding-left: 22px;
+	vertical-align: middle;
+}
+input[type="checkbox"] + label:after {
+	content: '';
+	display: block;
+	width: 15px;
+	height: 15px;
+	outline: 1px solid #939598;	 
+	position: absolute;
+	left: 4px;
+	top: 2px;
+	opacity: .6;  
+}
+input[type="checkbox"]:checked + label:after {	
+	border:3px solid #444444;
+	width:9px;
+	height:9px;
+	background-color:#ddd;
+}
+tr.perks:nth-child(odd){background: #414141;}
+tr.perks {border-bottom: solid 1px #5a5a5a;}
