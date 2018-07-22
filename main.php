@@ -37,6 +37,7 @@
 	<!DOCTYPE html>
 	<html>
 		<head>
+			<meta charset="utf-8">
 			<link href="https://fonts.googleapis.com/css?family=Orbitron:500" rel="stylesheet">
 			<link href="https://fonts.googleapis.com/css?family=Roboto+Condensed" rel="stylesheet">
 			<title>Статистика взятия перков</title>
@@ -46,48 +47,75 @@
 				border: solid 1px #e2e2e2;
 				border-bottom: none;
 				padding: 5px 12px;
-				border-radius: 2px 15px 0px 0px;
-				margin-right: 2px;
+				border-radius: 2px 2px 0px 0px;
+				margin-right: 4px;
+				margin-left: 0px;
 				cursor: pointer;
+				position: relative;
 			}
 			.selecttab {
 				color: white;
-				box-shadow: inset 0px 0px 9px #e2e2e2;
-			}
+				background-color: #444444;			
+				margin: 0px 4px -1px 0px;
+				border-radius: 2px 2px 0px 0px;					
+			}			
 			.tab:hover {
 				background: #696969;
 			}
-			.box {
-			  display: flex;
-			  align-items: stretch;
-			  border-bottom: solid 1px;
+			.selecttab:hover {
+				background-color: #444444;
 			}
+			.box {			
+			  display: flex;
+			  align-items: stretch;			   	  
+			}		
 			.tabcont {
 				transition: 1s;
 				padding: 10px;
-				border: solid 1px;
-				border-top: none;
+				border: solid 1px;				
+				min-width: 500px;
+				height: 650px;
+				overflow: hidden;
+			}			
+			.stabcont {				
+				transition: 1s;
+				padding: 10px;
+				border: solid 1px;				
+				min-width: 500px;
+				margin-left: -1px;
+				height: 650px;
+				overflow: hidden;								
 			}
 			.hide {
 				display: none;
+			}		
+			#parent {
+				width: 99%;
+				position: absolute;				
+				text-align: center;					
 			}
+			#main {
+				display: inline-block;					
+			}			
 			</style>
 		</head>
 		<body>
-			<div class="container">
+			<div id="parent">
+			<div id="main">
 				<div class="box">
 					<div id="pers" class="tab selecttab">Персонажи</div>
 					<div id="frac" class="tab">Фракции</div>
 					<div id="perk" class="perk tab">Перки и трейты</div>
 				</div>
-				<div class="box">
+				<div align="center" class="box">
 					<div class="pers tabcont"><?include "chars2.php";?></div>
 					<div class="frac tabcont hide"><?include "factions2.php";?></div>
 					<div class="perk tabcont hide"><?include "perks.php";?></div>
-					<div id="ajaxpage" class="tabcont hide"></div>
+					<div id="ajaxpage" class="stabcont hide"></div>
 				</div>
 			</div>
-			<script>
+			</div>		
+			<script>			
 			var tabsconts = document.querySelectorAll(".tabcont");
 			var tabs = document.querySelectorAll(".tab");
 			for (var i = 0; i < tabs.length; i++) {
@@ -101,7 +129,7 @@
 					this.classList.add("selecttab");
 			  };
 			}
-			function ajax(url,func) {
+			function ajax(url,func) {				
 				var xhr = new XMLHttpRequest();
 				xhr.open('POST', url, true);
 				xhr.onreadystatechange = function() { // (3)
@@ -110,7 +138,7 @@
 				xhr.responseType = "document";
 				xhr.send();
 			}
-			function relink() {
+			function relink() {				
 				ajax(this.href,function(res) {
 					ajaxpage.innerHTML = res.body.innerHTML;
 					ajaxpage.classList.remove("hide");
@@ -120,10 +148,20 @@
 					}
 				})
 				return false;
-			}
+			}			
 			var links = document.querySelectorAll("a");
 			for (var i = 0; i < links.length; i++) {
 				links[i].onclick = relink;
+			}
+			document.querySelector(".tabcont").onwheel = function (e) { 
+			var delta = e.deltaY || e.detail || e.wheelDelta; 
+			if(delta>0) this.scrollTop = this.scrollTop + 18; 
+			else this.scrollTop = this.scrollTop - 18; e.preventDefault(); 
+			}
+			document.querySelector(".stabcont").onwheel = function (e) { 
+			var delta = e.deltaY || e.detail || e.wheelDelta; 
+			if(delta>0) this.scrollTop = this.scrollTop + 18; 
+			else this.scrollTop = this.scrollTop - 18; e.preventDefault(); 
 			}
 			</script>
 		</body>

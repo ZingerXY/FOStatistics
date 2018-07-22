@@ -58,14 +58,9 @@ a:hover {
 	top: 7%;
 }
 .block1 {
+	display: inline-block;
 	top: 7%;
-	float: left;
-	width: 212px;
-}
-.block2 {
-	top: 7%;
-	float: left;
-	width: 212px;
+	margin: 0 5px;
 }
 .block3 {
 	text-align: center;

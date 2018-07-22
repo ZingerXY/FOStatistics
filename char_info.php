@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 	/*ini_set('error_reporting', E_ALL);
 	ini_set('display_errors', 1);
@@ -109,7 +109,7 @@
 				<tr>
 					<td class='td'><a href='char_info.php?s={$sess}&char_id={$schar['id']}'>$schar[name]</td>
 					<td class='td2_char_info'><img class ='image'src='images/rating.png'></td>
-					<td class='td1'>$resreit</span></td>
+					<td class='td1'>+$resreit</span></td>
 				</tr>";
 			}
 		}
@@ -123,7 +123,7 @@
 				<tr>
 					<td class='td'><a href='char_info.php?s={$sess}&char_id={$schar['id']}'>$schar[name]</td>
 					<td class='td2_char_info'><img class ='image'src='images/rating.png'></td>
-					<td class='td1'>$resreit</span></td>
+					<td class='td1'>-$resreit</span></td>
 				</tr>";
 			}
 		}
@@ -131,23 +131,23 @@
 	<!DOCTYPE html>
 	<html>
 		<head>
+			<meta charset="utf-8">
 			<link href="https://fonts.googleapis.com/css?family=Orbitron:500" rel="stylesheet">
 			<link href="https://fonts.googleapis.com/css?family=Roboto+Condensed" rel="stylesheet">
 			<title>Статистика <?=$data_stat[$char_id]["name"]?></title>
 			<link rel='stylesheet' href='style.css'>
 		</head>
-		<body>
-			<div class="title"><a href="chars2.php">←</a></div>
+		<body>			
 			<div class="title"><?=$data_stat[$char_id]["name"]?></div>
 			<div class="title"><?=round($allstats[$char_id]["raiting"],2)?></div>
-			<div = class="container">
+			<div align="center" class="container">
 				<div class="block1">
 					<div class="block3">Убийства</div>
 					<table align='center' class='table'>
 						<?=$contKills?>
 					</table>
 				</div>
-				<div class="block2">
+				<div class="block1">
 					<div class="block4">Смерти</div>
 					<table align='center' class='table'>
 						<?=$contDeaths?>

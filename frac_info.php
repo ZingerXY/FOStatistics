@@ -179,17 +179,17 @@
 	<!DOCTYPE html>
 	<html>
 		<head>
+			<meta charset="utf-8">
 			<link href="https://fonts.googleapis.com/css?family=Orbitron:500" rel="stylesheet">
 			<link href="https://fonts.googleapis.com/css?family=Roboto+Condensed" rel="stylesheet">
 			<title>Статистика фракции <?=$faction_name?></title>
 			<link rel='stylesheet' href='style.css'>
 		</head>
-		<body>
-			<div class="title"><a href="factions2.php">←</a></div>
+		<body>			
 			<div class="title"><?=$faction_name?></div>
 			<div class="title"><?=round($faction_rait,2)?></div>
 			<div align="center"><a href="#deaths">К смертям →</a></div>
-			<div class="block">
+			<div align="center" class="block">
 				<table align='center' class='table'>
 					<?=$content?>
 				</table>
