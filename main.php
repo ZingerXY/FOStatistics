@@ -153,7 +153,8 @@
 					ajaxpage.classList.remove("hide");
 					var inlinks = ajaxpage.querySelectorAll("a");
 					for (var i = 0; i < inlinks.length; i++) {
-						inlinks[i].onclick = relink;
+						if(!~inlinks[i].href.indexOf("#"))
+							inlinks[i].onclick = relink;
 					}
 				})
 				return false;
