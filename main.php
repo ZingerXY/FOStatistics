@@ -1,38 +1,5 @@
 <?php
-	
-	/*ini_set('error_reporting', E_ALL);
-	ini_set('display_errors', 1);
-	ini_set('display_startup_errors', 1);*/
-
-	include_once "config.php";
-	
-	// защита БД от SQL иньекций
-	function def($text,$linksql = false) {
-		$result = strip_tags($text);
-		$result = htmlspecialchars($result);
-		if ($linksql)
-			$result = mysqli_real_escape_string ($linksql, $result);
-		return $result;
-	}
-
-	$filter = [
-		'options' => [
-			'default' => 0, // значение, возвращаемое, если фильтрация завершилась неудачей
-			// другие параметры
-			'min_range' => 0
-		],
-		'flags' => FILTER_FLAG_ALLOW_OCTAL,
-	];
-	
-	function myCmp($a, $b)
-	{
-		return ($b["raiting"]*1000) - ($a["raiting"]*1000);
-	}
-	
-	$sess = 18;
-	if (isset($_REQUEST['s'])) {
-		$sess = filter_var(def($_REQUEST['s']), FILTER_VALIDATE_INT, $filter);
-	}
+	include_once "app.php";
 ?>
 	<!DOCTYPE html>
 	<html>
@@ -75,7 +42,7 @@
 				border: solid 1px;
 				min-width: 500px;
 				height: 650px;
-				overflow: hidden;
+				overflow: auto;
 			}
 			.stabcont {
 				transition: 1s;
@@ -84,7 +51,7 @@
 				min-width: 500px;
 				margin-left: -1px;
 				height: 650px;
-				overflow: hidden;
+				overflow: auto;
 			}
 			.hide {
 				display: none;
@@ -110,7 +77,7 @@
 				<div align="center" class="box">
 					<div class="pers tabcont"><?include "chars2.php";?></div>
 					<div class="frac tabcont hide"><?include "factions2.php";?></div>
-					<div class="perk tabcont hide"><?include "perks.php";?></div>
+					<div id="perks" class="perk tabcont hide"><?include "perks.php";?></div>
 					<div id="ajaxpage" class="stabcont hide"></div>
 				</div>
 			</div>
@@ -128,9 +95,9 @@
 						tabcount.classList.remove("hide");
 						this.classList.add("selecttab");
 				};
-				tabsconts[i].onwheel = scroll;
+				//tabsconts[i].onwheel = scroll;
 			}
-			ajaxpage.onwheel = scroll;
+			//ajaxpage.onwheel = scroll;
 			var links = document.querySelectorAll("a");
 			for (var i = 0; i < links.length; i++) {
 				links[i].onclick = relink;
@@ -147,24 +114,39 @@
 			}
 			// Для ajax ссылок
 			function relink() {
-				ajax(this.href,function(res) {
-					ajaxpage.scrollTop = 0;
-					ajaxpage.innerHTML = res.body.innerHTML;
-					ajaxpage.classList.remove("hide");
-					var inlinks = ajaxpage.querySelectorAll("a");
-					for (var i = 0; i < inlinks.length; i++) {
-						if(!~inlinks[i].href.indexOf("#"))
-							inlinks[i].onclick = relink;
-					}
-				})
+				if(!~this.href.indexOf("perks")) {
+					ajax(this.href,function(res) {
+						ajaxpage.scrollTop = 0;
+						ajaxpage.innerHTML = res.body.innerHTML;
+						ajaxpage.classList.remove("hide");
+						var inlinks = ajaxpage.querySelectorAll("a");
+						for (var i = 0; i < inlinks.length; i++) {
+							if(!~inlinks[i].href.indexOf("#")) {
+								inlinks[i].onclick = relink;
+							}
+						}
+					});
+				}else {
+					ajax(this.href,function(res) {
+						perks.scrollTop = 0;
+						perks.innerHTML = res.body.innerHTML;
+						perks.classList.remove("hide");
+						var inlinks = perks.querySelectorAll("a");
+						for (var i = 0; i < inlinks.length; i++) {
+							if(!~inlinks[i].href.indexOf("#")) {
+								inlinks[i].onclick = relink;
+							}
+						}
+					});
+				}
 				return false;
 			}
 			// Для скрола элементов без скролбаров
-			function scroll(e) { 
+			/*function scroll(e) { 
 				var delta = e.deltaY || e.detail || e.wheelDelta; 
 				if(delta>0) this.scrollTop = this.scrollTop + 18; 
 				else this.scrollTop = this.scrollTop - 18; e.preventDefault(); 
-			}
+			}*/
 			
 			</script>
 		</body>

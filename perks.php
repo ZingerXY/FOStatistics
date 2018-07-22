@@ -1,5 +1,7 @@
 <?php
-
+	
+	include_once "app.php";
+	
 	$ck = 0;
 	if (isset($_REQUEST ['ck'])) {
 		$ck = filter_var(def($_REQUEST ['ck']), FILTER_VALIDATE_INT, $filter);
