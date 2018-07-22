@@ -26,6 +26,8 @@
 	$sum = 0;
 	while ($row = mysqli_fetch_assoc($result)) {
 		$res = str_split($row["pidlist"]);
+		if(count($res) < 143)
+			array_splice($res, 15, 0, [0]);
 		foreach($res as $i => $e) {
 			if($e > 0) {
 				if(!array_key_exists($i,$stat))
