@@ -55,9 +55,9 @@
 			}
 			.selecttab {
 				color: white;
-				background-color: #444444;			
+				background-color: #444444;
 				margin: 0px 4px -1px 0px;
-				border-radius: 2px 2px 0px 0px;					
+				border-radius: 2px 2px 0px 0px;
 			}			
 			.tab:hover {
 				background: #696969;
@@ -65,37 +65,37 @@
 			.selecttab:hover {
 				background-color: #444444;
 			}
-			.box {			
-			  display: flex;
-			  align-items: stretch;			   	  
-			}		
+			.box {
+				display: flex;
+				align-items: stretch;
+			}
 			.tabcont {
 				transition: 1s;
 				padding: 10px;
-				border: solid 1px;				
+				border: solid 1px;
 				min-width: 500px;
 				height: 650px;
 				overflow: hidden;
-			}			
-			.stabcont {				
+			}
+			.stabcont {
 				transition: 1s;
 				padding: 10px;
-				border: solid 1px;				
+				border: solid 1px;
 				min-width: 500px;
 				margin-left: -1px;
 				height: 650px;
-				overflow: hidden;								
+				overflow: hidden;
 			}
 			.hide {
 				display: none;
 			}		
 			#parent {
 				width: 99%;
-				position: absolute;				
-				text-align: center;					
+				position: absolute;
+				text-align: center;
 			}
 			#main {
-				display: inline-block;					
+				display: inline-block;
 			}			
 			</style>
 		</head>
@@ -114,22 +114,29 @@
 					<div id="ajaxpage" class="stabcont hide"></div>
 				</div>
 			</div>
-			</div>		
-			<script>			
+			</div>
+			<script>
 			var tabsconts = document.querySelectorAll(".tabcont");
 			var tabs = document.querySelectorAll(".tab");
 			for (var i = 0; i < tabs.length; i++) {
-			  tabs[i].onclick = function(e){
-					for (var i = 0; i < tabs.length; i++) {
-						tabs[i].classList.remove("selecttab");
-						tabsconts[i].classList.add("hide");
-					}
-					var tabcount = document.querySelector(".tabcont." + this.id);
-					tabcount.classList.remove("hide");
-					this.classList.add("selecttab");
-			  };
+				tabs[i].onclick = function(e){
+						for (var i = 0; i < tabs.length; i++) {
+							tabs[i].classList.remove("selecttab");
+							tabsconts[i].classList.add("hide");
+						}
+						var tabcount = document.querySelector(".tabcont." + this.id);
+						tabcount.classList.remove("hide");
+						this.classList.add("selecttab");
+				};
+				tabsconts[i].onwheel = scroll;
 			}
-			function ajax(url,func) {				
+			ajaxpage.onwheel = scroll;
+			var links = document.querySelectorAll("a");
+			for (var i = 0; i < links.length; i++) {
+				links[i].onclick = relink;
+			}
+			// Для ajax запросов
+			function ajax(url,func) {
 				var xhr = new XMLHttpRequest();
 				xhr.open('POST', url, true);
 				xhr.onreadystatechange = function() { // (3)
@@ -138,8 +145,10 @@
 				xhr.responseType = "document";
 				xhr.send();
 			}
-			function relink() {				
+			// Для ajax ссылок
+			function relink() {
 				ajax(this.href,function(res) {
+					ajaxpage.scrollTop = 0;
 					ajaxpage.innerHTML = res.body.innerHTML;
 					ajaxpage.classList.remove("hide");
 					var inlinks = ajaxpage.querySelectorAll("a");
@@ -148,21 +157,14 @@
 					}
 				})
 				return false;
-			}			
-			var links = document.querySelectorAll("a");
-			for (var i = 0; i < links.length; i++) {
-				links[i].onclick = relink;
 			}
-			document.querySelector(".tabcont").onwheel = function (e) { 
-			var delta = e.deltaY || e.detail || e.wheelDelta; 
-			if(delta>0) this.scrollTop = this.scrollTop + 18; 
-			else this.scrollTop = this.scrollTop - 18; e.preventDefault(); 
+			// Для скрола элементов без скролбаров
+			function scroll(e) { 
+				var delta = e.deltaY || e.detail || e.wheelDelta; 
+				if(delta>0) this.scrollTop = this.scrollTop + 18; 
+				else this.scrollTop = this.scrollTop - 18; e.preventDefault(); 
 			}
-			document.querySelector(".stabcont").onwheel = function (e) { 
-			var delta = e.deltaY || e.detail || e.wheelDelta; 
-			if(delta>0) this.scrollTop = this.scrollTop + 18; 
-			else this.scrollTop = this.scrollTop - 18; e.preventDefault(); 
-			}
+			
 			</script>
 		</body>
 	</html>
