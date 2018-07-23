@@ -1,5 +1,11 @@
 <?php
 
+	if(!isset($mainphp)) {
+		 header("HTTP/1.1 301 Moved Permanently"); 
+		 header("Location: main.php"); 
+		 exit(); 
+	}
+
 	// Проверка существования таблицы с префиксом
 	$chrtbl = mysqli_query($link, "SHOW TABLES LIKE 'serv{$sess}_chars'") or die(mysqli_error($link));
 
