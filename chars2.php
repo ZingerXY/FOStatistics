@@ -14,11 +14,9 @@
 		$start = microtime(true);
 
 		$query = "	SELECT serv{$sess}_kills.id_killer,
-					(select serv{$sess}_chars.name from serv{$sess}_chars where serv{$sess}_chars.id=serv{$sess}_kills.id_killer)
-						AS killer_name,
+					serv{$sess}_kills.faction_id_killer,
 					serv{$sess}_kills.id_victim,
-					(select serv{$sess}_chars.name from serv{$sess}_chars where serv{$sess}_chars.id=serv{$sess}_kills.id_victim)
-						AS victim_name
+					serv{$sess}_kills.faction_id_victim
 					FROM serv{$sess}_kills";
 
 		$result = mysqli_query($link, $query);
@@ -47,9 +45,11 @@
 		{
 			$id_killer = $dkills["id_killer"];
 			$id_victim = $dkills["id_victim"];
+			$faction_id_killer = $dkills["faction_id_killer"];
+			$faction_id_victim = $dkills["faction_id_victim"];
 
-			if (!isset($allstats[$id_killer],$allstats[$id_victim]))
-				continue;
+			if (!isset($allstats[$id_killer],$allstats[$id_victim])) continue;
+			if($faction_id_killer == $faction_id_victim) continue;
 
 			$allstats[$id_killer]["kills"]++;
 			$allstats[$id_victim]["deaths"]++;

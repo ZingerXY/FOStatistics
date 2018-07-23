@@ -62,6 +62,7 @@
 			
 
 			if (!isset($allstats[$id_killer],$allstats[$id_victim])) continue;
+			if($faction_id_killer == $faction_id_victim) continue;
 
 			$allstats[$id_killer]["kills"]++;
 			$allstats[$id_victim]["deaths"]++;
