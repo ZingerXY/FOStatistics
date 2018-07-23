@@ -1,5 +1,6 @@
 <?php
 	include_once "app.php";
+	$mainphp = true;
 ?>
 	<!DOCTYPE html>
 	<html>
