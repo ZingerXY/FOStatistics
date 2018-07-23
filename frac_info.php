@@ -1,39 +1,7 @@
 <?php
-
-	/*ini_set('error_reporting', E_ALL);
-	ini_set('display_errors', 1);
-	ini_set('display_startup_errors', 1);*/
-
-	include "config.php";
-
-	// защита БД от SQL иньекций
-	function def($text,$linksql = false) {
-		$result = strip_tags($text);
-		$result = htmlspecialchars($result);
-		if ($linksql)
-			$result = mysqli_real_escape_string ($linksql, $result);
-		return $result;
-	}
-
-	$filter = [
-		'options' => [
-			'default' => 0, // значение, возвращаемое, если фильтрация завершилась неудачей
-			// другие параметры
-			'min_range' => 0
-		],
-		'flags' => FILTER_FLAG_ALLOW_OCTAL,
-	];
-
-	function myCmp($a, $b)
-	{
-		return ($b["raiting"]*1000) - ($a["raiting"]*1000);
-	}
-
-	$sess = 18;
-	if (isset($_REQUEST['s'])) {
-		$sess = filter_var(def($_REQUEST['s']), FILTER_VALIDATE_INT, $filter);
-	}
-
+	
+	include_once "app.php";
+	
 	// Проверка существования таблицы с префиксом
 	$chrtbl = mysqli_query($link, "SHOW TABLES LIKE 'serv{$sess}_chars'") or die(mysqli_error($link));
 
@@ -87,9 +55,10 @@
 			$id_killer = $dkills["id_killer"];
 			$id_victim = $dkills["id_victim"];
 			$faction_id_killer = $dkills["faction_id_killer"];
-			$faction_id_victim = $dkills["faction_id_victim"];
+			$faction_id_victim = $dkills["faction_id_victim"];			
 
 			if (!isset($allstats[$id_killer],$allstats[$id_victim])) continue;
+			if($faction_id_killer == $faction_id_victim) continue;
 
 			$allstats[$id_killer]["kills"]++;
 			$allstats[$id_victim]["deaths"]++;
@@ -153,7 +122,7 @@
 					<td class='td'>$sfaction[char_name_victim]</td>
 					<td class='td'><a href='frac_info.php?s={$sess}&frac_id={$sfaction['faction_id']}'>$sfaction[faction_name]</td>
 					<td class='td4'><img class ='image'src='images/rating.png'></td>
-					<td class='td1'> + $resreit</span></td>
+					<td class='td1'>$resreit</span></td>
 				</tr>";
 			}
 		}
@@ -171,7 +140,7 @@
 					<td class='td'>$sfaction[char_name_killer]</td>
 					<td class='td'><a href='frac_info.php?s={$sess}&frac_id={$sfaction['faction_id']}'>$sfaction[faction_name]</td>
 					<td class='td4'><img class ='image'src='images/rating.png'></td>
-					<td class='td1'> - $resreit</span></td>
+					<td class='td1'>$resreit</span></td>
 				</tr>";
 			}
 		}

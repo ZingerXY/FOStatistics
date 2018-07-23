@@ -1,46 +1,17 @@
 <?php
 
-	/*ini_set('error_reporting', E_ALL);
-	ini_set('display_errors', 1);
-	ini_set('display_startup_errors', 1);*/
+	include_once "app.php";
 
-	include "config.php";
-
-	// защита БД от SQL иньекций
-	function def($text,$linksql = false) {
-		$result = strip_tags($text);
-		$result = htmlspecialchars($result);
-		if ($linksql)
-			$result = mysqli_real_escape_string ($linksql, $result);
-		return $result;
-	}
-
-	$filter = [
-		'options' => [
-			'default' => 0, // значение, возвращаемое, если фильтрация завершилась неудачей
-			// другие параметры
-			'min_range' => 0
-		],
-		'flags' => FILTER_FLAG_ALLOW_OCTAL,
-	];
-
-	$sess = 18;
-	if (isset($_GET['s'])) {
-		$sess = filter_var(def($_GET['s']), FILTER_VALIDATE_INT, $filter);
-	}
 	// Проверка существования таблицы с префиксом
 	$chrtbl = mysqli_query($link, "SHOW TABLES LIKE 'serv{$sess}_chars'") or die(mysqli_error($link));
 
 	if (isset($_REQUEST['char_id']) && ctype_digit ($_REQUEST['char_id']) && mysqli_num_rows($chrtbl) > 0) {
 		$char_id = filter_var(def($_REQUEST['char_id'],$link), FILTER_VALIDATE_INT, $filter);
 
-		$sess = 18;
 		$query = "	SELECT serv{$sess}_kills.id_killer,
-					(select serv{$sess}_chars.name from serv{$sess}_chars where serv{$sess}_chars.id=serv{$sess}_kills.id_killer)
-						AS killer_name,
+					serv{$sess}_kills.faction_id_killer,
 					serv{$sess}_kills.id_victim,
-					(select serv{$sess}_chars.name from serv{$sess}_chars where serv{$sess}_chars.id=serv{$sess}_kills.id_victim)
-						AS victim_name
+					serv{$sess}_kills.faction_id_victim
 					FROM serv{$sess}_kills";
 
 		$result = mysqli_query($link, $query);
@@ -66,8 +37,12 @@
 		{
 			$id_killer = $dkills["id_killer"];
 			$id_victim = $dkills["id_victim"];
+			$faction_id_killer = $dkills["faction_id_killer"];
+			$faction_id_victim = $dkills["faction_id_victim"];
+
 
 			if (!isset($allstats[$id_killer],$allstats[$id_victim])) continue;
+			if($faction_id_killer == $faction_id_victim) continue;
 
 			$allstats[$id_killer]["kills"]++;
 			$allstats[$id_victim]["deaths"]++;
