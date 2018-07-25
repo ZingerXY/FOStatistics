@@ -39,8 +39,8 @@
 		$sum++;
 	}
 	
-	$content = '<tr class="perks"><td class="th" colspan="3"></a><div class="title">Трейты</div></td></tr>';
-	$content .= '<tbody>';
+	$content = '<tr class="perks"><td class="th" colspan="3"></a><div class="title">Трейты</div><div id="turn">-</div></td></tr>';
+	$content .= '<tbody id="traitbox">';
 	$class = 'trait';
 	$num = 1;
 	foreach($perk as $i => $e) {
@@ -89,6 +89,7 @@
 		<input class="check" id="imp" type="checkbox" checked><label for="imp">implant</label>
 		<input class="check" id="mperk" type="checkbox" checked><label for="mperk">masters</label>
 		<input class="check" id="sys" type="checkbox" checked><label for="sys">system</label>
+		<input id="uncheck" type="checkbox" checked><label for="uncheck">uncheckall</label>
 	</div>
 	<div align="center" class="block">
 		<?
