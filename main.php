@@ -135,10 +135,8 @@
 				turn.onclick = function() {
 					if(traitbox.style.display) {
 						traitbox.style.display = "";
-						this.innerHTML = "-";
 					} else {
 						traitbox.style.display = "none";
-						this.innerHTML = "+";
 					}
 				}
 				if (typeof nopes == 'undefined') {

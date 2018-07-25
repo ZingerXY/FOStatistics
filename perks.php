@@ -39,7 +39,7 @@
 		$sum++;
 	}
 	
-	$content = '<tr class="perks"><td class="th" colspan="3"></a><div class="title">Трейты</div><div id="turn">-</div></td></tr>';
+	$content = '<tr id="turn" class="perks"><td class="th" colspan="3"></a><div class="title">Трейты</div></td></tr>';
 	$content .= '<tbody id="traitbox">';
 	$class = 'trait';
 	$num = 1;
