@@ -132,14 +132,14 @@
 						checks[i].click();
 					}				
 				};
-				turn.onclick = function() {				
+				turn.onclick = function() {
 					if(traitbox.style.display) {
 						traitbox.style.display = "";
 						this.firstChild.firstChild.innerHTML = "Трейты";
-						this.style.borderBottom = "solid 1px #5a5a5a";					
+						this.style.borderBottom = "solid 1px #5a5a5a";
 					} else {
 						traitbox.style.display = "none";
-						this.firstChild.firstChild.innerHTML = "↩";		
+						this.firstChild.firstChild.innerHTML = "↩";
 						this.style.borderBottom = "none";
 					}
 				};

@@ -193,4 +193,7 @@ tr.perks {border-bottom: solid 1px #5a5a5a;}
 #main {
 	display: inline-block;
 }
+#turn {
+	cursor: pointer;
+}
 			
