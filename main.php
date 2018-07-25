@@ -132,13 +132,17 @@
 						checks[i].click();
 					}				
 				};
-				turn.onclick = function() {
+				turn.onclick = function() {				
 					if(traitbox.style.display) {
 						traitbox.style.display = "";
+						this.firstChild.firstChild.innerHTML = "Трейты";
+						this.style.borderBottom = "solid 1px #5a5a5a";					
 					} else {
 						traitbox.style.display = "none";
+						this.firstChild.firstChild.innerHTML = "↩";		
+						this.style.borderBottom = "none";
 					}
-				}
+				};
 				if (typeof nopes == 'undefined') {
 					var perktype = ['','','','','','','','','','','','','','','','','lvl15','lvl33','lvl3','lvl6','lvl15','lvl3','lvl9','lvl3','lvl12','quest','lvl33','lvl6','lvl3','lvl6','lvl12','lvl33','lvl33','lvl3','lvl6','lvl12','lvl9','lvl3','lvl15','lvl15','lvl15','lvl15','lvl12','lvl12','lvl6','lvl33','lvl30','lvl30','lvl9','lvl33','lvl6','lvl6','lvl33','lvl6','lvl3','lvl12','lvl6','lvl6','lvl30','lvl15','lvl33','lvl12','lvl33','lvl3','lvl3','sys','lvl12','lvl15','lvl3','lvl12','lvl33','lvl12','lvl15','lvl33','lvl30','lvl12','lvl3','lvl3','lvl33','lvl3','lvl6','lvl6','lvl6','lvl6','lvl6','lvl6','lvl6','lvl33','lvl33','lvl3','lvl12','quest','lvl6','lvl12','lvl33','lvl33','lvl33','lvl9','lvl3','lvl33','lvl3','lvl30','lvl30','quest','sys','sys','lvl15','sys','lvl6','lvl9','lvl30','sys','quest','quest','lvl12','quest','sys','quest','quest','quest','quest','quest','lvl33','quest','lvl15','quest','imp','imp','imp','lvl15','sys','mperk','mperk','mperk','mperk','mperk','mperk','mperk','mperk','mperk','mperk','mperk','lvl12']
 					var tr = Array.from(document.querySelectorAll("tr.perk,.trait"));

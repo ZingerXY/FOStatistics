@@ -1,2 +1,4 @@
 
 *.db
+generation.php
+config.php
