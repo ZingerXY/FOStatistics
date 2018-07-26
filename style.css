@@ -138,7 +138,9 @@ input[type="checkbox"]:checked + label:after {
 	background-color:#ddd;
 }
 tr.perks:nth-child(odd){background: #414141;}
-tr.perks {border-bottom: solid 1px #5a5a5a;}
+tr.perks {
+	border-bottom: solid 1px #5a5a5a;
+}
 .tab {
 	border: solid 1px #e2e2e2;
 	border-bottom: none;
@@ -194,6 +196,5 @@ tr.perks {border-bottom: solid 1px #5a5a5a;}
 	display: inline-block;
 }
 #turn {
-	cursor: pointer;
+	cursor: pointer;	
 }
-			

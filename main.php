@@ -6,6 +6,7 @@
 	<html>
 		<head>
 			<meta charset="utf-8">
+			<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
 			<link href="https://fonts.googleapis.com/css?family=Orbitron:500" rel="stylesheet">
 			<link href="https://fonts.googleapis.com/css?family=Roboto+Condensed" rel="stylesheet">
 			<title>Статистика взятия перков</title>
@@ -27,7 +28,7 @@
 				</div>
 			</div>
 			</div>
-			<script>
+			<script>				
 			var tabsconts = document.querySelectorAll(".tabcont");
 			var tabs = document.querySelectorAll(".tab");
 			for (var i = 0; i < tabs.length; i++) {
@@ -125,14 +126,37 @@
 				var checks = document.querySelectorAll("input.check");
 				for (var i = 0; i < checks.length; i++) {
 					checks[i].onclick = hideshow;
-				}						
+				}
 				uncheck.onclick = function() {
 					var checks = document.querySelectorAll("input.check");
 					for (var i = 0; i < checks.length; i++) {
 						checks[i].click();
-					}				
+					}
 				};
-				turn.onclick = function() {
+				$(document).ready(function()
+				{
+					var ic = true;
+					$("#turn").click(function () 
+					{						
+						if(ic)
+						{
+							this.firstChild.firstChild.innerHTML = "‹";
+							$(this).css("opacity", 0).animate({opacity: 1},550);
+							$(this).css("borderBottomWidth", "0px");
+							$("#traitbox").toggle(550);
+							ic = false;
+						}
+						else 
+						{
+							this.firstChild.firstChild.innerHTML = "Трейты";
+							$(this).css("opacity", 0).animate({opacity: 1},550);
+							$(this).css("borderBottomWidth", "1px");
+							$("#traitbox").toggle(550);
+							ic = true;
+						}
+					});
+				});
+				/*turn.onclick = function() {
 					if(traitbox.style.display) {
 						traitbox.style.display = "";
 						this.firstChild.firstChild.innerHTML = "Трейты";
@@ -142,7 +166,7 @@
 						this.firstChild.firstChild.innerHTML = "↩";
 						this.style.borderBottom = "none";
 					}
-				};
+				};*/
 				if (typeof nopes == 'undefined') {
 					var perktype = ['','','','','','','','','','','','','','','','','lvl15','lvl33','lvl3','lvl6','lvl15','lvl3','lvl9','lvl3','lvl12','quest','lvl33','lvl6','lvl3','lvl6','lvl12','lvl33','lvl33','lvl3','lvl6','lvl12','lvl9','lvl3','lvl15','lvl15','lvl15','lvl15','lvl12','lvl12','lvl6','lvl33','lvl30','lvl30','lvl9','lvl33','lvl6','lvl6','lvl33','lvl6','lvl3','lvl12','lvl6','lvl6','lvl30','lvl15','lvl33','lvl12','lvl33','lvl3','lvl3','sys','lvl12','lvl15','lvl3','lvl12','lvl33','lvl12','lvl15','lvl33','lvl30','lvl12','lvl3','lvl3','lvl33','lvl3','lvl6','lvl6','lvl6','lvl6','lvl6','lvl6','lvl6','lvl33','lvl33','lvl3','lvl12','quest','lvl6','lvl12','lvl33','lvl33','lvl33','lvl9','lvl3','lvl33','lvl3','lvl30','lvl30','quest','sys','sys','lvl15','sys','lvl6','lvl9','lvl30','sys','quest','quest','lvl12','quest','sys','quest','quest','quest','quest','quest','lvl33','quest','lvl15','quest','imp','imp','imp','lvl15','sys','mperk','mperk','mperk','mperk','mperk','mperk','mperk','mperk','mperk','mperk','mperk','lvl12']
 					var tr = Array.from(document.querySelectorAll("tr.perk,.trait"));
