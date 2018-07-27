@@ -39,8 +39,9 @@
 		$sum++;
 	}
 	
-	$content = '<tr id="turn" class="perks"><td class="th" colspan="3"></a><div class="title">Трейты</div></td></tr>';
-	$content .= '<tbody id="traitbox">';
+	$content = '<div id="turn" class="title ptitle"><span id="traitfh">Трейты</span><span id="traitsh">‹</span></div>
+				<div id="roll"><table align="center" class="ptable">';
+	$content .= '<tbody>';
 	$class = 'trait';
 	$num = 1;
 	foreach($perk as $i => $e) {
@@ -51,21 +52,27 @@
 		$content .= "
 			<tr class='$class perks' data-id='$i'>
 				<td>
-					<img align ='middle' class ='image_perks' src='images/perks/$num.png'" . 
+					<img align ='left' class ='image_perks' src='images/perks/$num.png'" . 
 					($num == 105 ? "onmouseover='this.src = \"images/perks/easter_egg.png\"' onmouseout='this.src = \"images/perks/$num.png\"'" : "") . ">
 				</td>
 				<td class='td'>$e</td>
 				<td class='td'>$pr%</td>
 			</tr>";
 		if ($i == 15) {
-			$content .= '</tbody><tr class="perks"><td class="th" colspan="3"></a><div class="title">Перки</div></td></tr><tbody>';
+			$content .= '</tbody></table></div>
+					<table align="center" class="ptable">
+						<tr class="perks">
+							<td class="th" colspan="3">
+								<div class="title">Перки</div>
+							</td>
+						</tr><tbody>';
 			$class = 'perk';
 		}
 		$num++;
 	}
 	$content .= '</tbody>';
 	
-	$content .= "<tr style='background-color:#444444;border-bottom:none;'><td></td><td class='td'>Всего данных</td><td class='td'>$sum</td></tr>";
+	$content .= "<tr style='background-color:#444444;border-bottom:none;'><td></td><td class='td'>Всего данных</td><td class='td'>$sum</td></tr></table>";
 ?>
 	<div align="center" class="block" style="margin: 4px 0px;">Фильтр по убийствам</div>
 	<div align="center">
@@ -94,7 +101,7 @@
 	<div align="center" class="block">
 		<?
 		if ($sum > 15) 
-			echo "<table align='center' class='table'>".$content."</table>";
+			echo $content;
 		else
 			echo "<p id='nopes'>Недостаточно данных для вывода статистики</p>";
 		?>

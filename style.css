@@ -25,6 +25,13 @@ a:hover {
 	margin: 0px auto;
 	min-width: 192px;
 }
+.ptable {
+	border-collapse: collapse;
+	text-align: center;
+	font-weight: bold;
+	margin: 0px auto;
+	min-width: 340px;
+}
 #table {
 	min-width: 400px;
 }
@@ -85,6 +92,10 @@ a:hover {
 	margin: auto;
 	font-size: 30pt;
 	font-family: 'FOnline', sans-serif;
+}
+.ptitle{
+	max-width: 340px;
+	border-bottom: solid 1px #5a5a5a;
 }
 tr:nth-child(even){
 	background: #414141;
@@ -196,5 +207,29 @@ tr.perks {
 	display: inline-block;
 }
 #turn {
-	cursor: pointer;	
+	cursor: pointer;
+	transition: all .75s;
+	overflow: hidden;
+	width: 340px;
+	height: 50px;
+}
+#roll {
+	overflow: hidden;
+	width: 340px;
+	height: 505px;
+	transition: all .95s cubic-bezier(.36, 1, .36, 1);
+}
+#traitfh {
+	right: 0px;
+	position: relative;
+	overflow: hidden;
+	height: 50px;
+	transition: all .95s cubic-bezier(.36, 1, .36, 1);
+}
+#traitsh {
+	right: -250px;
+	position: relative;
+	overflow: hidden;
+	height: 50px;
+	transition: all .95s cubic-bezier(.36, 1, .36, 1);
 }
