@@ -5,9 +5,7 @@
 	<!DOCTYPE html>
 	<html>
 		<head>
-			<meta charset="utf-8">			
-			<link href="https://fonts.googleapis.com/css?family=Orbitron:500" rel="stylesheet">
-			<link href="https://fonts.googleapis.com/css?family=Roboto+Condensed" rel="stylesheet">
+			<meta charset="utf-8">
 			<title>Статистика взятия перков</title>
 			<link rel='stylesheet' href='style.css'>
 		</head>
@@ -132,7 +130,15 @@
 						checks[i].click();
 					}
 				};
-				var ic = true;
+				if (typeof nopes == 'undefined') {
+					var perktype = ['','','','','','','','','','','','','','','','','lvl15','lvl33','lvl3','lvl6','lvl15','lvl3','lvl9','lvl3','lvl12','quest','lvl33','lvl6','lvl3','lvl6','lvl12','lvl33','lvl33','lvl3','lvl6','lvl12','lvl9','lvl3','lvl15','lvl15','lvl15','lvl15','lvl12','lvl12','lvl6','lvl33','lvl30','lvl30','lvl9','lvl33','lvl6','lvl6','lvl33','lvl6','lvl3','lvl12','lvl6','lvl6','lvl30','lvl15','lvl33','lvl12','lvl33','lvl3','lvl3','sys','lvl12','lvl15','lvl3','lvl12','lvl33','lvl12','lvl15','lvl33','lvl30','lvl12','lvl3','lvl3','lvl33','lvl3','lvl6','lvl6','lvl6','lvl6','lvl6','lvl6','lvl6','lvl33','lvl33','lvl3','lvl12','quest','lvl6','lvl12','lvl33','lvl33','lvl33','lvl9','lvl3','lvl33','lvl3','lvl30','lvl30','quest','sys','sys','lvl15','sys','lvl6','lvl9','lvl30','sys','quest','quest','lvl12','quest','sys','quest','quest','quest','quest','quest','lvl33','quest','lvl15','quest','imp','imp','imp','lvl15','sys','mperk','mperk','mperk','mperk','mperk','mperk','mperk','mperk','mperk','mperk','mperk','lvl12']
+					var tr = Array.from(document.querySelectorAll("tr.perk,.trait"));
+					for(var i in tr)
+						if(perktype[i])
+							tr[i].classList.add(perktype[i]);	
+					sortGrid("trait");
+					sortGrid("perk");
+					var ic = true;
 				turn.onclick = function() {
 					if(ic)
 					{
@@ -151,14 +157,6 @@
 						ic = true;
 					}
 				};
-				if (typeof nopes == 'undefined') {
-					var perktype = ['','','','','','','','','','','','','','','','','lvl15','lvl33','lvl3','lvl6','lvl15','lvl3','lvl9','lvl3','lvl12','quest','lvl33','lvl6','lvl3','lvl6','lvl12','lvl33','lvl33','lvl3','lvl6','lvl12','lvl9','lvl3','lvl15','lvl15','lvl15','lvl15','lvl12','lvl12','lvl6','lvl33','lvl30','lvl30','lvl9','lvl33','lvl6','lvl6','lvl33','lvl6','lvl3','lvl12','lvl6','lvl6','lvl30','lvl15','lvl33','lvl12','lvl33','lvl3','lvl3','sys','lvl12','lvl15','lvl3','lvl12','lvl33','lvl12','lvl15','lvl33','lvl30','lvl12','lvl3','lvl3','lvl33','lvl3','lvl6','lvl6','lvl6','lvl6','lvl6','lvl6','lvl6','lvl33','lvl33','lvl3','lvl12','quest','lvl6','lvl12','lvl33','lvl33','lvl33','lvl9','lvl3','lvl33','lvl3','lvl30','lvl30','quest','sys','sys','lvl15','sys','lvl6','lvl9','lvl30','sys','quest','quest','lvl12','quest','sys','quest','quest','quest','quest','quest','lvl33','quest','lvl15','quest','imp','imp','imp','lvl15','sys','mperk','mperk','mperk','mperk','mperk','mperk','mperk','mperk','mperk','mperk','mperk','lvl12']
-					var tr = Array.from(document.querySelectorAll("tr.perk,.trait"));
-					for(var i in tr)
-						if(perktype[i])
-							tr[i].classList.add(perktype[i]);	
-					sortGrid("trait");
-					sortGrid("perk");
 				}
 			}
 			</script>
