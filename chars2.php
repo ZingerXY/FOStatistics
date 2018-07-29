@@ -95,7 +95,7 @@
 	<div class="title">
 		Stats of <?=$sess?> session
 	</div>
-	<div class="block">
+	<div>
 		<table align='center' id='table' class='table'>
 			<?=$content?>
 		</table>
