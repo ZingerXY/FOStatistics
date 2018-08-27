@@ -16,9 +16,9 @@
 	}
 	
 	if ($ck)
-		$query = "SELECT id,pidlist FROM serv18_perks WHERE id = (select distinct id_killer from serv18_kills where id_killer = serv18_perks.id AND (select count(id_killer) from serv18_kills where id_killer = serv18_perks.id) >= $ck)";
+		$query = "SELECT id,pidlist FROM serv{$sess}_perks WHERE id = (select distinct id_killer from serv{$sess}_kills where id_killer = serv{$sess}_perks.id AND (select count(id_killer) from serv{$sess}_kills where id_killer = serv{$sess}_perks.id) >= $ck)";
 	else
-		$query = "SELECT id,pidlist FROM serv18_perks";
+		$query = "SELECT id,pidlist FROM serv{$sess}_perks";
 	
 	$result = mysqli_query($link, $query);
 	
