@@ -85,6 +85,9 @@
 			}
 		}
 		
+		if(!$faction_stats)
+			$faction_stats = [];
+		
 		usort($faction_stats, 'myCmp');
 
 		$content = "";
@@ -113,7 +116,7 @@
 	<div class="title">
 		Stats of <?=$sess?> session
 	</div>
-	<div>
+	<div class="block">
 		<table align='center' class='table'>
 			<?=$content?>
 		</table>

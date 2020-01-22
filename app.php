@@ -27,8 +27,8 @@
 	{
 		return ($b["raiting"]*1000) - ($a["raiting"]*1000);
 	}
-	
-	$sess = 19;
+	// Текущая ссесия
+	$sess = '22';
 	if (isset($_REQUEST['s'])) {
 		$sess = filter_var(def($_REQUEST['s']), FILTER_VALIDATE_INT, $filter);
 	}

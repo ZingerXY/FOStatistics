@@ -123,7 +123,7 @@
 					</table>
 				</div>
 				<div class="block1">
-					<div class="block3">Смерти</div>
+					<div class="block4">Смерти</div>
 					<table align='center' class='table'>
 						<?=$contDeaths?>
 					</table>

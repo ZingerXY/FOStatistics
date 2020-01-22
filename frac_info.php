@@ -158,7 +158,7 @@
 			<div class="title"><?=$faction_name?></div>
 			<div class="title"><?=round($faction_rait,2)?></div>
 			<div align="center"><a href="#deaths">К смертям →</a></div>
-			<div align="center">
+			<div align="center" class="block">
 				<table align='center' class='table'>
 					<?=$content?>
 				</table>

@@ -65,6 +65,9 @@
 
 		$time2 = microtime(true) - $start;
 		$start = microtime(true);
+		
+		if(!$allstats)
+			$allstats = [];
 
 		usort($allstats, 'myCmp');
 
@@ -95,7 +98,7 @@
 	<div class="title">
 		Stats of <?=$sess?> session
 	</div>
-	<div>
+	<div class="block">
 		<table align='center' id='table' class='table'>
 			<?=$content?>
 		</table>
