@@ -12,7 +12,7 @@
 		<head>
 			<meta charset="utf-8">
 			<title>Статистика</title>
-			<link rel='stylesheet' href='style.css'>
+			<link rel='stylesheet' href='style.css?<?=$version?>'>
 		</head>
 		<body>
 			<div id="parent">
