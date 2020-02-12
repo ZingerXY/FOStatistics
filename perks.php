@@ -81,7 +81,7 @@
 	$result = mysqli_query($link, $query);
 	$perk = [];
 	
-	while ($row = mysqli_fetch_assoc($result)) {
+	while ($result && $row = mysqli_fetch_assoc($result)) {
 		$perk[] = ['name'=>$row["name"],'id'=>$row["id"]];		
 	}
 	
@@ -100,7 +100,7 @@
 	
 	$stat = [];
 	$sum = 0;
-	while ($row = mysqli_fetch_assoc($result)) {
+	while ($result && $row = mysqli_fetch_assoc($result)) {
 		$res = str_split($row["pidlist"]);
 		if (count($res) < 143) { // Старое исправление битых данных
 			array_splice($res, 15, 0, [0]);
