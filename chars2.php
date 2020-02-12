@@ -60,7 +60,6 @@
 			$killer_deaths = $allstats[$id_killer]["deaths"];
 
 			$allstats[$id_killer]["raiting"] += ($victim_kills / ($victim_kills + $victim_deaths));
-			$allstats[$id_victim]["raiting"] -= ($killer_deaths / ( $killer_deaths + $killer_kills));
 		}
 
 		$time2 = microtime(true) - $start;
