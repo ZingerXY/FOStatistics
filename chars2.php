@@ -97,7 +97,7 @@
 			<td class='td2'><img class ='image'src='images/rating.png'></td>
 			<td class='td1'><?=$resreit?></span></td>
 		</tr>
-		<?php $num++; endforeach;?>
+		<?php $num++; endfor;?>
 		</table>
 	</div>
 <?
