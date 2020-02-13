@@ -26,7 +26,7 @@
 		while ($row = mysqli_fetch_assoc($result))
 		{		
 			$data_stat[$row["id"]] =
-			[adasdasd
+			[
 				"id" => $row["id"],
 				"name" => $row["char_name"],
 				"kills" => 0,
