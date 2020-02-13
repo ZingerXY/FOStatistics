@@ -100,7 +100,7 @@
 								<td class='td2_char_info'><img class ='image'src='images/rating.png'></td>
 								<td class='td1'>+<?=$resreit?></span></td>
 							</tr>
-						<?php endfor; endif; ?>
+						<?php endforeach; endif; ?>
 					</table>
 				</div>
 				<div class="block1">
@@ -118,7 +118,7 @@
 								<td class='td2_char_info'><img class ='image_item' src='http://fonlinew.ru/getinfo.php?picid=<?=$armor?>'></td>
 								<td class='td2_char_info'><img class ='image'src='images/rating.png'></td>
 							</tr>
-						<?php endfor; endif; ?>
+						<?php endforeach; endif; ?>
 					</table>
 				</div>
 			</div>
