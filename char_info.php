@@ -91,11 +91,13 @@
 							<?php krsort($list_of_kills[$char_id]); ?>
 							<?php foreach ($list_of_kills[$char_id] as $schar): ?>
 							<?php $resreit = round($schar['raiting'], 2); ?>
-							<?php $armor = $schar['armor'] ?: 558; ?>
 							<tr>
+								<td class='td1'><img class ='image'src='images/kill.png'></td>
 								<td class='td2_char_info'><img class ='image_item' src='http://fonlinew.ru/getinfo.php?picid=<?=$schar['weapon']?>'></td>
-								<td class='td'><a href='char_info.php?s=<?=$sess?>&char_id=<?=$schar['id']?>'><?=$schar['name']?></td>
-								<td class='td2_char_info'><img class ='image_item' src='http://fonlinew.ru/getinfo.php?picid=<?=$armor?>'></td>								
+								<td class='td'><a href='char_info.php?s=<?=$sess?>&char_id=<?$schar['id']?>'><?=$schar['name']?></td>
+								<td class='td2'><img class ='image'src='images/death.png'></td>
+								<td class='td2_char_info'><img class ='image_item' src='http://fonlinew.ru/getinfo.php?picid=<?=$armor?>'></td>
+								<td class='td2_char_info'><img class ='image'src='images/rating.png'></td>
 								<td class='td1'>+<?=$resreit?></span></td>
 							</tr>
 						<?php endforeach; endif; ?>
@@ -107,11 +109,14 @@
 						<?php if (isset($list_of_deaths[$char_id])): ?>
 							<?php krsort($list_of_deaths[$char_id]); ?>
 							<?php foreach ($list_of_deaths[$char_id] as $schar): ?>
-							<?php $armor = $schar['armor'] ?: 558; ?>
+							<?php $resreit = round($schar['raiting'], 2); ?>
 							<tr>
+								<td class='td1'><img class ='image'src='images/kill.png'></td>
 								<td class='td2_char_info'><img class ='image_item' src='http://fonlinew.ru/getinfo.php?picid=<?=$schar['weapon']?>'></td>
-								<td class='td'><a href='char_info.php?s=<?=$sess?>&char_id=<?=$schar['id']?>'><?=$schar['name']?></td>
+								<td class='td'><a href='char_info.php?s=<?=$sess?>&char_id=<?$schar['id']?>'><?=$schar['name']?></td>
+								<td class='td2'><img class ='image'src='images/death.png'></td>
 								<td class='td2_char_info'><img class ='image_item' src='http://fonlinew.ru/getinfo.php?picid=<?=$armor?>'></td>
+								<td class='td2_char_info'><img class ='image'src='images/rating.png'></td>
 							</tr>
 						<?php endforeach; endif; ?>
 					</table>
