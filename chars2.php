@@ -88,7 +88,7 @@
 			$resreit = round($schar['raiting'], 2);
 		?>
 		<tr>
-			<td class='td3'><?=$num?></td>
+			<td class='td3'><<?=$num?></td>
 			<td class='td'><a href='char_info.php?s=<?=$sess?>&char_id=<?=$schar['id']?>'><?=$schar['name']?></td>
 			<td class='td1'><img class ='image'src='images/kill.png'></td>
 			<td class='td1'><?=$schar['kills']?></td>
