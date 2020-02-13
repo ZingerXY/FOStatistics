@@ -54,7 +54,6 @@
 			$victim_kills = $allstats[$id_victim]["kills"];
 			$killer_deaths = $allstats[$id_killer]["deaths"];
 			$allstats[$id_killer]["raiting"] += ($victim_kills / ($victim_kills + $victim_deaths));
-			$allstats[$id_victim]["raiting"] -= ($killer_deaths / ( $killer_deaths + $killer_kills));
 
 			$list_of_kills[$id_killer][$killer_kills] = [
 					"id" => $id_victim,
@@ -72,42 +71,6 @@
 					"armor" => $armor_victim,
 				];
 		}
-		$contKills = "";
-		$contDeaths = "";
-		if (isset($list_of_kills[$char_id])) {
-			krsort($list_of_kills[$char_id]);
-			foreach ($list_of_kills[$char_id] as $schar) {
-				$resreit = round($schar['raiting'], 2);
-				$armor = $schar['armor'] ?: 558;
-				$contKills .= "
-				<tr>
-					<td class='td1'><img class ='image'src='images/kill.png'></td>
-					<td class='td2_char_info'><img class ='image_item' src='http://fonlinew.ru/getinfo.php?picid={$schar['weapon']}'></td>
-					<td class='td'><a href='char_info.php?s={$sess}&char_id={$schar['id']}'>$schar[name]</td>
-					<td class='td2'><img class ='image'src='images/death.png'></td>
-					<td class='td2_char_info'><img class ='image_item' src='http://fonlinew.ru/getinfo.php?picid=$armor'></td>
-					<td class='td2_char_info'><img class ='image' src='images/rating.png'></td>	
-					<td class='td1'>+$resreit</span></td>
-				</tr>";
-			}
-		}
-		if (isset($list_of_deaths[$char_id])) {
-			krsort($list_of_deaths[$char_id]);
-			foreach ($list_of_deaths[$char_id] as $schar) {
-				$resreit = round($schar['raiting'], 2);
-				$armor = $schar['armor'] ?: 558;
-				$contDeaths .= "
-				<tr>
-					<td class='td1'><img class ='image'src='images/kill.png'></td>
-					<td class='td2_char_info'><img class ='image_item' src='http://fonlinew.ru/getinfo.php?picid={$schar['weapon']}'></td>
-					<td class='td'><a href='char_info.php?s={$sess}&char_id={$schar['id']}'>$schar[name]</td>
-					<td class='td2'><img class ='image'src='images/death.png'></td>
-					<td class='td2_char_info'><img class ='image_item' src='http://fonlinew.ru/getinfo.php?picid=$armor'></td>
-					<td class='td2_char_info'><img class ='image'src='images/rating.png'></td>
-					<td class='td1'>-$resreit</span></td>
-				</tr>";
-			}
-		}
 	?>
 	<!DOCTYPE html>
 	<html>
@@ -124,13 +87,38 @@
 				<div class="block1">
 					<div class="block3">Убийства</div>
 					<table align='center' class='table'>
-						<?=$contKills?>
+						<?php if (isset($list_of_kills[$char_id])): ?>
+							<?php krsort($list_of_kills[$char_id]); ?>
+							<?php foreach ($list_of_kills[$char_id] as $schar): ?>
+							<?php $resreit = round($schar['raiting'], 2); ?>
+							<tr>
+								<td class='td1'><img class ='image'src='images/kill.png'></td>
+								<td class='td2_char_info'><img class ='image_item' src='http://fonlinew.ru/getinfo.php?picid=<?=$schar['weapon']?>'></td>
+								<td class='td'><a href='char_info.php?s=<?=$sess?>&char_id=<?$schar['id']?>'><?=$schar['name']?></td>
+								<td class='td2'><img class ='image'src='images/death.png'></td>
+								<td class='td2_char_info'><img class ='image_item' src='http://fonlinew.ru/getinfo.php?picid=<?=$armor?>'></td>
+								<td class='td2_char_info'><img class ='image'src='images/rating.png'></td>
+								<td class='td1'>+<?=$resreit?></span></td>
+							</tr>
+						<?php endfor; endif; ?>
 					</table>
 				</div>
 				<div class="block1">
 					<div class="block4">Смерти</div>
 					<table align='center' class='table'>
-						<?=$contDeaths?>
+						<?php if (isset($list_of_deaths[$char_id])): ?>
+							<?php krsort($list_of_deaths[$char_id]); ?>
+							<?php foreach ($list_of_deaths[$char_id] as $schar): ?>
+							<?php $resreit = round($schar['raiting'], 2); ?>
+							<tr>
+								<td class='td1'><img class ='image'src='images/kill.png'></td>
+								<td class='td2_char_info'><img class ='image_item' src='http://fonlinew.ru/getinfo.php?picid=<?=$schar['weapon']?>'></td>
+								<td class='td'><a href='char_info.php?s=<?=$sess?>&char_id=<?$schar['id']?>'><?=$schar['name']?></td>
+								<td class='td2'><img class ='image'src='images/death.png'></td>
+								<td class='td2_char_info'><img class ='image_item' src='http://fonlinew.ru/getinfo.php?picid=<?=$armor?>'></td>
+								<td class='td2_char_info'><img class ='image'src='images/rating.png'></td>
+							</tr>
+						<?php endfor; endif; ?>
 					</table>
 				</div>
 			</div>
