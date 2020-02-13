@@ -60,6 +60,7 @@
 			$killer_deaths = $allstats[$id_killer]["deaths"];
 
 			$allstats[$id_killer]["raiting"] += ($victim_kills / ($victim_kills + $victim_deaths));
+			$allstats[$id_victim]["raiting"] -= ($killer_deaths / ( $killer_deaths + $killer_kills));
 		}
 
 		$time2 = microtime(true) - $start;
@@ -75,12 +76,31 @@
 
 		$content = "";
 		$num = 1;
+		foreach ($allstats as $schar)
+		{
+			if ($schar["kills"] == 0 && $schar["deaths"] == 0)
+				continue;
+			$resreit = round($schar['raiting'], 2);
+			$content .= "
+			<tr>
+				<td class='td3'>$num</td>
+				<td class='td'><a href='char_info.php?s={$sess}&char_id={$schar['id']}'>$schar[name]</td>
+				<td class='td1'><img class ='image'src='images/kill.png'></td>
+				<td class='td1'>$schar[kills]</td>
+				<td class='td2'><img class ='image'src='images/death.png'></td>
+				<td class='td1'>$schar[deaths]</td>
+				<td class='td2'><img class ='image'src='images/rating.png'></td>
+				<td class='td1'>$resreit</span></td>
+			</tr>";
+			$num++;
+		}
 ?>
 	<div class="title">
 		Stats of <?=$sess?> session
 	</div>
 	<div class="block">
 		<table align='center' id='table' class='table'>
+<<<<<<< HEAD
 		<?php foreach ($allstats as $schar): ?>
 		<?php if 
 			($schar['kills'] == 0 && $schar['deaths'] == 0) 
@@ -98,6 +118,9 @@
 			<td class='td1'><?=$resreit?></span></td>
 		</tr>
 		<?php $num++; endforeach;?>
+=======
+			<?=$content?>
+>>>>>>> parent of 572d6e8... Тест 1
 		</table>
 	</div>
 <?
