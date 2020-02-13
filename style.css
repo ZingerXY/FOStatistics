@@ -199,7 +199,7 @@ tr.perks {
 	transition: 1s;
 	padding: 10px;
 	border: solid 1px;
-	min-width: 500px;
+	min-width: 650px;
 	margin-left: -1px;
 	height: 650px;
 	overflow: auto;

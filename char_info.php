@@ -33,8 +33,7 @@
 		}
 
 		$allstats = $data_stat;
-		foreach ($data_kills as $dkills)
-		{
+		foreach ($data_kills as $dkills) {
 			$id_killer = $dkills["id_killer"];
 			$faction_id_killer = $dkills["faction_id_killer"];
 			$weapon_killer = $dkills["weapon_killer"];
@@ -80,9 +79,12 @@
 				$armor = $schar['armor'] ?: 558;
 				$contKills .= "
 				<tr>
+					<td class='td1'><img class ='image'src='images/kill.png'></td>
 					<td class='td2_char_info'><img class ='image_item' src='http://fonlinew.ru/getinfo.php?picid={$schar['weapon']}'></td>
 					<td class='td'><a href='char_info.php?s={$sess}&char_id={$schar['id']}'>$schar[name]</td>
+					<td class='td2'><img class ='image'src='images/death.png'></td>
 					<td class='td2_char_info'><img class ='image_item' src='http://fonlinew.ru/getinfo.php?picid=$armor'></td>
+					<td class='td2_char_info'><img class ='image' src='images/rating.png'></td>	
 					<td class='td1'>+$resreit</span></td>
 				</tr>";
 			}
@@ -94,8 +96,10 @@
 				$armor = $schar['armor'] ?: 558;
 				$contDeaths .= "
 				<tr>
+					<td class='td1'><img class ='image'src='images/kill.png'></td>
 					<td class='td2_char_info'><img class ='image_item' src='http://fonlinew.ru/getinfo.php?picid={$schar['weapon']}'></td>
 					<td class='td'><a href='char_info.php?s={$sess}&char_id={$schar['id']}'>$schar[name]</td>
+					<td class='td2'><img class ='image'src='images/death.png'></td>
 					<td class='td2_char_info'><img class ='image_item' src='http://fonlinew.ru/getinfo.php?picid=$armor'></td>
 				</tr>";
 			}
