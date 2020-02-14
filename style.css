@@ -52,15 +52,9 @@ a:hover {
 .td2_char_info{
 	text-align: center;
 }
-.td2_2 {
-	text-align: left;
-}
 .td3 {
 	text-align: center;
 	min-width: 30px;
-}
-.td4 {
-	text-align: left;
 }
 .container{
 	margin: 0 auto;
@@ -93,7 +87,7 @@ a:hover {
 }
 .image_item{
 	max-width: 35px;
-	max-height: 35px;
+	max-height: 21px;
 	/*margin-right: 5px;*/
 }
 .title{ 

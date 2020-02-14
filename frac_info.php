@@ -121,7 +121,7 @@
 					<td class='td2'>►</td>
 					<td class='td'>$sfaction[char_name_victim]</td>
 					<td class='td'><a href='frac_info.php?s={$sess}&frac_id={$sfaction['faction_id']}'>$sfaction[faction_name]</td>
-					<td class='td4'><img class ='image'src='images/rating.png'></td>
+					<td class='td1'><img class ='image'src='images/rating.png'></td>
 					<td class='td1'>$resreit</span></td>
 				</tr>";
 			}
@@ -139,7 +139,7 @@
 					<td class='td2'>◄</td>
 					<td class='td'>$sfaction[char_name_killer]</td>
 					<td class='td'><a href='frac_info.php?s={$sess}&frac_id={$sfaction['faction_id']}'>$sfaction[faction_name]</td>
-					<td class='td4'><img class ='image'src='images/rating.png'></td>
+					<td class='td1'><img class ='image'src='images/rating.png'></td>
 					<td class='td1'>$resreit</span></td>
 				</tr>";
 			}
