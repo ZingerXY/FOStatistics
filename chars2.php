@@ -86,7 +86,7 @@
 			}
 
 			$allstats[$id_killer]["raiting"] += $Ka * (1 - $Ea);
-			$allstats[$id_victim]["raiting"] += $Kb * (0 - $Ea);
+			$allstats[$id_victim]["raiting"] += $Kb * (0 - $Eb);
 		}
 
 		$time2 = microtime(true) - $start;

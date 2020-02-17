@@ -80,7 +80,7 @@
 			}
 
 			$allstats[$id_killer]["raiting"] += $Ka * (1 - $Ea);
-			$allstats[$id_victim]["raiting"] += $Kb * (0 - $Ea);
+			$allstats[$id_victim]["raiting"] += $Kb * (0 - $Eb);
 
 			$list_of_kills[$id_killer][$killer_kills] = [
 					"id" => $id_victim,
@@ -93,7 +93,7 @@
 			$list_of_deaths[$id_victim][$victim_deaths] = [
 					"id" => $id_killer,
 					"name" => $data_stat[$id_killer]["name"],
-					"raiting" => $Kb * (0 - $Ea),
+					"raiting" => $Kb * (0 - $Eb),
 					"weapon" => $weapon_killer,
 					"armor" => $armor_victim,
 				];
