@@ -33,7 +33,7 @@
 				"name" => $row["char_name"],
 				"kills" => 0,
 				"deaths" => 0,
-				"raiting" => 0
+				"raiting" => 1000
 			];
 		}
 
@@ -59,8 +59,34 @@
 			$victim_kills = $allstats[$id_victim]["kills"];
 			$killer_deaths = $allstats[$id_killer]["deaths"];
 
-			$allstats[$id_killer]["raiting"] += ($victim_kills / ($victim_kills + $victim_deaths));
-			$allstats[$id_victim]["raiting"] -= ($killer_deaths / ( $killer_deaths + $killer_kills));
+			$Ra = $allstats[$id_killer]["raiting"];
+			$Rb = $allstats[$id_victim]["raiting"];
+
+			$Ea = 1/( 1 + pow(10,($Rb - $Ra)/400 ) );
+			$Eb = 1/( 1 + pow(10,($Ra - $Rb)/400 ) );
+
+			if ($Ra <= 600) {
+				$Ka = 30;
+			} else if ($Ra > 600 && $Ra <= 2400 ) {
+				$Ka = 20;
+			} else if ($Ra > 2400 && $Ra <= 3000) {
+				$Ka = 10;
+			} else if ($Ra > 3000) {
+				$Ka = 5;
+			}
+
+			if ($Rb <= 600) {
+				$Kb = 30;
+			} else if ($Rb > 600 && $Rb <= 2400 ) {
+				$Kb = 20;
+			} else if ($Rb > 2400 && $Rb <= 3000) {
+				$Kb = 10;
+			} else if ($Rb > 3000) {
+				$Kb = 5;
+			}
+
+			$allstats[$id_killer]["raiting"] += $Ka * (1 - $Ea);
+			$allstats[$id_victim]["raiting"] += $Kb * (0 - $Ea);
 		}
 
 		$time2 = microtime(true) - $start;
