@@ -13,11 +13,12 @@
 
 		$start = microtime(true);
 
-		$query = "	SELECT serv{$sess}_kills.id_killer,
-					serv{$sess}_kills.faction_id_killer,
-					serv{$sess}_kills.id_victim,
-					serv{$sess}_kills.faction_id_victim
-					FROM serv{$sess}_kills";
+		$query = "	SELECT kills.id_killer,
+					kills.faction_id_killer,
+					kills.id_victim,
+					kills.faction_id_victim,
+					date
+					FROM serv{$sess}_kills kills";
 
 		$result = mysqli_query($link, $query);
 		for ($data_kills=[]; $row = mysqli_fetch_assoc($result); $data_kills[] = $row);
@@ -33,7 +34,8 @@
 				"name" => $row["char_name"],
 				"kills" => 0,
 				"deaths" => 0,
-				"raiting" => 0
+				"raiting" => 0,
+				"abuse" => []
 			];
 		}
 
@@ -59,8 +61,37 @@
 			$victim_kills = $allstats[$id_victim]["kills"];
 			$killer_deaths = $allstats[$id_killer]["deaths"];
 
-			$allstats[$id_killer]["raiting"] += ($victim_kills / ($victim_kills + $victim_deaths));
-			$allstats[$id_victim]["raiting"] -= ($killer_deaths / ( $killer_deaths + $killer_kills));
+			$date_kill = $dkills["date"];
+			$unix_date_kill = strtotime($date_kill);
+
+			$add_killer_raiting = ($victim_kills / ($victim_kills + $victim_deaths));
+			$add_victim_raiting = ($killer_deaths / ( $killer_deaths + $killer_kills));
+
+			// Берем ранее добавленный массив с абузами киллера для текущей жертвы если он есть
+			$old_abuse = isset($allstats[$id_killer]['abuse'][$id_victim]) ? $allstats[$id_killer]['abuse'][$id_victim] : [];
+			// Смотрим размер текущего массива абузов киллера
+			$abuse_count = count($old_abuse);
+			if ($abuse_count > 0) { // Если размер больше нуля выбираем из него последнюю запись и сравниваем с текущей
+				$abuse_date = $old_abuse[$abuse_count - 1];
+				$interval = $unix_date_kill - $abuse_date;
+				if ($interval < (3600*3)) { // Если с последнего убийства этой жертвы прошло меньше 3х часов добавляем запись
+					$allstats[$id_killer]['abuse'][$id_victim][] = $unix_date_kill;
+				} else { // Иначе очищаем массив абузов для этой жертвы
+					$allstats[$id_killer]['abuse'][$id_victim] = [];
+				}
+			} else { // Если равен 0 просто добавляем запись
+				$allstats[$id_killer]['abuse'][$id_victim][] = $unix_date_kill;
+			}
+
+			/*	Если в массиве абузов больше 4 записей для этой жертвы и киллер получает 
+				за жертву больше чем теряет жертва меняем местами рейтинг жертвы и киллера */
+			if (count($allstats[$id_killer]['abuse'][$id_victim]) > 4) {
+				$add_victim_raiting = $add_killer_raiting;
+				$add_killer_raiting = 0;
+			}
+
+			$allstats[$id_killer]["raiting"] += $add_killer_raiting;
+			$allstats[$id_victim]["raiting"] -= $add_victim_raiting;
 		}
 
 		$time2 = microtime(true) - $start;

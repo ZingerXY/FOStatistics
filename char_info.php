@@ -13,7 +13,8 @@
 					kills.weapon_killer,
 					kills.id_victim,
 					kills.faction_id_victim,
-					kills.armor_victim
+					kills.armor_victim,
+					date
 					FROM serv{$sess}_kills kills";
 
 		$result = mysqli_query($link, $query);
@@ -28,7 +29,8 @@
 					"name" => $row["char_name"],
 					"kills" => 0,
 					"deaths" => 0,
-					"raiting" => 0
+					"raiting" => 0,
+					"abuse" => []
 				];
 		}
 
@@ -52,25 +54,57 @@
 			$victim_deaths = $allstats[$id_victim]["deaths"];
 			$victim_kills = $allstats[$id_victim]["kills"];
 			$killer_deaths = $allstats[$id_killer]["deaths"];
-			$allstats[$id_killer]["raiting"] += ($victim_kills / ($victim_kills + $victim_deaths));
-			$allstats[$id_victim]["raiting"] -= ($killer_deaths / ( $killer_deaths + $killer_kills));
+			
+			$date_kill = $dkills["date"];
+			$unix_date_kill = strtotime($date_kill);
+			
+			$add_killer_raiting = ($victim_kills / ($victim_kills + $victim_deaths));
+			$add_victim_raiting = ($killer_deaths / ( $killer_deaths + $killer_kills));
+			
+			// Берем ранее добавленный массив с абузами киллера для текущей жертвы если он есть
+			$old_abuse = isset($allstats[$id_killer]['abuse'][$id_victim]) ? $allstats[$id_killer]['abuse'][$id_victim] : [];
+			// Смотрим размер текущего массива абузов киллера
+			$abuse_count = count($old_abuse);
+			if ($abuse_count > 0) { // Если размер больше нуля выбираем из него последнюю запись и сравниваем с текущей
+				$abuse_date = $old_abuse[$abuse_count - 1];
+				$interval = $unix_date_kill - $abuse_date;
+				if ($interval < (3600*3)) { // Если с последнего убийства этой жертвы прошло меньше 3х часов добавляем запись
+					$allstats[$id_killer]['abuse'][$id_victim][] = $unix_date_kill;
+				} else { // Иначе очищаем массив абузов для этой жертвы
+					$allstats[$id_killer]['abuse'][$id_victim] = [];
+				}
+			} else { // Если равен 0 просто добавляем запись
+				$allstats[$id_killer]['abuse'][$id_victim][] = $unix_date_kill;
+			}
+			
+			// Если в массиве абузов больше 4 записей для этой жертвы меняем местами рейтинг жертвы и киллера
+			if (count($allstats[$id_killer]['abuse'][$id_victim]) > 4) {
+				$add_victim_raiting = $add_killer_raiting;
+				$add_killer_raiting = 0;
+			}
+		
+			$allstats[$id_killer]["raiting"] += $add_killer_raiting;
+			$allstats[$id_victim]["raiting"] -= $add_victim_raiting;
 
 			$list_of_kills[$id_killer][$killer_kills] = [
 					"id" => $id_victim,
 					"name" => $data_stat[$id_victim]["name"],
-					"raiting" => ($victim_kills / ($victim_kills + $victim_deaths)),
+					"raiting" => $add_killer_raiting,
 					"weapon" => $weapon_killer,
 					"armor" => $armor_victim,
+					"date" => $date_kill
 				];
 
 			$list_of_deaths[$id_victim][$victim_deaths] = [
 					"id" => $id_killer,
 					"name" => $data_stat[$id_killer]["name"],
-					"raiting" => ($killer_deaths / ( $killer_deaths + $killer_kills)),
+					"raiting" => $add_victim_raiting,
 					"weapon" => $weapon_killer,
 					"armor" => $armor_victim,
+					"date" => $date_kill
 				];
 		}
+
 		$contKills = "";
 		$contDeaths = "";
 		if (isset($list_of_kills[$char_id])) {
@@ -78,12 +112,13 @@
 			foreach ($list_of_kills[$char_id] as $schar) {
 				$resreit = round($schar['raiting'], 2);
 				$armor = $schar['armor'] ?: 558;
+				$date = $schar['date'];
 				$contKills .= "
 				<tr>
 					<td class='td1'><img class ='image'src='images/kill.png'></td>
 					<td class='td2_char_info'><img class ='image_item' src='http://fonlinew.ru/getinfo.php?picid={$schar['weapon']}'></td>
 					<td class='td'><a href='char_info.php?s={$sess}&char_id={$schar['id']}'>$schar[name]</td>
-					<td class='td2'><img class ='image'src='images/death.png'></td>
+					<td class='td2'><img class ='image'src='images/death.png' title='$date'></td>
 					<td class='td2_char_info'><img class ='image_item' src='http://fonlinew.ru/getinfo.php?picid=$armor'></td>
 					<td class='td2_char_info'><img class ='image' src='images/rating.png'></td>	
 					<td class='td1'>+$resreit</span></td>
@@ -95,12 +130,13 @@
 			foreach ($list_of_deaths[$char_id] as $schar) {
 				$resreit = round($schar['raiting'], 2);
 				$armor = $schar['armor'] ?: 558;
+				$date = $schar['date'];
 				$contDeaths .= "
 				<tr>
 					<td class='td1'><img class ='image'src='images/kill.png'></td>
 					<td class='td2_char_info'><img class ='image_item' src='http://fonlinew.ru/getinfo.php?picid={$schar['weapon']}'></td>
 					<td class='td'><a href='char_info.php?s={$sess}&char_id={$schar['id']}'>$schar[name]</td>
-					<td class='td2'><img class ='image'src='images/death.png'></td>
+					<td class='td2'><img class ='image'src='images/death.png' title='$date'></td>
 					<td class='td2_char_info'><img class ='image_item' src='http://fonlinew.ru/getinfo.php?picid=$armor'></td>
 					<td class='td2_char_info'><img class ='image'src='images/rating.png'></td>
 					<td class='td1'>-$resreit</span></td>
