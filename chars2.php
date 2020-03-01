@@ -17,7 +17,7 @@
 					kills.faction_id_killer,
 					kills.id_victim,
 					kills.faction_id_victim,
-					date
+					kills.date
 					FROM serv{$sess}_kills kills";
 
 		$result = mysqli_query($link, $query);

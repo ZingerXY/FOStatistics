@@ -9,11 +9,12 @@
 
 		$frac_id = filter_var(def($_REQUEST['frac_id'],$link), FILTER_VALIDATE_INT, $filter);
 
-		$query = "	SELECT serv{$sess}_kills.id_killer,
-					serv{$sess}_kills.faction_id_killer,
-					serv{$sess}_kills.id_victim,
-					serv{$sess}_kills.faction_id_victim
-					FROM serv{$sess}_kills";
+		$query = "	SELECT kills.id_killer,
+					kills.faction_id_killer,
+					kills.id_victim,
+					kills.faction_id_victim,
+					kills.date
+					FROM serv{$sess}_kills kills";
 
 		$result = mysqli_query($link, $query);
 		for ($data_kills=[]; $row = mysqli_fetch_assoc($result); $data_kills[] = $row);
@@ -29,7 +30,8 @@
 				"name" => $row["char_name"],
 				"kills" => 0,
 				"deaths" => 0,
-				"raiting" => 0
+				"raiting" => 0,
+				"abuse" => []
 			];
 		}
 
@@ -68,16 +70,45 @@
 			$victim_kills = $allstats[$id_victim]["kills"];
 			$killer_deaths = $allstats[$id_killer]["deaths"];
 
-			$allstats[$id_killer]["raiting"] += ($victim_kills / ($victim_kills + $victim_deaths));
-			$allstats[$id_victim]["raiting"] -= ($killer_deaths / ( $killer_deaths + $killer_kills));
+			$date_kill = $dkills["date"];
+			$unix_date_kill = strtotime($date_kill);
+
+			$add_killer_raiting = ($victim_kills / ($victim_kills + $victim_deaths));
+			$add_victim_raiting = ($killer_deaths / ( $killer_deaths + $killer_kills));
+
+			// Берем ранее добавленный массив с абузами киллера для текущей жертвы если он есть
+			$old_abuse = isset($allstats[$id_killer]['abuse'][$id_victim]) ? $allstats[$id_killer]['abuse'][$id_victim] : [];
+			// Смотрим размер текущего массива абузов киллера
+			$abuse_count = count($old_abuse);
+			if ($abuse_count > 0) { // Если размер больше нуля выбираем из него последнюю запись и сравниваем с текущей
+				$abuse_date = $old_abuse[$abuse_count - 1];
+				$interval = $unix_date_kill - $abuse_date;
+				if ($interval < (3600*3)) { // Если с последнего убийства этой жертвы прошло меньше 3х часов добавляем запись
+					$allstats[$id_killer]['abuse'][$id_victim][] = $unix_date_kill;
+				} else { // Иначе очищаем массив абузов для этой жертвы
+					$allstats[$id_killer]['abuse'][$id_victim] = [];
+				}
+			} else { // Если равен 0 просто добавляем запись
+				$allstats[$id_killer]['abuse'][$id_victim][] = $unix_date_kill;
+			}
+
+			/*	Если в массиве абузов больше 4 записей для этой жертвы и киллер получает 
+				за жертву больше чем теряет жертва меняем местами рейтинг жертвы и киллера */
+			if (count($allstats[$id_killer]['abuse'][$id_victim]) > 4) {
+				$add_victim_raiting = 0;
+				$add_killer_raiting = 0;
+			}
+
+			$allstats[$id_killer]["raiting"] += $add_killer_raiting;
+			$allstats[$id_victim]["raiting"] -= $add_victim_raiting;
 
 			if ($faction_id_killer != 0 && $faction_id_victim != 0 && isset($faction_stats[$faction_id_killer]) && isset($faction_stats[$faction_id_victim]))
 			{
 				$faction_stats[$faction_id_killer]["kills"]++;
-				$faction_stats[$faction_id_killer]["raiting"] += ($victim_kills / ($victim_kills + $victim_deaths));
+				$faction_stats[$faction_id_killer]["raiting"] += $add_killer_raiting;
 
 				$faction_stats[$faction_id_victim]["deaths"]++;
-				$faction_stats[$faction_id_victim]["raiting"] -= ($killer_deaths / ( $killer_deaths + $killer_kills));
+				$faction_stats[$faction_id_victim]["raiting"] -= $add_victim_raiting;
 
 				$faction_kills = $faction_stats[$faction_id_killer]["kills"];
 				$faction_deaths = $faction_stats[$faction_id_victim]["deaths"];
@@ -86,7 +117,7 @@
 				[
 					"faction_id" => $faction_id_victim,
 					"faction_name" => $faction_stats[$faction_id_victim]["name"],
-					"raiting" => ($victim_kills / ($victim_kills + $victim_deaths)),
+					"raiting" => $add_killer_raiting,
 					"char_name_killer" => $data_stat[$id_killer]["name"],
 					"char_name_victim" => $data_stat[$id_victim]["name"]
 				];
@@ -95,7 +126,7 @@
 				[
 					"faction_id" => $faction_id_killer,
 					"faction_name" => $faction_stats[$faction_id_killer]["name"],
-					"raiting" => ($killer_deaths / ( $killer_deaths + $killer_kills)),
+					"raiting" => $add_victim_raiting,
 					"char_name_killer" => $data_stat[$id_killer]["name"],
 					"char_name_victim" => $data_stat[$id_victim]["name"]
 				];
