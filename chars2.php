@@ -121,7 +121,7 @@
 		{
 			if ($schar["kills"] == 0 && $schar["deaths"] == 0)
 				continue;
-			$resreit = round($schar['raiting'] - 1000);
+			$resreit = round($schar['raiting'] - 1000, 2);
 			$content .= "
 			<tr>
 				<td class='td3'>$num</td>

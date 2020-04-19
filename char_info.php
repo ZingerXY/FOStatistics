@@ -120,7 +120,7 @@
 		if (isset($list_of_kills[$char_id])) {
 			krsort($list_of_kills[$char_id]);
 			foreach ($list_of_kills[$char_id] as $schar) {
-				$resreit = round($schar['raiting']);
+				$resreit = round($schar['raiting'], 2);
 				$armor = $schar['armor'] ?: 558;
 				$date = $schar['date'];
 				$contKills .= "
@@ -138,7 +138,7 @@
 		if (isset($list_of_deaths[$char_id])) {
 			krsort($list_of_deaths[$char_id]);
 			foreach ($list_of_deaths[$char_id] as $schar) {
-				$resreit = round($schar['raiting']);
+				$resreit = round($schar['raiting'], 2);
 				$armor = $schar['armor'] ?: 558;
 				$date = $schar['date'];
 				$contDeaths .= "
@@ -164,7 +164,7 @@
 			<link rel='stylesheet' href='style.css'>
 		</head>
 		<body>			<div class="title"><?=$data_stat[$char_id]["name"]?></div>
-			<div class="title"><?=round($allstats[$char_id]["raiting"] - 1000,2)?></div>
+			<div class="title"><?=round($allstats[$char_id]["raiting"] - 1000, 2)?></div>
 			<div align="center" class="container">
 				<div class="block1">
 					<div class="block3">Убийства</div>

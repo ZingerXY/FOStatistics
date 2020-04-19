@@ -137,7 +137,7 @@
 			if ($sfaction["kills"] == 0 && $sfaction["deaths"] == 0)
 				continue;
 			//if (!isset($sfaction["name"])) continue;
-			$resreit = round($sfaction['raiting']);
+			$resreit = round($sfaction['raiting'], 2);
 			$content .= "
 			<tr>
 				<td class='td3'>$num</td>

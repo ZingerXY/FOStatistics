@@ -153,7 +153,7 @@
 			krsort($list_of_faction_kills[$frac_id]);
 			foreach ($list_of_faction_kills[$frac_id] as $sfaction)
 			{
-				$resreit = round($sfaction['raiting']);
+				$resreit = round($sfaction['raiting'], 2);
 				$content .= "
 				<tr>
 					<td class='td'>$sfaction[char_name_killer]</td>
@@ -171,7 +171,7 @@
 			krsort($list_of_faction_deaths[$frac_id]);
 			foreach ($list_of_faction_deaths[$frac_id] as $sfaction)
 			{
-				$resreit = round($sfaction['raiting']);
+				$resreit = round($sfaction['raiting'], 2);
 				$content .= "
 				<tr>
 					<td class='td'>$sfaction[char_name_victim]</td>
@@ -195,7 +195,7 @@
 		</head>
 		<body>			
 			<div class="title"><?=$faction_name?></div>
-			<div class="title"><?=round($faction_rait,2)?></div>
+			<div class="title"><?=round($faction_rait, 2)?></div>
 			<div align="center"><a href="#deaths">К смертям →</a></div>
 			<div align="center" class="block">
 				<table align='center' class='table'>
