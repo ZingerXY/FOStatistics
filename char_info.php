@@ -42,10 +42,13 @@
 			$faction_id_killer = $dkills["faction_id_killer"];
 			$faction_id_victim = $dkills["faction_id_victim"];
 
+			$weapon_killer = $dkills["weapon_killer"];
+			$armor_victim = $dkills["armor_victim"];
+
 			$killer_kills = $allstats[$id_killer]["kills"];
 			$victim_deaths = $allstats[$id_victim]["deaths"];
 			$victim_kills = $allstats[$id_victim]["kills"];
-			$killer_deaths = $allstats[$id_killer]["deaths"];
+			$killer_deaths = $allstats[$id_killer]["deaths"];			
 
 			if (!isset($allstats[$id_killer],$allstats[$id_victim])) continue;
 			if($faction_id_killer != 0 && $faction_id_killer == $faction_id_victim) continue;
@@ -111,7 +114,7 @@
 					"date" => $date_kill
 				];
 		}
-		
+
 		$contKills = "";
 		$contDeaths = "";
 		if (isset($list_of_kills[$char_id])) {

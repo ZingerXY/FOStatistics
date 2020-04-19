@@ -43,7 +43,6 @@
 
 		$time1 = microtime(true) - $start;
 		$start = microtime(true);
-		
 
 		$allstats = $data_stat;
 		foreach ($data_kills as $dkills)
