@@ -30,7 +30,7 @@
 				"name" => $row["char_name"],
 				"kills" => 0,
 				"deaths" => 0,
-				"raiting" => 0,
+				"raiting" => 1000,
 				"abuse" => []
 			];
 		}
@@ -73,8 +73,16 @@
 			$date_kill = $dkills["date"];
 			$unix_date_kill = strtotime($date_kill);
 
-			$add_killer_raiting = ($victim_kills / ($victim_kills + $victim_deaths));
-			$add_victim_raiting = ($killer_deaths / ( $killer_deaths + $killer_kills));
+			//Берем текущие рейтинги килера и жертвы
+			$Ra = $allstats[$id_killer]["raiting"];
+			$Rb = $allstats[$id_victim]["raiting"];
+
+			//Передаем их в функцию расчета рейтинга
+			$raiting = EloRating($Ra, $Rb);
+
+			//Изменяем рейтинги игроков
+			$add_killer_raiting = $raiting["killer_raiting"];
+			$add_victim_raiting = $raiting["victim_raiting"];
 
 			// Берем ранее добавленный массив с абузами киллера для текущей жертвы если он есть
 			$old_abuse = isset($allstats[$id_killer]['abuse'][$id_victim]) ? $allstats[$id_killer]['abuse'][$id_victim] : [];
@@ -100,7 +108,7 @@
 			}
 
 			$allstats[$id_killer]["raiting"] += $add_killer_raiting;
-			$allstats[$id_victim]["raiting"] -= $add_victim_raiting;
+			$allstats[$id_victim]["raiting"] += $add_victim_raiting;
 
 			if ($faction_id_killer != 0 && $faction_id_victim != 0 && isset($faction_stats[$faction_id_killer]) && isset($faction_stats[$faction_id_victim]))
 			{
@@ -108,7 +116,7 @@
 				$faction_stats[$faction_id_killer]["raiting"] += $add_killer_raiting;
 
 				$faction_stats[$faction_id_victim]["deaths"]++;
-				$faction_stats[$faction_id_victim]["raiting"] -= $add_victim_raiting;
+				$faction_stats[$faction_id_victim]["raiting"] += $add_victim_raiting;
 
 				$faction_kills = $faction_stats[$faction_id_killer]["kills"];
 				$faction_deaths = $faction_stats[$faction_id_victim]["deaths"];
@@ -145,7 +153,7 @@
 			krsort($list_of_faction_kills[$frac_id]);
 			foreach ($list_of_faction_kills[$frac_id] as $sfaction)
 			{
-				$resreit = round($sfaction['raiting'], 2);
+				$resreit = round($sfaction['raiting']);
 				$content .= "
 				<tr>
 					<td class='td'>$sfaction[char_name_killer]</td>
@@ -163,7 +171,7 @@
 			krsort($list_of_faction_deaths[$frac_id]);
 			foreach ($list_of_faction_deaths[$frac_id] as $sfaction)
 			{
-				$resreit = round($sfaction['raiting'], 2);
+				$resreit = round($sfaction['raiting']);
 				$content .= "
 				<tr>
 					<td class='td'>$sfaction[char_name_victim]</td>
