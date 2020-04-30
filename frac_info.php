@@ -13,7 +13,7 @@
 					kills.faction_id_killer,
 					kills.id_victim,
 					kills.faction_id_victim,
-					kills.date
+					date
 					FROM serv{$sess}_kills kills";
 
 		$result = mysqli_query($link, $query);
@@ -28,9 +28,6 @@
 			[
 				"id" => $row["id"],
 				"name" => $row["char_name"],
-				"kills" => 0,
-				"deaths" => 0,
-				"raiting" => 1000,
 				"abuse" => []
 			];
 		}
@@ -46,7 +43,7 @@
 				"name" => $row["faction_name"],
 				"kills" => 0,
 				"deaths" => 0,
-				"raiting" => 0
+				"raiting" => 1000
 			];
 		}
 
@@ -57,25 +54,17 @@
 			$id_killer = $dkills["id_killer"];
 			$id_victim = $dkills["id_victim"];
 			$faction_id_killer = $dkills["faction_id_killer"];
-			$faction_id_victim = $dkills["faction_id_victim"];			
+			$faction_id_victim = $dkills["faction_id_victim"];
 
 			if (!isset($allstats[$id_killer],$allstats[$id_victim])) continue;
 			if($faction_id_killer == $faction_id_victim) continue;
-
-			$allstats[$id_killer]["kills"]++;
-			$allstats[$id_victim]["deaths"]++;
-
-			$killer_kills = $allstats[$id_killer]["kills"];
-			$victim_deaths = $allstats[$id_victim]["deaths"];
-			$victim_kills = $allstats[$id_victim]["kills"];
-			$killer_deaths = $allstats[$id_killer]["deaths"];
 
 			$date_kill = $dkills["date"];
 			$unix_date_kill = strtotime($date_kill);
 
 			//Берем текущие рейтинги килера и жертвы
-			$Ra = $allstats[$id_killer]["raiting"];
-			$Rb = $allstats[$id_victim]["raiting"];
+			$Ra = $faction_stats[$faction_id_killer]["raiting"];
+			$Rb = $faction_stats[$faction_id_victim]["raiting"];
 
 			//Передаем их в функцию расчета рейтинга
 			$raiting = EloRating($Ra, $Rb);
@@ -106,9 +95,6 @@
 				$add_victim_raiting = 0;
 				$add_killer_raiting = 0;
 			}
-
-			$allstats[$id_killer]["raiting"] += $add_killer_raiting;
-			$allstats[$id_victim]["raiting"] += $add_victim_raiting;
 
 			if ($faction_id_killer != 0 && $faction_id_victim != 0 && isset($faction_stats[$faction_id_killer]) && isset($faction_stats[$faction_id_victim]))
 			{
@@ -195,7 +181,7 @@
 		</head>
 		<body>			
 			<div class="title"><?=$faction_name?></div>
-			<div class="title"><?=round($faction_rait, 2)?></div>
+			<div class="title"><?=round($faction_rait - 1000, 2)?></div>
 			<div align="center"><a href="#deaths">К смертям →</a></div>
 			<div align="center" class="block">
 				<table align='center' class='table'>
