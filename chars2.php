@@ -17,9 +17,11 @@
 
 		$query = "	SELECT kills.id_killer,
 					kills.faction_id_killer,
+					kills.weapon_killer,
 					kills.id_victim,
 					kills.faction_id_victim,
-					kills.date
+					kills.armor_victim,
+					date
 					FROM serv{$sess}_kills kills";
 
 		$result = mysqli_query($link, $query);
@@ -52,6 +54,9 @@
 			$faction_id_killer = $dkills["faction_id_killer"];
 			$faction_id_victim = $dkills["faction_id_victim"];
 
+			$weapon_killer = $dkills["weapon_killer"];
+			$armor_victim = $dkills["armor_victim"];
+
 			$killer_kills = $allstats[$id_killer]["kills"];
 			$victim_deaths = $allstats[$id_victim]["deaths"];
 			$victim_kills = $allstats[$id_victim]["kills"];
@@ -72,7 +77,12 @@
 
 			//Изменяем рейтинги игроков
 			$add_killer_raiting = $raiting["killer_raiting"];
-			$add_victim_raiting = $raiting["victim_raiting"];				
+			$add_victim_raiting = $raiting["victim_raiting"];
+
+			if ($armor_c[$armor_victim] != 0.0) {
+				$add_killer_raiting = ($add_killer_raiting * $armor_c[$armor_victim]);
+				$add_victim_raiting = ($add_victim_raiting / $armor_c[$armor_victim]);
+			}
 
 			$date_kill = $dkills["date"];
 			$unix_date_kill = strtotime($date_kill);
