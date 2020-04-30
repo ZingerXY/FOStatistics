@@ -65,7 +65,12 @@
 
 			//Изменяем рейтинги игроков
 			$add_killer_raiting = $raiting["killer_raiting"];
-			$add_victim_raiting = $raiting["victim_raiting"];				
+			$add_victim_raiting = $raiting["victim_raiting"];
+			
+			if ( isset($armor_c[$armor_victim]) ) {
+				$add_killer_raiting = ($add_killer_raiting * $armor_c[$armor_victim]);
+				$add_victim_raiting = ($add_victim_raiting / $armor_c[$armor_victim]);
+			}
 
 			$date_kill = $dkills["date"];
 			$unix_date_kill = strtotime($date_kill);

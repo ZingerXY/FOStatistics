@@ -79,7 +79,7 @@
 			$add_killer_raiting = $raiting["killer_raiting"];
 			$add_victim_raiting = $raiting["victim_raiting"];
 
-			if ($armor_c[$armor_victim] != 0.0) {
+			if ( isset($armor_c[$armor_victim]) ) {
 				$add_killer_raiting = ($add_killer_raiting * $armor_c[$armor_victim]);
 				$add_victim_raiting = ($add_victim_raiting / $armor_c[$armor_victim]);
 			}
