@@ -2,3 +2,4 @@
 *.db
 generation.php
 config.php
+.vscode
