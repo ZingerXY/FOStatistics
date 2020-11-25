@@ -15,8 +15,7 @@
 		$query = "SELECT serv{$sess}_chars.id AS id, serv{$sess}_chars.name AS char_name FROM serv{$sess}_chars";
 
 		$result = mysqli_query($link, $query);
-		while ($row = mysqli_fetch_assoc($result))
-		{
+		while ($row = mysqli_fetch_assoc($result)) {
 			$data_stat[$row["id"]] =
 			[
 				"id" => $row["id"],
@@ -28,8 +27,7 @@
 		}
 
 		$allstats = $data_stat;
-		foreach ($data_kills as $dkills)
-		{
+		foreach ($data_kills as $dkills) {
 			$id_killer = $dkills["id_killer"];
 			$id_victim = $dkills["id_victim"];
 			$faction_id_killer = $dkills["faction_id_killer"];
@@ -50,8 +48,9 @@
 			$allstats[$id_victim]["raiting"] -= ($killer_deaths / ( $killer_deaths + $killer_kills));
 		}
 		
-		if(!$allstats)
+		if(!$allstats) {
 			$allstats = [];
+		}
 		
 		usort($allstats, 'myCmp');
 		
@@ -82,10 +81,10 @@
 	$perk = [];
 	
 	while ($result && $row = mysqli_fetch_assoc($result)) {
-		$perk[] = ['name'=>$row["name"],'id'=>$row["id"]];		
+		$perk[] = ['name'=>$row["name"],'id'=>$row["id"]];
 	}
 	
-	if ($ck)		
+	if ($ck)
 		if ($type) { // Расчет топа статки по убийствам
 			$query = "SELECT id,pidlist FROM serv{$sess}_perks WHERE LENGTH( pidlist ) >= 155 && id = (select distinct id_killer from serv{$sess}_kills where id_killer = serv{$sess}_perks.id AND (select count(id_killer) from serv{$sess}_kills where id_killer = serv{$sess}_perks.id) >= $ck)";
 		} else { // Расчет топа статки по рейтингу	
@@ -126,11 +125,12 @@
 	$content .= '<tbody>';
 	$class = 'trait';
 	$num = 1;
-	foreach($perk as $i => $e) {
-		if (array_key_exists($i,$stat))
+	foreach ($perk as $i => $e) {
+		if (array_key_exists($i,$stat)) {
 			$pr = round($stat[$i] / $sum * 100, 2);
-		else
+		} else {
 			$pr = 0;
+		}
 		$name = $e['name'];
 		$id = $e['id'];
 		$content .= "
@@ -185,10 +185,11 @@
 	<script>console.log("<?=$countBrokenStr?>")</script>
 	<div align="center" class="block">
 		<?
-		if ($sum > 15) 
+		if ($sum > 15) {
 			echo $content;
-		else
+		} else {
 			echo "<p id='nopes'>Недостаточно данных для вывода статистики</p>";
+		}
 		?>
 	</div>
 
