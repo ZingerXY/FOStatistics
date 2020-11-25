@@ -2,7 +2,7 @@
 
 	include_once "app.php";
 
-	if(!isset($mainphp)) {
+	if (!isset($mainphp)) {
 		 header("HTTP/1.1 301 Moved Permanently"); 
 		 header("Location: main.php"); 
 		 exit(); 
@@ -30,10 +30,8 @@
 		$query = "SELECT serv{$sess}_chars.id AS id, serv{$sess}_chars.name AS char_name FROM serv{$sess}_chars";
 
 		$result = mysqli_query($link, $query);
-		while ($row = mysqli_fetch_assoc($result))
-		{
-			$data_stat[$row["id"]] =
-			[
+		while ($row = mysqli_fetch_assoc($result)) {
+			$data_stat[$row["id"]] = [
 				"id" => $row["id"],
 				"name" => $row["char_name"],
 				"kills" => 0,
@@ -47,8 +45,7 @@
 		$start = microtime(true);
 
 		$allstats = $data_stat;
-		foreach ($data_kills as $dkills)
-		{
+		foreach ($data_kills as $dkills) {
 			$id_killer = $dkills["id_killer"];
 			$id_victim = $dkills["id_victim"];
 			$faction_id_killer = $dkills["faction_id_killer"];
@@ -62,8 +59,13 @@
 			$victim_kills = $allstats[$id_victim]["kills"];
 			$killer_deaths = $allstats[$id_killer]["deaths"];
 
-			if (!isset($allstats[$id_killer],$allstats[$id_victim])) continue;
-			if($faction_id_killer != 0 && $faction_id_killer == $faction_id_victim) continue;
+			if (!isset($allstats[$id_killer],$allstats[$id_victim])) {
+				continue;
+			}
+
+			if ($faction_id_killer != 0 && $faction_id_killer == $faction_id_victim) {
+				continue;
+			}
 
 			$allstats[$id_killer]["kills"]++;
 			$allstats[$id_victim]["deaths"]++;
@@ -117,8 +119,9 @@
 		$time2 = microtime(true) - $start;
 		$start = microtime(true);
 		
-		if(!$allstats)
+		if (!$allstats) {
 			$allstats = [];
+		}
 
 		usort($allstats, 'myCmp');
 
@@ -127,10 +130,10 @@
 
 		$content = "";
 		$num = 1;
-		foreach ($allstats as $schar)
-		{
-			if ($schar["kills"] == 0 && $schar["deaths"] == 0)
+		foreach ($allstats as $schar) {
+			if ($schar["kills"] == 0 && $schar["deaths"] == 0) {
 				continue;
+			}
 			$resreit = round($schar['raiting'] - 1000, 2);
 			$content .= "
 			<tr>

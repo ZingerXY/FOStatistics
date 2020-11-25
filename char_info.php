@@ -36,7 +36,6 @@
 
 		$allstats = $data_stat;
 		foreach ($data_kills as $dkills) {
-
 			$id_killer = $dkills["id_killer"];
 			$id_victim = $dkills["id_victim"];
 			$faction_id_killer = $dkills["faction_id_killer"];
@@ -50,8 +49,13 @@
 			$victim_kills = $allstats[$id_victim]["kills"];
 			$killer_deaths = $allstats[$id_killer]["deaths"];			
 
-			if (!isset($allstats[$id_killer],$allstats[$id_victim])) continue;
-			if($faction_id_killer != 0 && $faction_id_killer == $faction_id_victim) continue;
+			if (!isset($allstats[$id_killer], $allstats[$id_victim])) { 
+				continue;
+			}
+
+			if($faction_id_killer != 0 && $faction_id_killer == $faction_id_victim) {
+				continue;
+			}
 
 			$allstats[$id_killer]["kills"]++;
 			$allstats[$id_victim]["deaths"]++;
@@ -168,7 +172,8 @@
 			<title>Статистика <?=$data_stat[$char_id]["name"]?></title>
 			<link rel='stylesheet' href='style.css'>
 		</head>
-		<body>			<div class="title"><?=$data_stat[$char_id]["name"]?></div>
+		<body>
+			<div class="title"><?=$data_stat[$char_id]["name"]?></div>
 			<div class="title"><?=round($allstats[$char_id]["raiting"] - 1000, 2)?></div>
 			<div align="center" class="container">
 				<div class="block1">

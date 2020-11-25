@@ -2,7 +2,7 @@
 
 	include_once "app.php";
 
-	if(!isset($mainphp)) {
+	if (!isset($mainphp)) {
 		 header("HTTP/1.1 301 Moved Permanently"); 
 		 header("Location: main.php"); 
 		 exit(); 
@@ -26,10 +26,8 @@
 		$query = "SELECT serv{$sess}_chars.id AS id, serv{$sess}_chars.name AS char_name FROM serv{$sess}_chars";
 
 		$result = mysqli_query($link, $query);
-		while ($row = mysqli_fetch_assoc($result))
-		{		
-			$data_stat[$row["id"]] =
-			[
+		while ($row = mysqli_fetch_assoc($result)) {
+			$data_stat[$row["id"]] = [
 				"id" => $row["id"],
 				"name" => $row["char_name"],
 				"abuse" => []
@@ -41,8 +39,7 @@
 		$result = mysqli_query($link, $query);
 		while ($row = mysqli_fetch_assoc($result))
 		{
-			$data_faction[$row["id"]] =
-			[
+			$data_faction[$row["id"]] = [
 				"id" => $row["id"],
 				"name" => $row["faction_name"],
 				"kills" => 0,
@@ -53,16 +50,19 @@
 
 		$faction_stats = $data_faction;
 		$allstats = $data_stat;
-		foreach ($data_kills as $dkills)
-		{
-
+		foreach ($data_kills as $dkills) {
 			$id_killer = $dkills["id_killer"];
 			$id_victim = $dkills["id_victim"];
 			$faction_id_killer = $dkills["faction_id_killer"];
 			$faction_id_victim = $dkills["faction_id_victim"];
 
-			if (!isset($allstats[$id_killer],$allstats[$id_victim])) continue;
-			if($faction_id_killer == $faction_id_victim) continue;
+			if (!isset($allstats[$id_killer],$allstats[$id_victim])) {
+				continue;
+			}
+
+			if ($faction_id_killer == $faction_id_victim) {
+				continue;
+			}
 
 			$date_kill = $dkills["date"];
 			$unix_date_kill = strtotime($date_kill);
@@ -101,8 +101,11 @@
 				$add_killer_raiting = 0;
 			}
 
-			if ($faction_id_killer != 0 && $faction_id_victim != 0 && isset($faction_stats[$faction_id_killer]) && isset($faction_stats[$faction_id_victim]))
-			{
+			if ($faction_id_killer != 0 && 
+				$faction_id_victim != 0 && 
+				isset($faction_stats[$faction_id_killer]) && 
+				isset($faction_stats[$faction_id_victim])) {
+
 				$faction_stats[$faction_id_killer]["kills"]++;
 				$faction_stats[$faction_id_killer]["raiting"] += $add_killer_raiting;
 
@@ -111,18 +114,18 @@
 			}
 		}
 		
-		if(!$faction_stats)
+		if (!$faction_stats) {
 			$faction_stats = [];
+		}
 		
 		usort($faction_stats, 'myCmp');
 
 		$content = "";
 		$num = 1;
-		foreach ($faction_stats	as $sfaction)
-		{
-
-			if ($sfaction["kills"] == 0 && $sfaction["deaths"] == 0)
+		foreach ($faction_stats	as $sfaction) {
+			if ($sfaction["kills"] == 0 && $sfaction["deaths"] == 0) {
 				continue;
+			}
 			//if (!isset($sfaction["name"])) continue;
 			$resreit = round($sfaction['raiting'] - 1000, 2);
 			$content .= "

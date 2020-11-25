@@ -24,8 +24,7 @@
 		$result = mysqli_query($link, $query);
 		while ($row = mysqli_fetch_assoc($result))
 		{		
-			$data_stat[$row["id"]] =
-			[
+			$data_stat[$row["id"]] = [
 				"id" => $row["id"],
 				"name" => $row["char_name"],
 				"abuse" => []
@@ -37,8 +36,7 @@
 		$result = mysqli_query($link, $query);
 		while ($row = mysqli_fetch_assoc($result))
 		{
-			$data_faction[$row["id"]] =
-			[
+			$data_faction[$row["id"]] = [
 				"id" => $row["id"],
 				"name" => $row["faction_name"],
 				"kills" => 0,
@@ -49,15 +47,19 @@
 
 		$faction_stats = $data_faction;
 		$allstats = $data_stat;
-		foreach ($data_kills as $dkills)
-		{
+		foreach ($data_kills as $dkills) {
 			$id_killer = $dkills["id_killer"];
 			$id_victim = $dkills["id_victim"];
 			$faction_id_killer = $dkills["faction_id_killer"];
 			$faction_id_victim = $dkills["faction_id_victim"];
 
-			if (!isset($allstats[$id_killer],$allstats[$id_victim])) continue;
-			if($faction_id_killer == $faction_id_victim) continue;
+			if (!isset($allstats[$id_killer],$allstats[$id_victim])) {
+				continue;
+			}
+
+			if($faction_id_killer == $faction_id_victim) {
+				continue;
+			}
 
 			$date_kill = $dkills["date"];
 			$unix_date_kill = strtotime($date_kill);
@@ -96,8 +98,11 @@
 				$add_killer_raiting = 0;
 			}
 
-			if ($faction_id_killer != 0 && $faction_id_victim != 0 && isset($faction_stats[$faction_id_killer]) && isset($faction_stats[$faction_id_victim]))
-			{
+			if ($faction_id_killer != 0 && 
+				$faction_id_victim != 0 && 
+				isset($faction_stats[$faction_id_killer]) && 
+				isset($faction_stats[$faction_id_victim])) {
+
 				$faction_stats[$faction_id_killer]["kills"]++;
 				$faction_stats[$faction_id_killer]["raiting"] += $add_killer_raiting;
 
@@ -107,8 +112,7 @@
 				$faction_kills = $faction_stats[$faction_id_killer]["kills"];
 				$faction_deaths = $faction_stats[$faction_id_victim]["deaths"];
 
-				$list_of_faction_kills[$faction_id_killer][$faction_kills] =
-				[
+				$list_of_faction_kills[$faction_id_killer][$faction_kills] = [
 					"faction_id" => $faction_id_victim,
 					"faction_name" => $faction_stats[$faction_id_victim]["name"],
 					"raiting" => $add_killer_raiting,
@@ -116,8 +120,7 @@
 					"char_name_victim" => $data_stat[$id_victim]["name"]
 				];
 
-				$list_of_faction_deaths[$faction_id_victim][$faction_deaths] =
-				[
+				$list_of_faction_deaths[$faction_id_victim][$faction_deaths] = [
 					"faction_id" => $faction_id_killer,
 					"faction_name" => $faction_stats[$faction_id_killer]["name"],
 					"raiting" => $add_victim_raiting,
@@ -134,11 +137,9 @@
 		usort($faction_stats, 'myCmp');
 
 		$content = '<tr><td class="th" colspan="6"><div class="title">Убийства</div></td></tr>';
-		if (isset($list_of_faction_kills[$frac_id]))
-		{
+		if (isset($list_of_faction_kills[$frac_id])) {
 			krsort($list_of_faction_kills[$frac_id]);
-			foreach ($list_of_faction_kills[$frac_id] as $sfaction)
-			{
+			foreach ($list_of_faction_kills[$frac_id] as $sfaction) {
 				$resreit = round($sfaction['raiting'], 2);
 				$content .= "
 				<tr>
@@ -152,11 +153,9 @@
 			}
 		}
 		$content .= '<tr><td class="th" colspan="6"><a name="deaths"></a><div class="title">Смерти</div></td></tr>';
-		if (isset($list_of_faction_deaths[$frac_id]))
-		{
+		if (isset($list_of_faction_deaths[$frac_id])) {
 			krsort($list_of_faction_deaths[$frac_id]);
-			foreach ($list_of_faction_deaths[$frac_id] as $sfaction)
-			{
+			foreach ($list_of_faction_deaths[$frac_id] as $sfaction) {
 				$resreit = round($sfaction['raiting'], 2);
 				$content .= "
 				<tr>

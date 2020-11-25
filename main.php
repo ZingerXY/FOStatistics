@@ -2,10 +2,10 @@
 	include_once "app.php";
 	$mainphp = true;
 	$tabid = 'pers';
-	if(isset($_REQUEST['select_tab'])) {
+	if (isset($_REQUEST['select_tab'])) {
 		$tabid = $_REQUEST['select_tab'];
 	}
-	
+
 ?>
 	<!DOCTYPE html>
 	<html>
@@ -33,27 +33,27 @@
 			<script>
 			// Работа с localStorage >>
 			function lsSet(key,data) {
-				if (typeof data == "string")
+				if (typeof data == "string") {
 					localStorage.setItem(key,data);
-				else {
+				} else {
 					textdata = JSON.stringify(data);
 					localStorage.setItem(key,textdata);
 				}
 			}
-			
+
 			function lsGet(key) {
 				var data = localStorage.getItem(key);
 				try {
 					return JSON.parse(data);
 				} catch (e) {
 					return data;
-				}		
+				}
 			}
-			
+
 			function lsDel(key) {
 				localStorage.removeItem(key)
 			}
-			
+
 			function lsClear() {
 				localStorage.clear();
 			}
@@ -61,7 +61,7 @@
 			if (!lsGet("select_tab")) {
 				lsSet("select_tab","pers");
 			}
-			
+
 			var tabsconts = document.querySelectorAll(".tabcont");
 			var tabs = document.querySelectorAll(".tab");
 			for (var i = 0; i < tabs.length; i++) {
@@ -74,7 +74,7 @@
 				links[i].onclick = relink;
 			}
 			startperk();
-			
+
 			var select_tab = lsGet("select_tab");
 			changeTab(select_tab);
 			// Смена вкладки
@@ -95,14 +95,14 @@
 				var xhr = new XMLHttpRequest();
 				xhr.open('POST', url, true);
 				xhr.onreadystatechange = function() { // (3)
-				  if (xhr.readyState == 4) func(xhr.response);
+					if (xhr.readyState == 4) func(xhr.response);
 				}
 				xhr.responseType = "document";
 				xhr.send();
 			}
 			// Для ajax ссылок
 			function relink() {
-				if(!~this.href.indexOf("perks")) {
+				if (!~this.href.indexOf("perks")) {
 					ajax(this.href,function(res) {
 						ajaxpage.scrollTop = 0;
 						ajaxpage.innerHTML = res.body.innerHTML;
@@ -114,7 +114,7 @@
 							}
 						}
 					});
-				}else {
+				} else {
 					ajax(this.href,function(res) {
 						perks.scrollTop = 0;
 						perks.innerHTML = res.body.innerHTML;
@@ -122,7 +122,7 @@
 						startperk();
 						var inlinks = perks.querySelectorAll("a");
 						for (var i = 0; i < inlinks.length; i++) {
-							if(!~inlinks[i].href.indexOf("#")) {
+							if (!~inlinks[i].href.indexOf("#")) {
 								inlinks[i].onclick = relink;
 							}
 						}
@@ -149,17 +149,19 @@
 				});
 				// добавить результат в нужном порядке в TBODY
 				// они автоматически будут убраны со старых мест и вставлены в правильном порядке
-				for (var i = 0; i < rowsArray.length; i++)
+				for (var i = 0; i < rowsArray.length; i++) {
 					tbody.appendChild(rowsArray[i]);
+				}
 			}
 			function hideshow() {
 				var trs = document.querySelectorAll("tr.perk."+this.id);	
-				for(var i in trs) {
-					if(trs[i].style) {
-						if(this.checked)
+				for (var i in trs) {
+					if (trs[i].style) {
+						if (this.checked) {
 							trs[i].style.display = '';
-						else
+						} else {
 							trs[i].style.display = 'none';
+						}
 					}
 				}
 			}
@@ -335,30 +337,29 @@
 						{name:'Огневая поддержка',pid:'466',type:'lvl12'}
 					];
 					var tr = Array.from(document.querySelectorAll("tr.perk,.trait"));
-					for(var i in tr) 
-						if(perktype[i].type)
-							tr[i].classList.add(perktype[i].type);	
+					for (var i in tr) {
+						if (perktype[i].type) {
+							tr[i].classList.add(perktype[i].type);
+						}
+					}
 					sortGrid("trait");
 					sortGrid("perk");
 					var ic = true;
-				turn.onclick = function() {
-					if(ic)
-					{
-						roll.style.height = "0px";
-						this.style.borderBottomWidth = "0px";
-						traitfh.style.right = "520px";
-						traitsh.style.right = "64px";
-						ic = false;
-					}
-					else
-					{
-						roll.style.height = "";
-						this.style.borderBottomWidth = "1px";
-						traitfh.style.right = "0px";
-						traitsh.style.right = "-450px";
-						ic = true;
-					}
-				};
+					turn.onclick = function() {
+						if (ic) {
+							roll.style.height = "0px";
+							this.style.borderBottomWidth = "0px";
+							traitfh.style.right = "520px";
+							traitsh.style.right = "64px";
+							ic = false;
+						} else {
+							roll.style.height = "";
+							this.style.borderBottomWidth = "1px";
+							traitfh.style.right = "0px";
+							traitsh.style.right = "-450px";
+							ic = true;
+						}
+					};
 				}
 			}
 			</script>
