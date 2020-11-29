@@ -59,7 +59,7 @@
 			$victim_kills = $allstats[$id_victim]["kills"];
 			$killer_deaths = $allstats[$id_killer]["deaths"];
 
-			if (!isset($allstats[$id_killer],$allstats[$id_victim])) {
+			if (!isset($allstats[$id_killer], $allstats[$id_victim])) {
 				continue;
 			}
 

@@ -84,15 +84,16 @@
 		$perk[] = ['name'=>$row["name"],'id'=>$row["id"]];
 	}
 	
-	if ($ck)
+	if ($ck) {
 		if ($type) { // Расчет топа статки по убийствам
-			$query = "SELECT id,pidlist FROM serv{$sess}_perks WHERE LENGTH( pidlist ) >= 155 && id = (select distinct id_killer from serv{$sess}_kills where id_killer = serv{$sess}_perks.id AND (select count(id_killer) from serv{$sess}_kills where id_killer = serv{$sess}_perks.id) >= $ck)";
+			$query = "SELECT id, pidlist FROM serv{$sess}_perks WHERE LENGTH( pidlist ) >= 155 && id = (select distinct id_killer from serv{$sess}_kills where id_killer = serv{$sess}_perks.id AND (select count(id_killer) from serv{$sess}_kills where id_killer = serv{$sess}_perks.id) >= $ck)";
 		} else { // Расчет топа статки по рейтингу	
 			$query = "SELECT id,pidlist FROM serv{$sess}_perks WHERE LENGTH( pidlist ) >= 155 && id in (".getTopReitingCharsIds($link, $sess, $ck).")";
 		}
-	else
+	} else {
 		$query = "SELECT id,pidlist FROM serv{$sess}_perks WHERE LENGTH( pidlist ) >= 155";
-	
+	}
+
 	$result = mysqli_query($link, $query);
 	
 	$countBrokenStr = 0;
@@ -137,7 +138,7 @@
 			<tr class='$class perks' data-id='$i'>
 				<td>
 					<img align ='left' class ='image_perks' src='images/perks/$id.png'" . 
-					($num == 117 ? "onmouseover='this.src = \"images/perks/easter_egg.png\"' onmouseout='this.src = \"images/perks/$id.png\"'" : "") . ">
+					($num == 119 ? "onmouseover='this.src = \"images/perks/easter_egg.png\"' onmouseout='this.src = \"images/perks/$id.png\"'" : "") . ">
 				</td>
 				<td class='td'>$name</td>
 				<td class='td'>$pr%</td>

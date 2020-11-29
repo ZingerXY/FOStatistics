@@ -56,7 +56,7 @@
 			$faction_id_killer = $dkills["faction_id_killer"];
 			$faction_id_victim = $dkills["faction_id_victim"];
 
-			if (!isset($allstats[$id_killer],$allstats[$id_victim])) {
+			if (!isset($allstats[$id_killer], $allstats[$id_victim])) {
 				continue;
 			}
 
