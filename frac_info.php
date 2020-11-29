@@ -50,6 +50,10 @@
 		foreach ($data_kills as $dkills) {
 			$id_killer = $dkills["id_killer"];
 			$id_victim = $dkills["id_victim"];
+			if (isNotStatChar($id_killer) || isNotStatChar($id_victim)) {
+				continue;
+			}
+
 			$faction_id_killer = $dkills["faction_id_killer"];
 			$faction_id_victim = $dkills["faction_id_victim"];
 

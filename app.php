@@ -7,14 +7,10 @@
 	include_once "config.php";
 
 	mysqli_query($link, "SET NAMES utf8");
-
-	// защита БД от SQL иньекций
-	function def($text,$linksql = false) {
-		$result = strip_tags($text);
-		$result = htmlspecialchars($result);
-		if ($linksql)
-			$result = mysqli_real_escape_string ($linksql, $result);
-		return $result;
+	// Текущая ссесия
+	$sess = '23';
+	if (isset($_REQUEST['s'])) {
+		$sess = filter_var(def($_REQUEST['s']), FILTER_VALIDATE_INT, $filter);
 	}
 
 	$filter = [
@@ -25,48 +21,24 @@
 		],
 		'flags' => FILTER_FLAG_ALLOW_OCTAL,
 	];
-	
-	function myCmp($a, $b) {
-		return ($b["raiting"]*1000) - ($a["raiting"]*1000);
-	}
-	// Текущая ссесия
-	$sess = '23';
-	if (isset($_REQUEST['s'])) {
-		$sess = filter_var(def($_REQUEST['s']), FILTER_VALIDATE_INT, $filter);
-	}
 
-	//функция расчета рейтинга игрока. Ra, Rb - рейтинги двух игроков, Ra - килера, Rb - жертвы
-	function EloRating ($Ra, $Rb) {
-		// Ea, Eb - вероятноти выигрыша игроков, вычисляются из входного рейтинга
-		$Ea = 1/( 1 + pow(10,($Rb - $Ra)/400 ) );
-		$Eb = 1/( 1 + pow(10,($Ra - $Rb)/400 ) );
-
-		//Коэфициенты, зависящие от текущего входного рейтинга игроков
-		if ($Ra <= 800) {
-			$Ka = 30;
-		} else if ($Ra <= 1100 ) {
-			$Ka = 20;
-		} else if ($Ra <= 1300) {
-			$Ka = 10;
-		} else if ($Ra > 1300) {
-			$Ka = 5;
+	$result = mysqli_query($link, "SELECT id, pidlist FROM serv{$sess}_perks");
+	// Номер перка статист
+	$statPerk = 24; // Иммунитет
+	$statChars = [];
+	while ($result && $row = mysqli_fetch_assoc($result)) {
+		$res = str_split($row["pidlist"]);
+		if (count($res) > 157 && $res[102] == 1) { // Фикс Специалиста
+			array_splice($res, 102, 2, [9]);
 		}
 
-		if ($Rb <= 800) {
-			$Kb = 30;
-		} else if ($Rb <= 1100 ) {
-			$Kb = 20;
-		} else if ($Rb <= 1300) {
-			$Kb = 10;
-		} else if ($Rb > 1300) {
-			$Kb = 5;
+		if ((int) $res[$statPerk]) {
+			$statChars[] = $row["id"];
 		}
-		//Возвращаем итоговую прибавку к рейтингу килера и снижение рейтинга у жертвы.
-		return ['killer_raiting' => $Ka * (1 - $Ea), 'victim_raiting' => $Kb * (0 - $Eb)];
 	}
 
-	//Массив с коэффициетами от броней
-	$armor_c = array (
+	// Массив с коэффициетами от броней
+	$armor_c = [
 		//пижама и мантии
 		0 => 0.5, //пижамка
 		113 => 0.5,
@@ -125,4 +97,58 @@
 		8113 => 1.4, //Сиолвуха мут.
 		8114 => 1.4, //Силовуха мк2 мут.
 		8118 => 1.4, //РБК мк2 мут.
-	);
+	];
+
+	/**
+	 * Определяет считать ли стату персонажу с указанным id
+	 * @param int $id идетификатор персонажа
+	 * @return bool
+	*/
+	function isNotStatChar($id) {
+		global $statChars;
+		return !in_array($id, $statChars);
+	}
+
+	// защита БД от SQL иньекций
+	function def($text, $linksql = false) {
+		$result = strip_tags($text);
+		$result = htmlspecialchars($result);
+		if ($linksql)
+			$result = mysqli_real_escape_string ($linksql, $result);
+		return $result;
+	}
+
+	// Сравнение значений для сортировки
+	function myCmp($a, $b) {
+		return ($b["raiting"]*1000) - ($a["raiting"]*1000);
+	}
+
+	//функция расчета рейтинга игрока. Ra, Rb - рейтинги двух игроков, Ra - килера, Rb - жертвы
+	function EloRating ($Ra, $Rb) {
+		// Ea, Eb - вероятноти выигрыша игроков, вычисляются из входного рейтинга
+		$Ea = 1/( 1 + pow(10,($Rb - $Ra)/400 ) );
+		$Eb = 1/( 1 + pow(10,($Ra - $Rb)/400 ) );
+
+		//Коэфициенты, зависящие от текущего входного рейтинга игроков
+		if ($Ra <= 800) {
+			$Ka = 30;
+		} else if ($Ra <= 1100 ) {
+			$Ka = 20;
+		} else if ($Ra <= 1300) {
+			$Ka = 10;
+		} else if ($Ra > 1300) {
+			$Ka = 5;
+		}
+
+		if ($Rb <= 800) {
+			$Kb = 30;
+		} else if ($Rb <= 1100 ) {
+			$Kb = 20;
+		} else if ($Rb <= 1300) {
+			$Kb = 10;
+		} else if ($Rb > 1300) {
+			$Kb = 5;
+		}
+		//Возвращаем итоговую прибавку к рейтингу килера и снижение рейтинга у жертвы.
+		return ['killer_raiting' => $Ka * (1 - $Ea), 'victim_raiting' => $Kb * (0 - $Eb)];
+	}
