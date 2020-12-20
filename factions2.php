@@ -151,7 +151,11 @@
 	</div>
 	<div class="block">
 		<table align='center' class='table'>
-			<?=$content?>
+			<? if ($num > 1): ?>
+				<?=$content?>
+			<? else: ?>
+				<p>Недостаточно данных для вывода статистики</p>
+			<? endif ?>
 		</table>
 	</div>
 <?

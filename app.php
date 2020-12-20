@@ -8,7 +8,7 @@
 
 	mysqli_query($link, "SET NAMES utf8");
 	// Текущая ссесия
-	$sess = '23';
+	$sess = '24';
 	if (isset($_REQUEST['s'])) {
 		$sess = filter_var(def($_REQUEST['s']), FILTER_VALIDATE_INT, $filter);
 	}
@@ -24,14 +24,14 @@
 
 	$result = mysqli_query($link, "SELECT id, pidlist FROM serv{$sess}_perks");
 	// Номер перка статист
-	$statPerk = 24; // Иммунитет
+	$statPerk = 161; // Статист
 	$statChars = [];
 	while ($result && $row = mysqli_fetch_assoc($result)) {
 		$res = str_split($row["pidlist"]);
-		if (count($res) > 157 && $res[102] == 1) { // Фикс Специалиста
-			array_splice($res, 102, 2, [9]);
+		if (count($res) > 168) {
+			$countBrokenStr++;
+			continue;
 		}
-
 		if ((int) $res[$statPerk]) {
 			$statChars[] = $row["id"];
 		}
@@ -105,6 +105,7 @@
 	 * @return bool
 	*/
 	function isNotStatChar($id) {
+		// return false; // Отключить статиста
 		global $statChars;
 		return !in_array($id, $statChars);
 	}

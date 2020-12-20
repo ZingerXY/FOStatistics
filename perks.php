@@ -98,47 +98,85 @@
 	
 	$countBrokenStr = 0;
 	
+	$classStat = [
+		0 => ['class' => 'Без класса', 'count' => 0],
+		1 => ['class' => 'Разведчик', 'count' => 0],
+		2 => ['class' => 'Пулеметчик', 'count' => 0],
+		3 => ['class' => 'Берсерк', 'count' => 0],
+		4 => ['class' => 'Уворотчик', 'count' => 0],
+		5 => ['class' => 'Танк', 'count' => 0],
+		6 => ['class' => 'Медик', 'count' => 0],
+		7 => ['class' => 'Стрелок', 'count' => 0],
+		8 => ['class' => 'Пироман', 'count' => 0],
+	];
 	$stat = [];
 	$sum = 0;
 	while ($result && $row = mysqli_fetch_assoc($result)) {
 		$res = str_split($row["pidlist"]);
-		if (count($res) < 143) { // Старое исправление битых данных
-			array_splice($res, 15, 0, [0]);
+		if (count($res) > 168) {
 			$countBrokenStr++;
-		}
-		if (count($res) > 157 && $res[102] == 1) { // Фикс Специалиста
-			array_splice($res, 102, 2, [9]);
-			$countBrokenStr++;
+			continue;
 		}
 		foreach ($res as $i => $e) {
+			if ($i == 166) {
+				$classStat[$e]['count']++;
+			}
 			if ($e > 0) {
-				if (!array_key_exists($i,$stat))
+				if (!array_key_exists($i, $stat)) {
 					$stat[$i] = 1;
-				else
+				} else {
 					$stat[$i]++;
+				}
 			}
 		}
 		$sum++;
 	}
-	
-	$content = '<div id="turn" class="title ptitle"><span id="traitfh">Трейты</span><span id="traitsh">‹</span></div>
-				<div id="roll"><table align="center" class="ptable">';
+	$classContent = '<div class="turn title ptitle" data-ic="1" data-class="class">
+						<span id="classfh" class="flesh fh">Классы</span>
+						<span id="classsh" class="flesh sh">‹</span>
+					</div>
+					<div id="rollclass" class="roll"><table align="center" class="ptable">
+					<tbody>';
+	foreach ($classStat as $i => $e) {
+		$img = 0;
+		$name = $e['class'];
+		$pr = round($e['count'] / $sum * 100, 2);
+		$classContent .= "
+			<tr class='class perks' data-pid='$i'>
+				<td>
+					<img align ='left' class ='image_perks' src='images/perks/$img.png'>
+				</td>
+				<td class='td'>$name</td>
+				<td class='td'>$pr%</td>
+			</tr>";
+	}
+	$content = $classContent;
+	$content .= '</tbody></table></div>
+				<div class="turn title ptitle" data-ic="1" data-class="trait">
+					<span id="traitfh" class="flesh fh">Трейты</span>
+					<span id="traitsh" class="flesh sh">‹</span>
+				</div>
+				<div id="rolltrait" class="roll"><table align="center" class="ptable">';
 	$content .= '<tbody>';
 	$class = 'trait';
 	$num = 1;
 	foreach ($perk as $i => $e) {
-		if (array_key_exists($i,$stat)) {
+		if (array_key_exists($i, $stat)) {
 			$pr = round($stat[$i] / $sum * 100, 2);
 		} else {
 			$pr = 0;
 		}
 		$name = $e['name'];
 		$id = $e['id'];
+		$img = $id;
+		if (!file_exists("images/perks/$id.png")) {
+			$img = 0;
+		}
 		$content .= "
-			<tr class='$class perks' data-id='$i'>
+			<tr class='$class perks' data-pid='$id' data-num='$i'>
 				<td>
-					<img align ='left' class ='image_perks' src='images/perks/$id.png'" . 
-					($num == 119 ? "onmouseover='this.src = \"images/perks/easter_egg.png\"' onmouseout='this.src = \"images/perks/$id.png\"'" : "") . ">
+					<img align ='left' class ='image_perks' src='images/perks/$img.png'" . 
+					($id == 417 ? "onmouseover='this.src = \"images/perks/easter_egg.png\"' onmouseout='this.src = \"images/perks/$img.png\"'" : "") . ">
 				</td>
 				<td class='td'>$name</td>
 				<td class='td'>$pr%</td>
@@ -193,4 +231,3 @@
 		}
 		?>
 	</div>
-

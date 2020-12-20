@@ -209,30 +209,34 @@ tr.perks {
 #main {
 	display: inline-block;
 }
-#turn {
+.turn {
 	cursor: pointer;
 	transition: all .75s;
 	overflow: hidden;
 	width: 340px;
 	height: 50px;
 }
-#roll {
+.roll {
 	overflow: hidden;
 	width: 340px;
 	height: 505px;
 	transition: all .95s cubic-bezier(.36, 1, .36, 1);
 }
-#traitfh {
-	right: 0px;
+#rollclass {
+	height: 250px;
+}
+#rolltrait {
+	height: 505px;
+}
+.flesh {
 	position: relative;
 	overflow: hidden;
 	height: 50px;
 	transition: all .95s cubic-bezier(.36, 1, .36, 1);
 }
-#traitsh {
+.flesh.fh {
+	right: 0px;
+}
+.flesh.sh {
 	right: -250px;
-	position: relative;
-	overflow: hidden;
-	height: 50px;
-	transition: all .95s cubic-bezier(.36, 1, .36, 1);
 }

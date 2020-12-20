@@ -242,6 +242,7 @@
 						{name:'Ветеран',pid:'347',type:'lvl12'},
 						{name:'Рейнджер',pid:'348',type:'lvl33'},
 						{name:'Оптимизация',pid:'349',type:'lvl3'},
+						{name:'Опыт торговли',pid:'350',type:'sys'},
 						{name:'Самоучка',pid:'351',type:'lvl3'},
 						{name:'Математик',pid:'352',type:'lvl12'},
 						{name:'Мутация',pid:'353',type:'lvl12'},
@@ -267,6 +268,10 @@
 						{name:'Закалка',pid:'373',type:'lvl33'},
 						{name:'Репликант',pid:'374',type:'lvl30'},
 						{name:'Сапер',pid:'375',type:'lvl9'},
+						{name:'Глаза и уши',pid:'376',type:'lvl12'},
+						{name:'Голем',pid:'377',type:'lvl6'},
+						{name:'Ярость',pid:'378',type:'lvl12'},
+						{name:'Броня',pid:'379',type:'lvl3'},
 						{name:'Кровопийца',pid:'380',type:'lvl12'},
 						{name:'Бдительность',pid:'381',type:'lvl3'},
 						{name:'Наблюдательность',pid:'382',type:'lvl3'},
@@ -297,13 +302,18 @@
 						{name:'Обращение с оружием',pid:'407',type:'lvl30'},
 						{name:'Стажировка в Городе-Убежище',pid:'408',type:'quest'},
 						{name:'Спец по уборке экскрементов',pid:'417',type:'sys'},
+						{name:'Опытный медик',pid:'418',type:'lvl9'},
 						{name:'Дурной глаз(перк)',pid:'419',type:'sys'},
 						{name:'Терминатор',pid:'420',type:'lvl15'},
 						{name:'Взрывотехник',pid:'421',type:'lvl12'},
 						{name:'Токсиколог',pid:'422',type:'lvl9'},
 						{name:'Дополнительные атаки',pid:'423',type:'lvl15'},
 						{name:'Бывалый',pid:'424',type:'lvl30'},
-						{name:'Эксперт-метатель',pid:'425',type:'sys'},
+						{name:'Карман',pid:'425',type:'lvl33'},
+						{name:'Движение жизнь',pid:'426',type:'lvl3'},
+						{name:'Флаг удачи',pid:'427',type:'lvl12'},
+						{name:'Прицел',pid:'428',type:'lvl3'},
+						{name:'Выстрел',pid:'429',type:'lvl6'},
 						{name:'Скорняк',pid:'430',type:'quest'},
 						{name:'Прививки из Города-Убежище',pid:'431',type:'quest'},
 						{name:'Живчик',pid:'432',type:'lvl12'},
@@ -318,6 +328,7 @@
 						{name:'Водитель',pid:'442',type:'quest'},
 						{name:'Офицер',pid:'443',type:'lvl15'},
 						{name:'Смотрящий',pid:'444',type:'quest'},
+						{name:'Быстрота',pid:'445',type:'lvl9'},
 						{name:'Боевой имплантант',pid:'446',type:'imp'},
 						{name:'Медицинский имплантант',pid:'447',type:'imp'},
 						{name:'Вспомогательный имплант',pid:'448',type:'imp'},
@@ -330,36 +341,55 @@
 						{name:'Мастер электричества',pid:'455',type:'mperk'},
 						{name:'Мастер импульса',pid:'456',type:'mperk'},
 						{name:'Мастер взрыва',pid:'457',type:'mperk'},
+						{name:'Зоркий',pid:'458',type:'lvl3'},
+						{name:'Статист',pid:'459',type:'sys'},
 						{name:'Житель Пустоши',pid:'460',type:'mperk'},
 						{name:'Опытный ремонтник',pid:'461',type:'mperk'},
 						{name:'Опытный инженер',pid:'462',type:'mperk'},
 						{name:'Опытный врач',pid:'463',type:'mperk'},
+						{name:'Класс персонажа',pid:'465',type:'sys'},
 						{name:'Огневая поддержка',pid:'466',type:'lvl12'}
 					];
 					var tr = Array.from(document.querySelectorAll("tr.perk,.trait"));
-					for (var i in tr) {
-						if (perktype[i].type) {
-							tr[i].classList.add(perktype[i].type);
+					for (var i in perktype) {
+						let perkPid = perktype[i].pid;
+						let perkType = perktype[i].type;
+						if (perkType) {
+							document.querySelector('tr[data-pid="' + perkPid + '"]')?.classList?.add(perkType);
 						}
 					}
+					// for (var i in tr) {
+					// 	if (perktype[i].type) {
+					// 		tr[i].classList.add(perktype[i].type);
+					// 	}
+					// }
 					sortGrid("trait");
 					sortGrid("perk");
-					var ic = true;
-					turn.onclick = function() {
-						if (ic) {
-							roll.style.height = "0px";
-							this.style.borderBottomWidth = "0px";
-							traitfh.style.right = "520px";
-							traitsh.style.right = "64px";
-							ic = false;
-						} else {
-							roll.style.height = "";
-							this.style.borderBottomWidth = "1px";
-							traitfh.style.right = "0px";
-							traitsh.style.right = "-450px";
-							ic = true;
-						}
-					};
+					sortGrid("class");
+					var turns = document.querySelectorAll("div.turn");
+					for (let i = 0; i < turns.length; i++) {
+						let turn = turns[i];
+						turn.onclick = function() {
+							let clasess = this.dataset.class
+							let ic = this.dataset.ic;
+							let roll = document.querySelector("#roll" + clasess);
+							let fh = document.querySelector("#" + clasess + "fh");
+							let sh = document.querySelector("#" + clasess + "sh");
+							if (ic > 0) {
+								roll.style.height = "0px";
+								this.style.borderBottomWidth = "0px";
+								fh.style.right = "520px";
+								sh.style.right = "64px";
+								this.dataset.ic = 0;
+							} else {
+								roll.style.height = "";
+								this.style.borderBottomWidth = "1px";
+								fh.style.right = "0px";
+								sh.style.right = "-450px";
+								this.dataset.ic = 1;
+							}
+						};
+					}
 				}
 			}
 			</script>
