@@ -4,7 +4,7 @@
 	ini_set('display_startup_errors', 1);*/
 	$version = 4;
 
-	include_once "config.php";
+	include_once "../../config.php";
 
 	mysqli_query($link, "SET NAMES utf8");
 	// Текущая ссесия
@@ -42,7 +42,7 @@
 		//пижама и мантии
 		0 => 0.5, //пижамка
 		113 => 0.5,
-		585 => 0.5, 
+		585 => 0.5,
 		725 => 0.5,
 		731 => 0.5,
 		916 => 0.5,
