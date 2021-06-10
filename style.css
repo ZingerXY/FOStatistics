@@ -223,7 +223,7 @@ tr.perks {
 	transition: all .95s cubic-bezier(.36, 1, .36, 1);
 }
 #rollclass {
-	height: 250px;
+	height: 280px;
 }
 #rolltrait {
 	height: 505px;
