@@ -3,10 +3,10 @@
 	include_once "app.php";
 
 	if (!isset($mainphp)) {
-		 header("HTTP/1.1 301 Moved Permanently"); 
-		 header("Location: main.php"); 
-		 exit(); 
-	}		
+		 header("HTTP/1.1 301 Moved Permanently");
+		 header("Location: main.php");
+		 exit();
+	}
 
 	// Проверка существования таблицы с префиксом
 	$chrtbl = mysqli_query($link, "SHOW TABLES LIKE 'serv{$sess}_chars'") or die(mysqli_error($link));
@@ -109,7 +109,7 @@
 				$allstats[$id_killer]['abuse'][$id_victim][] = $unix_date_kill;
 			}
 
-			/*	Если в массиве абузов больше 4 записей для этой жертвы и киллер получает 
+			/*	Если в массиве абузов больше 4 записей для этой жертвы и киллер получает
 				за жертву больше чем теряет жертва, килер получает 0, жертва теряет 0 */
 			if (count($allstats[$id_killer]['abuse'][$id_victim]) > 4) {
 				$add_victim_raiting = 0;
@@ -122,7 +122,7 @@
 
 		$time2 = microtime(true) - $start;
 		$start = microtime(true);
-		
+
 		if (!$allstats) {
 			$allstats = [];
 		}
@@ -143,11 +143,11 @@
 			<tr>
 				<td class='td3'>$num</td>
 				<td class='td'><a href='char_info.php?s={$sess}&char_id={$schar['id']}'>$schar[name]</td>
-				<td class='td1'><img class ='image'src='images/kill.png'></td>
+				<td class='td1'><img class ='image'src='statistic/images/kill.png'></td>
 				<td class='td1'>$schar[kills]</td>
-				<td class='td2'><img class ='image'src='images/death.png'></td>
+				<td class='td2'><img class ='image'src='statistic/images/death.png'></td>
 				<td class='td1'>$schar[deaths]</td>
-				<td class='td2'><img class ='image'src='images/rating.png'></td>
+				<td class='td2'><img class ='image'src='statistic/images/rating.png'></td>
 				<td class='td1'>$resreit</span></td>
 			</tr>";
 			$num++;

@@ -51,9 +51,9 @@
 			$killer_kills = $allstats[$id_killer]["kills"];
 			$victim_deaths = $allstats[$id_victim]["deaths"];
 			$victim_kills = $allstats[$id_victim]["kills"];
-			$killer_deaths = $allstats[$id_killer]["deaths"];			
+			$killer_deaths = $allstats[$id_killer]["deaths"];
 
-			if (!isset($allstats[$id_killer], $allstats[$id_victim])) { 
+			if (!isset($allstats[$id_killer], $allstats[$id_victim])) {
 				continue;
 			}
 
@@ -74,7 +74,7 @@
 			//Изменяем рейтинги игроков
 			$add_killer_raiting = $raiting["killer_raiting"];
 			$add_victim_raiting = $raiting["victim_raiting"];
-			
+
 			if ( isset($armor_c[$armor_victim]) ) {
 				$add_killer_raiting = ($add_killer_raiting * $armor_c[$armor_victim]);
 				$add_victim_raiting = ($add_victim_raiting / $armor_c[$armor_victim]);
@@ -99,7 +99,7 @@
 				$allstats[$id_killer]['abuse'][$id_victim][] = $unix_date_kill;
 			}
 
-			/*	Если в массиве абузов больше 4 записей для этой жертвы и киллер получает 
+			/*	Если в массиве абузов больше 4 записей для этой жертвы и киллер получает
 				за жертву больше чем теряет жертва, килер получает 0, жертва теряет 0 */
 			if (count($allstats[$id_killer]['abuse'][$id_victim]) > 4) {
 				$add_victim_raiting = 0;
@@ -138,12 +138,12 @@
 				$date = $schar['date'];
 				$contKills .= "
 				<tr>
-					<td class='td1'><img class ='image'src='images/kill.png'></td>
+					<td class='td1'><img class ='image'src='statistic/images/kill.png'></td>
 					<td class='td2_char_info'><img class ='image_item' src='http://fonlinew.ru/getinfo.php?picid={$schar['weapon']}'></td>
 					<td class='td'><a href='char_info.php?s={$sess}&char_id={$schar['id']}'>$schar[name]</td>
-					<td class='td2'><img class ='image'src='images/death.png' title='$date'></td>
+					<td class='td2'><img class ='image'src='statistic/images/death.png' title='$date'></td>
 					<td class='td2_char_info'><img class ='image_item' src='http://fonlinew.ru/getinfo.php?picid=$armor'></td>
-					<td class='td2_char_info'><img class ='image' src='images/rating.png'></td>	
+					<td class='td2_char_info'><img class ='image' src='statistic/images/rating.png'></td>
 					<td class='td1'>+$resreit</span></td>
 				</tr>";
 			}
@@ -156,12 +156,12 @@
 				$date = $schar['date'];
 				$contDeaths .= "
 				<tr>
-					<td class='td1'><img class ='image'src='images/kill.png'></td>
+					<td class='td1'><img class ='image'src='statistic/images/kill.png'></td>
 					<td class='td2_char_info'><img class ='image_item' src='http://fonlinew.ru/getinfo.php?picid={$schar['weapon']}'></td>
 					<td class='td'><a href='char_info.php?s={$sess}&char_id={$schar['id']}'>$schar[name]</td>
-					<td class='td2'><img class ='image'src='images/death.png' title='$date'></td>
+					<td class='td2'><img class ='image'src='statistic/images/death.png' title='$date'></td>
 					<td class='td2_char_info'><img class ='image_item' src='http://fonlinew.ru/getinfo.php?picid=$armor'></td>
-					<td class='td2_char_info'><img class ='image'src='images/rating.png'></td>
+					<td class='td2_char_info'><img class ='image'src='statistic/images/rating.png'></td>
 					<td class='td1'>-$resreit</span></td>
 				</tr>";
 			}

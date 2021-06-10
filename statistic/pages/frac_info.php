@@ -1,7 +1,7 @@
 <?php
-	
+
 	include_once "app.php";
-	
+
 	// Проверка существования таблицы с префиксом
 	$chrtbl = mysqli_query($link, "SHOW TABLES LIKE 'serv{$sess}_chars'") or die(mysqli_error($link));
 
@@ -23,7 +23,7 @@
 
 		$result = mysqli_query($link, $query);
 		while ($row = mysqli_fetch_assoc($result))
-		{		
+		{
 			$data_stat[$row["id"]] = [
 				"id" => $row["id"],
 				"name" => $row["char_name"],
@@ -95,16 +95,16 @@
 				$allstats[$id_killer]['abuse'][$id_victim][] = $unix_date_kill;
 			}
 
-			/*	Если в массиве абузов больше 4 записей для этой жертвы и киллер получает 
+			/*	Если в массиве абузов больше 4 записей для этой жертвы и киллер получает
 				за жертву больше чем теряет жертва, килер получает 0, жертва теряет 0 */
 			if (count($allstats[$id_killer]['abuse'][$id_victim]) > 4) {
 				$add_victim_raiting = 0;
 				$add_killer_raiting = 0;
 			}
 
-			if ($faction_id_killer != 0 && 
-				$faction_id_victim != 0 && 
-				isset($faction_stats[$faction_id_killer]) && 
+			if ($faction_id_killer != 0 &&
+				$faction_id_victim != 0 &&
+				isset($faction_stats[$faction_id_killer]) &&
 				isset($faction_stats[$faction_id_victim])) {
 
 				$faction_stats[$faction_id_killer]["kills"]++;
@@ -134,7 +134,7 @@
 			}
 
 		}
-		
+
 		$faction_name = $data_faction[$frac_id]["name"];
 		$faction_rait = $faction_stats[$frac_id]["raiting"];
 
@@ -151,7 +151,7 @@
 					<td class='td2'>►</td>
 					<td class='td'>$sfaction[char_name_victim]</td>
 					<td class='td'><a href='frac_info.php?s={$sess}&frac_id={$sfaction['faction_id']}'>$sfaction[faction_name]</td>
-					<td class='td1'><img class ='image'src='images/rating.png'></td>
+					<td class='td1'><img class ='image'src='statistic/images/rating.png'></td>
 					<td class='td1'>$resreit</span></td>
 				</tr>";
 			}
@@ -167,7 +167,7 @@
 					<td class='td2'>◄</td>
 					<td class='td'>$sfaction[char_name_killer]</td>
 					<td class='td'><a href='frac_info.php?s={$sess}&frac_id={$sfaction['faction_id']}'>$sfaction[faction_name]</td>
-					<td class='td1'><img class ='image'src='images/rating.png'></td>
+					<td class='td1'><img class ='image'src='statistic/images/rating.png'></td>
 					<td class='td1'>$resreit</span></td>
 				</tr>";
 			}
@@ -182,7 +182,7 @@
 			<title>Статистика фракции <?=$faction_name?></title>
 			<link rel='stylesheet' href='style.css'>
 		</head>
-		<body>			
+		<body>
 			<div class="title"><?=$faction_name?></div>
 			<div class="title"><?=round($faction_rait - 1000, 2)?></div>
 			<div align="center"><a href="#deaths">К смертям →</a></div>

@@ -3,9 +3,9 @@
 	include_once "app.php";
 
 	if (!isset($mainphp)) {
-		 header("HTTP/1.1 301 Moved Permanently"); 
-		 header("Location: main.php"); 
-		 exit(); 
+		 header("HTTP/1.1 301 Moved Permanently");
+		 header("Location: main.php");
+		 exit();
 	}
 
 	// Проверка существования таблицы с префиксом
@@ -98,16 +98,16 @@
 				$allstats[$id_killer]['abuse'][$id_victim][] = $unix_date_kill;
 			}
 
-			/*	Если в массиве абузов больше 4 записей для этой жертвы и киллер получает 
+			/*	Если в массиве абузов больше 4 записей для этой жертвы и киллер получает
 				за жертву больше чем теряет жертва, килер получает 0, жертва теряет 0 */
 			if (count($allstats[$id_killer]['abuse'][$id_victim]) > 4) {
 				$add_victim_raiting = 0;
 				$add_killer_raiting = 0;
 			}
 
-			if ($faction_id_killer != 0 && 
-				$faction_id_victim != 0 && 
-				isset($faction_stats[$faction_id_killer]) && 
+			if ($faction_id_killer != 0 &&
+				$faction_id_victim != 0 &&
+				isset($faction_stats[$faction_id_killer]) &&
 				isset($faction_stats[$faction_id_victim])) {
 
 				$faction_stats[$faction_id_killer]["kills"]++;
@@ -117,11 +117,11 @@
 				$faction_stats[$faction_id_victim]["raiting"] += $add_victim_raiting;
 			}
 		}
-		
+
 		if (!$faction_stats) {
 			$faction_stats = [];
 		}
-		
+
 		usort($faction_stats, 'myCmp');
 
 		$content = "";
@@ -136,11 +136,11 @@
 			<tr>
 				<td class='td3'>$num</td>
 				<td class='td'><a href='frac_info.php?s={$sess}&frac_id={$sfaction['id']}'>$sfaction[name]</td>
-				<td class='td1'><img class ='image'src='images/kill.png'></td>
+				<td class='td1'><img class ='image'src='statistic/images/kill.png'></td>
 				<td class='td1'>$sfaction[kills]</td>
-				<td class='td2'><img class ='image'src='images/death.png'></td>
+				<td class='td2'><img class ='image'src='statistic/images/death.png'></td>
 				<td class='td1'>$sfaction[deaths]</td>
-				<td class='td2'><img class ='image'src='images/rating.png'></td>
+				<td class='td2'><img class ='image'src='statistic/images/rating.png'></td>
 				<td class='td1'>$resreit</span></td>
 			</tr>";
 			$num++;

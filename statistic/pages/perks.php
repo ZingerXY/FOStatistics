@@ -1,7 +1,7 @@
 <?php
-	
+
 	include_once "app.php";
-	
+
 	function getTopReitingCharsIds($link, $sess, $ck) {
 		$query = "	SELECT serv{$sess}_kills.id_killer,
 					serv{$sess}_kills.faction_id_killer,
@@ -47,47 +47,47 @@
 			$allstats[$id_killer]["raiting"] += ($victim_kills / ($victim_kills + $victim_deaths));
 			$allstats[$id_victim]["raiting"] -= ($killer_deaths / ( $killer_deaths + $killer_kills));
 		}
-		
+
 		if(!$allstats) {
 			$allstats = [];
 		}
-		
+
 		usort($allstats, 'myCmp');
-		
+
 		$allstats = array_slice($allstats, 0, $ck);
-		
+
 		$result = [];
 		foreach ($allstats as $stat) {
 			$result[] = $stat['id'];
 		}
 		return implode($result,',');
 	}
-	
+
 	$ck = 0;
 	if (isset($_REQUEST ['ck'])) {
 		$ck = filter_var(def($_REQUEST ['ck']), FILTER_VALIDATE_INT, $filter);
 	}
-	
-	$type = false; // тип отображения статиситики топа по убийствам по рейтингу или 
+
+	$type = false; // тип отображения статиситики топа по убийствам по рейтингу или
 	$typeStat = 'топу';
 	if (isset($_REQUEST ['kills'])) {
 		$type = true;
 		$typeStat = 'убийствам';
 	}
-	
+
 	$query = "SELECT id,name FROM `serv{$sess}_name_perks`";
-		
+
 	$result = mysqli_query($link, $query);
 	$perk = [];
-	
+
 	while ($result && $row = mysqli_fetch_assoc($result)) {
 		$perk[] = ['name'=>$row["name"],'id'=>$row["id"]];
 	}
-	
+
 	if ($ck) {
 		if ($type) { // Расчет топа статки по убийствам
 			$query = "SELECT id, pidlist FROM serv{$sess}_perks WHERE LENGTH( pidlist ) >= 155 && id = (select distinct id_killer from serv{$sess}_kills where id_killer = serv{$sess}_perks.id AND (select count(id_killer) from serv{$sess}_kills where id_killer = serv{$sess}_perks.id) >= $ck)";
-		} else { // Расчет топа статки по рейтингу	
+		} else { // Расчет топа статки по рейтингу
 			$query = "SELECT id,pidlist FROM serv{$sess}_perks WHERE LENGTH( pidlist ) >= 155 && id in (".getTopReitingCharsIds($link, $sess, $ck).")";
 		}
 	} else {
@@ -95,9 +95,9 @@
 	}
 
 	$result = mysqli_query($link, $query);
-	
+
 	$countBrokenStr = 0;
-	
+
 	$classStat = [
 		0 => ['class' => 'Без класса', 'count' => 0],
 		1 => ['class' => 'Разведчик', 'count' => 0],
@@ -144,7 +144,7 @@
 		$classContent .= "
 			<tr class='class perks' data-pid='$i'>
 				<td>
-					<img align ='left' class ='image_perks' src='images/perks/$img.png'>
+					<img align ='left' class ='image_perks' src='statistic/images/perks/$img.png'>
 				</td>
 				<td class='td'>$name</td>
 				<td class='td'>$pr%</td>
@@ -169,14 +169,14 @@
 		$name = $e['name'];
 		$id = $e['id'];
 		$img = $id;
-		if (!file_exists("images/perks/$id.png")) {
+		if (!file_exists("statistic/images/perks/$id.png")) {
 			$img = 0;
 		}
 		$content .= "
 			<tr class='$class perks' data-pid='$id' data-num='$i'>
 				<td>
-					<img align ='left' class ='image_perks' src='images/perks/$img.png'" . 
-					($id == 417 ? "onmouseover='this.src = \"images/perks/easter_egg.png\"' onmouseout='this.src = \"images/perks/$img.png\"'" : "") . ">
+					<img align ='left' class ='image_perks' src='statistic/images/perks/$img.png'" .
+					($id == 417 ? "onmouseover='this.src = \"statistic/images/perks/easter_egg.png\"' onmouseout='this.src = \"statistic/images/perks/$img.png\"'" : "") . ">
 				</td>
 				<td class='td'>$name</td>
 				<td class='td'>$pr%</td>
@@ -194,7 +194,7 @@
 		$num++;
 	}
 	$content .= '</tbody>';
-	
+
 	$content .= "<tr style='background-color:#444444;border-bottom:none;'><td></td><td class='td'>Всего данных</td><td class='td'>$sum</td></tr></table>";
 ?>
 	<div align="center" class="block" style="margin: 4px 0px;">Фильтр по <?=$typeStat?> игроков</div>
