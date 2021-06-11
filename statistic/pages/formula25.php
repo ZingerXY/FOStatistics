@@ -319,10 +319,6 @@ function getListArmor() {
 				$allstats[$id_killer] = [
 					"id" => $id_killer,
 					"name" => "deleted",
-					"kills" => 0,
-					"deaths" => 0,
-					"raiting" => 0,
-					"armorCoefficient" => [],
 					"abuse" => []
 				];
 			}
@@ -330,10 +326,6 @@ function getListArmor() {
 				$allstats[$id_victim] = [
 					"id" => $id_victim,
 					"name" => "deleted",
-					"kills" => 0,
-					"deaths" => 0,
-					"raiting" => 0,
-					"armorCoefficient" => [],
 					"abuse" => []
 				];
 			}
@@ -356,11 +348,11 @@ function getListArmor() {
 			$add_victim_raiting = 1;
 
 			if ( isset($armor_c[$armor_victim]) ) {
-				$allstats[$id_victim]["armorCoefficient"][] = $armor_c[$armor_victim];
+				$faction_stats[$faction_id_victim]["armorCoefficient"][] = $armor_c[$armor_victim];
 				$armorCoefficient = 0;
-				$armorCoefficientLength = count($allstats[$id_victim]["armorCoefficient"]);
+				$armorCoefficientLength = count($faction_stats[$faction_id_victim]["armorCoefficient"]);
 				if ($armorCoefficientLength > 0) {
-					$armorCoefficient = array_sum($allstats[$id_victim]["armorCoefficient"]) / $armorCoefficientLength;
+					$armorCoefficient = array_sum($faction_stats[$faction_id_victim]["armorCoefficient"]) / $armorCoefficientLength;
 				}
 
 				$add_killer_raiting = ($add_killer_raiting * $armor_c[$armor_victim] * $armorCoefficient);
@@ -428,10 +420,6 @@ function getListArmor() {
 				$allstats[$id_killer] = [
 					"id" => $id_killer,
 					"name" => "deleted",
-					"kills" => 0,
-					"deaths" => 0,
-					"raiting" => 0,
-					"armorCoefficient" => [],
 					"abuse" => []
 				];
 			}
@@ -439,10 +427,6 @@ function getListArmor() {
 				$allstats[$id_victim] = [
 					"id" => $id_victim,
 					"name" => "deleted",
-					"kills" => 0,
-					"deaths" => 0,
-					"raiting" => 0,
-					"armorCoefficient" => [],
 					"abuse" => []
 				];
 			}
@@ -464,11 +448,11 @@ function getListArmor() {
 			$add_victim_raiting = 1;
 
 			if ( isset($armor_c[$armor_victim]) ) {
-				$allstats[$id_victim]["armorCoefficient"][] = $armor_c[$armor_victim];
+				$faction_stats[$faction_id_victim]["armorCoefficient"][] = $armor_c[$armor_victim];
 				$armorCoefficient = 0;
-				$armorCoefficientLength = count($allstats[$id_victim]["armorCoefficient"]);
+				$armorCoefficientLength = count($faction_stats[$faction_id_victim]["armorCoefficient"]);
 				if ($armorCoefficientLength > 0) {
-					$armorCoefficient = array_sum($allstats[$id_victim]["armorCoefficient"]) / $armorCoefficientLength;
+					$armorCoefficient = array_sum($faction_stats[$faction_id_victim]["armorCoefficient"]) / $armorCoefficientLength;
 				}
 
 				$add_killer_raiting = ($add_killer_raiting * $armor_c[$armor_victim] * $armorCoefficient);

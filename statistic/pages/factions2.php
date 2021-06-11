@@ -35,10 +35,6 @@
 			$allstats[$row["id"]] = [
 				"id" => $row["id"],
 				"name" => $row["char_name"],
-				"kills" => 0,
-				"deaths" => 0,
-				"raiting" => 0,
-				"armorCoefficient" => [],
 				"abuse" => []
 			];
 		}
@@ -54,7 +50,8 @@
 				"name" => $row["faction_name"],
 				"kills" => 0,
 				"deaths" => 0,
-				"raiting" => 0
+				"raiting" => 0,
+				"armorCoefficient" => []
 			];
 		}
 		// $allstats = $data_stat;
