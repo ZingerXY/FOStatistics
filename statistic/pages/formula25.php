@@ -104,10 +104,27 @@
 			if (isNotStatChar($id_killer) || isNotStatChar($id_victim)) {
 				continue;
 			}
-
-			if (!isset($allstats[$id_killer], $allstats[$id_victim])) {
-				continue;
+			if (!isset($allstats[$id_killer])) {
+				$allstats[$id_killer] = [
+					"id" => $id_killer,
+					"name" => "deleted",
+					"kills" => 0,
+					"deaths" => 0,
+					"raiting" => 1000,
+					"abuse" => []
+				];
 			}
+			if (!isset($allstats[$id_victim])) {
+				$allstats[$id_victim] = [
+					"id" => $id_victim,
+					"name" => "deleted",
+					"kills" => 0,
+					"deaths" => 0,
+					"raiting" => 1000,
+					"abuse" => []
+				];
+			}
+
 			$faction_id_killer = $dkills["faction_id_killer"];
 			$faction_id_victim = $dkills["faction_id_victim"];
 
@@ -189,8 +206,25 @@
 				continue;
 			}
 
-			if (!isset($allstats[$id_killer], $allstats[$id_victim])) {
-				continue;
+			if (!isset($allstats[$id_killer])) {
+				$allstats[$id_killer] = [
+					"id" => $id_killer,
+					"name" => "deleted",
+					"kills" => 0,
+					"deaths" => 0,
+					"raiting" => 1000,
+					"abuse" => []
+				];
+			}
+			if (!isset($allstats[$id_victim])) {
+				$allstats[$id_victim] = [
+					"id" => $id_victim,
+					"name" => "deleted",
+					"kills" => 0,
+					"deaths" => 0,
+					"raiting" => 1000,
+					"abuse" => []
+				];
 			}
 
 			$faction_id_killer = $dkills["faction_id_killer"];
@@ -294,9 +328,27 @@
 			$faction_id_killer = $dkills["faction_id_killer"];
 			$faction_id_victim = $dkills["faction_id_victim"];
 
-			if (!isset($allstats[$id_killer], $allstats[$id_victim])) {
-				continue;
+			if (!isset($allstats[$id_killer])) {
+				$allstats[$id_killer] = [
+					"id" => $id_killer,
+					"name" => "deleted",
+					"kills" => 0,
+					"deaths" => 0,
+					"raiting" => 1000,
+					"abuse" => []
+				];
 			}
+			if (!isset($allstats[$id_victim])) {
+				$allstats[$id_victim] = [
+					"id" => $id_victim,
+					"name" => "deleted",
+					"kills" => 0,
+					"deaths" => 0,
+					"raiting" => 1000,
+					"abuse" => []
+				];
+			}
+
 			if (!isset($faction_stats[$faction_id_killer], $faction_stats[$faction_id_victim])) {
 				continue;
 			}
@@ -374,8 +426,25 @@
 			$faction_id_killer = $dkills["faction_id_killer"];
 			$faction_id_victim = $dkills["faction_id_victim"];
 
-			if (!isset($allstats[$id_killer], $allstats[$id_victim])) {
-				continue;
+			if (!isset($allstats[$id_killer])) {
+				$allstats[$id_killer] = [
+					"id" => $id_killer,
+					"name" => "deleted",
+					"kills" => 0,
+					"deaths" => 0,
+					"raiting" => 1000,
+					"abuse" => []
+				];
+			}
+			if (!isset($allstats[$id_victim])) {
+				$allstats[$id_victim] = [
+					"id" => $id_victim,
+					"name" => "deleted",
+					"kills" => 0,
+					"deaths" => 0,
+					"raiting" => 1000,
+					"abuse" => []
+				];
 			}
 			if (!isset($faction_stats[$faction_id_killer], $faction_stats[$faction_id_victim])) {
 				continue;
