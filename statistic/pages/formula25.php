@@ -1,7 +1,14 @@
 <?php
+// echo '<pre>';
+// print_r($timers);
+// echo '</pre>';
 
+/**
+ * @return array - массив с коэффициентами броенй
+ */
+function getListArmor() {
 	// Массив с коэффициетами от броней
-	$armor_c = [
+	return [
 		//пижама и мантии
 		0 => 0.5, //пижамка
 		113 => 0.5,
@@ -61,43 +68,17 @@
 		8114 => 1.4, //Силовуха мк2 мут.
 		8118 => 1.4, //РБК мк2 мут.
 	];
+}
 
-	//функция расчета рейтинга игрока. Ra, Rb - рейтинги двух игроков, Ra - килера, Rb - жертвы
-	function EloRating ($Ra, $Rb) {
-		// Ea, Eb - вероятноти выигрыша игроков, вычисляются из входного рейтинга
-		$Ea = 1/( 1 + pow(10,($Rb - $Ra)/400 ) );
-		$Eb = 1/( 1 + pow(10,($Ra - $Rb)/400 ) );
-
-		//Коэфициенты, зависящие от текущего входного рейтинга игроков
-		if ($Ra <= 800) {
-			$Ka = 30;
-		} else if ($Ra <= 1100 ) {
-			$Ka = 20;
-		} else if ($Ra <= 1300) {
-			$Ka = 10;
-		} else if ($Ra > 1300) {
-			$Ka = 5;
-		}
-
-		if ($Rb <= 800) {
-			$Kb = 30;
-		} else if ($Rb <= 1100 ) {
-			$Kb = 20;
-		} else if ($Rb <= 1300) {
-			$Kb = 10;
-		} else if ($Rb > 1300) {
-			$Kb = 5;
-		}
-		//Возвращаем итоговую прибавку к рейтингу килера и снижение рейтинга у жертвы.
-		return ['killer_raiting' => $Ka * (1 - $Ea), 'victim_raiting' => $Kb * (0 - $Eb)];
-	}
 
 	/**
 	 * Считаем статистику персонажей
 	 * @param array $allstats - массив информации о игроках
 	 * @param array $data_kills - массив всех убийств на сервере
+	 * @param array $data_kills - массив всех убийств на сервере
 	 */
 	function calculateStats(&$allstats, &$data_kills) {
+		$armor_c = getListArmor();
 		foreach ($data_kills as $dkills) {
 			$id_killer = $dkills["id_killer"];
 			$id_victim = $dkills["id_victim"];
@@ -110,7 +91,8 @@
 					"name" => "deleted",
 					"kills" => 0,
 					"deaths" => 0,
-					"raiting" => 1000,
+					"raiting" => 0,
+					"armorCoefficient" => [],
 					"abuse" => []
 				];
 			}
@@ -120,7 +102,8 @@
 					"name" => "deleted",
 					"kills" => 0,
 					"deaths" => 0,
-					"raiting" => 1000,
+					"raiting" => 0,
+					"armorCoefficient" => [],
 					"abuse" => []
 				];
 			}
@@ -144,20 +127,20 @@
 			$allstats[$id_killer]["kills"]++;
 			$allstats[$id_victim]["deaths"]++;
 
-			//Берем текущие рейтинги килера и жертвы
-			$Ra = $allstats[$id_killer]["raiting"];
-			$Rb = $allstats[$id_victim]["raiting"];
-
-			//Передаем их в функцию расчета рейтинга
-			$raiting = EloRating($Ra, $Rb);
-
 			//Изменяем рейтинги игроков
-			$add_killer_raiting = $raiting["killer_raiting"];
-			$add_victim_raiting = $raiting["victim_raiting"];
+			$add_killer_raiting = 5;
+			$add_victim_raiting = 1;
 
 			if ( isset($armor_c[$armor_victim]) ) {
-				$add_killer_raiting = ($add_killer_raiting * $armor_c[$armor_victim]);
-				$add_victim_raiting = ($add_victim_raiting / $armor_c[$armor_victim]);
+				$allstats[$id_victim]["armorCoefficient"][] = $armor_c[$armor_victim];
+				$armorCoefficient = 0;
+				$armorCoefficientLength = count($allstats[$id_victim]["armorCoefficient"]);
+				if ($armorCoefficientLength > 0) {
+					$armorCoefficient = array_sum($allstats[$id_victim]["armorCoefficient"]) / $armorCoefficientLength;
+				}
+
+				$add_killer_raiting = ($add_killer_raiting * $armor_c[$armor_victim] * $armorCoefficient);
+				$add_victim_raiting = ($add_victim_raiting * $armor_c[$armor_victim]);
 			}
 
 			$date_kill = $dkills["date"];
@@ -199,6 +182,7 @@
 	 * @param array $list_of_deaths - массив всех смертей игрока
 	 */
 	function calculateStatsDetails(&$allstats, &$data_kills, &$list_of_kills, &$list_of_deaths) {
+		$armor_c = getListArmor();
 		foreach ($data_kills as $dkills) {
 			$id_killer = $dkills["id_killer"];
 			$id_victim = $dkills["id_victim"];
@@ -212,7 +196,8 @@
 					"name" => "deleted",
 					"kills" => 0,
 					"deaths" => 0,
-					"raiting" => 1000,
+					"raiting" => 0,
+					"armorCoefficient" => [],
 					"abuse" => []
 				];
 			}
@@ -222,7 +207,8 @@
 					"name" => "deleted",
 					"kills" => 0,
 					"deaths" => 0,
-					"raiting" => 1000,
+					"raiting" => 0,
+					"armorCoefficient" => [],
 					"abuse" => []
 				];
 			}
@@ -246,20 +232,20 @@
 			$allstats[$id_killer]["kills"]++;
 			$allstats[$id_victim]["deaths"]++;
 
-			//Берем текущие рейтинги килера и жертвы
-			$Ra = $allstats[$id_killer]["raiting"];
-			$Rb = $allstats[$id_victim]["raiting"];
-
-			//Передаем их в функцию расчета рейтинга
-			$raiting = EloRating($Ra, $Rb);
-
 			//Изменяем рейтинги игроков
-			$add_killer_raiting = $raiting["killer_raiting"];
-			$add_victim_raiting = $raiting["victim_raiting"];
+			$add_killer_raiting = 5;
+			$add_victim_raiting = 1;
 
 			if ( isset($armor_c[$armor_victim]) ) {
-				$add_killer_raiting = ($add_killer_raiting * $armor_c[$armor_victim]);
-				$add_victim_raiting = ($add_victim_raiting / $armor_c[$armor_victim]);
+				$allstats[$id_victim]["armorCoefficient"][] = $armor_c[$armor_victim];
+				$armorCoefficient = 0;
+				$armorCoefficientLength = count($allstats[$id_victim]["armorCoefficient"]);
+				if ($armorCoefficientLength > 0) {
+					$armorCoefficient = array_sum($allstats[$id_victim]["armorCoefficient"]) / $armorCoefficientLength;
+				}
+
+				$add_killer_raiting = ($add_killer_raiting * $armor_c[$armor_victim] * $armorCoefficient);
+				$add_victim_raiting = ($add_victim_raiting * $armor_c[$armor_victim]);
 			}
 
 			$date_kill = $dkills["date"];
@@ -312,12 +298,13 @@
 	}
 
 	/**
-	 * Считаем статистику персонажей
+	 * Считаем статистику фракций
 	 * @param array $allstats - массив информации о игроках
 	 * @param array $data_kills - массив всех убийств на сервере
 	 * @param array $faction_stats - массив информации о фракциях
 	 */
 	function calculateStatsFaction(&$allstats, &$data_kills, &$faction_stats) {
+		$armor_c = getListArmor();
 		foreach ($data_kills as $dkills) {
 			$id_killer = $dkills["id_killer"];
 			$id_victim = $dkills["id_victim"];
@@ -334,7 +321,8 @@
 					"name" => "deleted",
 					"kills" => 0,
 					"deaths" => 0,
-					"raiting" => 1000,
+					"raiting" => 0,
+					"armorCoefficient" => [],
 					"abuse" => []
 				];
 			}
@@ -344,7 +332,8 @@
 					"name" => "deleted",
 					"kills" => 0,
 					"deaths" => 0,
-					"raiting" => 1000,
+					"raiting" => 0,
+					"armorCoefficient" => [],
 					"abuse" => []
 				];
 			}
@@ -356,19 +345,27 @@
 				continue;
 			}
 
+			$weapon_killer = $dkills["weapon_killer"];
+			$armor_victim = $dkills["armor_victim"];
+
 			$date_kill = $dkills["date"];
 			$unix_date_kill = strtotime($date_kill);
 
-			//Берем текущие рейтинги килера и жертвы
-			$Ra = $faction_stats[$faction_id_killer]["raiting"];
-			$Rb = $faction_stats[$faction_id_victim]["raiting"];
-
-			//Передаем их в функцию расчета рейтинга
-			$raiting = EloRating($Ra, $Rb);
-
 			//Изменяем рейтинги игроков
-			$add_killer_raiting = $raiting["killer_raiting"];
-			$add_victim_raiting = $raiting["victim_raiting"];
+			$add_killer_raiting = 5;
+			$add_victim_raiting = 1;
+
+			if ( isset($armor_c[$armor_victim]) ) {
+				$allstats[$id_victim]["armorCoefficient"][] = $armor_c[$armor_victim];
+				$armorCoefficient = 0;
+				$armorCoefficientLength = count($allstats[$id_victim]["armorCoefficient"]);
+				if ($armorCoefficientLength > 0) {
+					$armorCoefficient = array_sum($allstats[$id_victim]["armorCoefficient"]) / $armorCoefficientLength;
+				}
+
+				$add_killer_raiting = ($add_killer_raiting * $armor_c[$armor_victim] * $armorCoefficient);
+				$add_victim_raiting = ($add_victim_raiting * $armor_c[$armor_victim]);
+			}
 
 			// Берем ранее добавленный массив с абузами киллера для текущей жертвы если он есть
 			$old_abuse = isset($allstats[$id_killer]['abuse'][$id_victim]) ? $allstats[$id_killer]['abuse'][$id_victim] : [];
@@ -408,7 +405,7 @@
 	}
 
 	/**
-	 * Считаем статистику подробную персонажей
+	 * Считаем подробную статистику фракций
 	 * @param array $allstats - массив информации о игроках
 	 * @param array $data_kills - массив всех убийств на сервере
 	 * @param array $faction_stats - массив информации о фракциях
@@ -416,6 +413,7 @@
 	 * @param array $list_of_faction_deaths - массив всех смертей фракции
 	 */
 	function calculateStatsFactionDetails(&$allstats, &$data_kills, &$faction_stats, &$list_of_faction_kills, &$list_of_faction_deaths) {
+		$armor_c = getListArmor();
 		foreach ($data_kills as $dkills) {
 			$id_killer = $dkills["id_killer"];
 			$id_victim = $dkills["id_victim"];
@@ -432,7 +430,8 @@
 					"name" => "deleted",
 					"kills" => 0,
 					"deaths" => 0,
-					"raiting" => 1000,
+					"raiting" => 0,
+					"armorCoefficient" => [],
 					"abuse" => []
 				];
 			}
@@ -442,7 +441,8 @@
 					"name" => "deleted",
 					"kills" => 0,
 					"deaths" => 0,
-					"raiting" => 1000,
+					"raiting" => 0,
+					"armorCoefficient" => [],
 					"abuse" => []
 				];
 			}
@@ -453,19 +453,27 @@
 				continue;
 			}
 
+			$weapon_killer = $dkills["weapon_killer"];
+			$armor_victim = $dkills["armor_victim"];
+
 			$date_kill = $dkills["date"];
 			$unix_date_kill = strtotime($date_kill);
 
-			//Берем текущие рейтинги килера и жертвы
-			$Ra = $faction_stats[$faction_id_killer]["raiting"];
-			$Rb = $faction_stats[$faction_id_victim]["raiting"];
-
-			//Передаем их в функцию расчета рейтинга
-			$raiting = EloRating($Ra, $Rb);
-
 			//Изменяем рейтинги игроков
-			$add_killer_raiting = $raiting["killer_raiting"];
-			$add_victim_raiting = $raiting["victim_raiting"];
+			$add_killer_raiting = 5;
+			$add_victim_raiting = 1;
+
+			if ( isset($armor_c[$armor_victim]) ) {
+				$allstats[$id_victim]["armorCoefficient"][] = $armor_c[$armor_victim];
+				$armorCoefficient = 0;
+				$armorCoefficientLength = count($allstats[$id_victim]["armorCoefficient"]);
+				if ($armorCoefficientLength > 0) {
+					$armorCoefficient = array_sum($allstats[$id_victim]["armorCoefficient"]) / $armorCoefficientLength;
+				}
+
+				$add_killer_raiting = ($add_killer_raiting * $armor_c[$armor_victim] * $armorCoefficient);
+				$add_victim_raiting = ($add_victim_raiting * $armor_c[$armor_victim]);
+			}
 
 			// Берем ранее добавленный массив с абузами киллера для текущей жертвы если он есть
 			$old_abuse = isset($allstats[$id_killer]['abuse'][$id_victim]) ? $allstats[$id_killer]['abuse'][$id_victim] : [];

@@ -14,10 +14,12 @@
 
 	if (mysqli_num_rows($chrtbl) > 0) {
 
-		$query = "	SELECT kills.id_killer,
+		$query = "SELECT kills.id_killer,
 					kills.faction_id_killer,
+					kills.weapon_killer,
 					kills.id_victim,
 					kills.faction_id_victim,
+					kills.armor_victim,
 					date
 					FROM serv{$sess}_kills kills";
 
@@ -33,6 +35,10 @@
 			$allstats[$row["id"]] = [
 				"id" => $row["id"],
 				"name" => $row["char_name"],
+				"kills" => 0,
+				"deaths" => 0,
+				"raiting" => 0,
+				"armorCoefficient" => [],
 				"abuse" => []
 			];
 		}
@@ -48,7 +54,7 @@
 				"name" => $row["faction_name"],
 				"kills" => 0,
 				"deaths" => 0,
-				"raiting" => 1000
+				"raiting" => 0
 			];
 		}
 		// $allstats = $data_stat;
@@ -67,7 +73,7 @@
 				continue;
 			}
 			//if (!isset($sfaction["name"])) continue;
-			$resreit = round($sfaction['raiting'] - 1000, 2);
+			$resreit = round($sfaction['raiting'], 2);
 			$content .= "
 			<tr>
 				<td class='td3'>$num</td>

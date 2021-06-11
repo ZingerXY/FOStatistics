@@ -9,7 +9,7 @@ include_once "formula25.php";
 	if (isset($_REQUEST['char_id']) && ctype_digit ($_REQUEST['char_id']) && mysqli_num_rows($chrtbl) > 0) {
 		$char_id = filter_var(def($_REQUEST['char_id'],$link), FILTER_VALIDATE_INT, $filter);
 
-		$query = "	SELECT kills.id_killer,
+		$query = "SELECT kills.id_killer,
 					kills.faction_id_killer,
 					kills.weapon_killer,
 					kills.id_victim,
@@ -32,7 +32,8 @@ include_once "formula25.php";
 					"name" => $row["char_name"],
 					"kills" => 0,
 					"deaths" => 0,
-					"raiting" => 1000,
+					"raiting" => 0,
+					"armorCoefficient" => [],
 					"abuse" => []
 				];
 		}
@@ -75,7 +76,7 @@ include_once "formula25.php";
 					<td class='td2'><img class ='image'src='statistic/images/death.png' title='$date'></td>
 					<td class='td2_char_info'><img class ='image_item' src='https://fonlinew.ru/getinfo.php?picid=$armor'></td>
 					<td class='td2_char_info'><img class ='image'src='statistic/images/rating.png'></td>
-					<td class='td1'>-$resreit</span></td>
+					<td class='td1'>+$resreit</span></td>
 				</tr>";
 			}
 		}
@@ -91,7 +92,7 @@ include_once "formula25.php";
 		</head>
 		<body>
 			<div class="title"><?=$allstats[$char_id]["name"]?></div>
-			<div class="title"><?=round($allstats[$char_id]["raiting"] - 1000, 2)?></div>
+			<div class="title"><?=round($allstats[$char_id]["raiting"], 2)?></div>
 			<div align="center" class="container">
 				<div class="block1">
 					<div class="block3">Убийства</div>

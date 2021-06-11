@@ -10,10 +10,12 @@
 
 		$frac_id = filter_var(def($_REQUEST['frac_id'],$link), FILTER_VALIDATE_INT, $filter);
 
-		$query = "	SELECT kills.id_killer,
+		$query = "SELECT kills.id_killer,
 					kills.faction_id_killer,
+					kills.weapon_killer,
 					kills.id_victim,
 					kills.faction_id_victim,
+					kills.armor_victim,
 					date
 					FROM serv{$sess}_kills kills";
 
@@ -29,6 +31,10 @@
 			$allstats[$row["id"]] = [
 				"id" => $row["id"],
 				"name" => $row["char_name"],
+				"kills" => 0,
+				"deaths" => 0,
+				"raiting" => 0,
+				"armorCoefficient" => [],
 				"abuse" => []
 			];
 		}
@@ -44,7 +50,7 @@
 				"name" => $row["faction_name"],
 				"kills" => 0,
 				"deaths" => 0,
-				"raiting" => 1000
+				"raiting" => 0
 			];
 		}
 
@@ -102,7 +108,7 @@
 		</head>
 		<body>
 			<div class="title"><?=$faction_name?></div>
-			<div class="title"><?=round($faction_rait - 1000, 2)?></div>
+			<div class="title"><?=round($faction_rait, 2)?></div>
 			<div align="center"><a href="#deaths">К смертям →</a></div>
 			<div align="center" class="block">
 				<table align='center' class='table'>

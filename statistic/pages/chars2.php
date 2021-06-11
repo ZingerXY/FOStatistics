@@ -14,7 +14,7 @@
 
 	if (mysqli_num_rows($chrtbl) > 0) {
 
-		$query = "	SELECT kills.id_killer,
+		$query = "SELECT kills.id_killer,
 					kills.faction_id_killer,
 					kills.weapon_killer,
 					kills.id_victim,
@@ -37,11 +37,11 @@
 				"name" => $row["char_name"],
 				"kills" => 0,
 				"deaths" => 0,
-				"raiting" => 1000,
+				"raiting" => 0,
+				"armorCoefficient" => [],
 				"abuse" => []
 			];
 		}
-
 
 		calculateStats($allstats, $data_kills);
 
@@ -57,7 +57,7 @@
 			if ($schar["kills"] == 0 && $schar["deaths"] == 0) {
 				continue;
 			}
-			$resreit = round($schar['raiting'] - 1000, 2);
+			$resreit = round($schar['raiting'], 2);
 			$content .= "
 			<tr>
 				<td class='td3'>$num</td>
