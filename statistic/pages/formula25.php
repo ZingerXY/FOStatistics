@@ -28,16 +28,14 @@ function getListArmor() {
 		7920 => 0.7, //Сборная броня (пустая)
 		//тир 2 брони
 		17 => 0.85, //ББмк1
-		240 => 0.85, //Тесла
 		265 => 0.85, //Боевая кожанка
-		586 => 0.85, //Кустарка
-		8010 => 0.85, // Химза
 		8110 => 0.85, //Кожанная куртка мут.
-		8115 => 0.85, //Тесла мут.
 		13220 => 0.85, //Броня трапера
 		//тир 3 брони
+		240 => 1.0, //Тесла
 		381 => 1.0, //ББмк2
 		524 => 1.0, //Мантия стража
+		586 => 1.0, //Кустарка
 		720 => 1.0, //ПББ
 		911 => 1.0, //Костюм разведчика
 		7921 => 1.0, //Тактичка
@@ -46,7 +44,9 @@ function getListArmor() {
 		7924 => 1.0, //Огнеупорка
 		7925 => 1.0, //FFE
 		7926 => 1.0, //EOD
+		8010 => 1.0, // Химза
 		8111 => 1.0, //Кустарка мут.
+		8115 => 1.0, //Тесла мут.
 		8112 => 1.0, //Кустарка мут. мк2
 		//полутоп
 		239 => 1.2, //ББС
@@ -128,8 +128,8 @@ function getListArmor() {
 			$allstats[$id_victim]["deaths"]++;
 
 			//Изменяем рейтинги игроков
-			$add_killer_raiting = 5;
-			$add_victim_raiting = 1;
+			$add_killer_raiting = 10;
+			$add_victim_raiting = 2;
 
 			if ( isset($armor_c[$armor_victim]) ) {
 				$allstats[$id_victim]["armorCoefficient"][] = $armor_c[$armor_victim];
@@ -233,8 +233,8 @@ function getListArmor() {
 			$allstats[$id_victim]["deaths"]++;
 
 			//Изменяем рейтинги игроков
-			$add_killer_raiting = 5;
-			$add_victim_raiting = 1;
+			$add_killer_raiting = 10;
+			$add_victim_raiting = 2;
 
 			if ( isset($armor_c[$armor_victim]) ) {
 				$allstats[$id_victim]["armorCoefficient"][] = $armor_c[$armor_victim];
@@ -344,8 +344,8 @@ function getListArmor() {
 			$unix_date_kill = strtotime($date_kill);
 
 			//Изменяем рейтинги игроков
-			$add_killer_raiting = 5;
-			$add_victim_raiting = 1;
+			$add_killer_raiting = 10;
+			$add_victim_raiting = 2;
 
 			if ( isset($armor_c[$armor_victim]) ) {
 				$faction_stats[$faction_id_victim]["armorCoefficient"][] = $armor_c[$armor_victim];
@@ -444,8 +444,8 @@ function getListArmor() {
 			$unix_date_kill = strtotime($date_kill);
 
 			//Изменяем рейтинги игроков
-			$add_killer_raiting = 5;
-			$add_victim_raiting = 1;
+			$add_killer_raiting = 10;
+			$add_victim_raiting = 2;
 
 			if ( isset($armor_c[$armor_victim]) ) {
 				$faction_stats[$faction_id_victim]["armorCoefficient"][] = $armor_c[$armor_victim];
