@@ -77,22 +77,6 @@
 				</tr>";
 			}
 		}
-		$content .= '<tr><td class="th" colspan="6"><a name="deaths"></a><div class="title">Смерти</div></td></tr>';
-		if (isset($list_of_faction_deaths[$frac_id])) {
-			krsort($list_of_faction_deaths[$frac_id]);
-			foreach ($list_of_faction_deaths[$frac_id] as $sfaction) {
-				$resreit = round($sfaction['raiting'], 2);
-				$content .= "
-				<tr>
-					<td class='td'>$sfaction[char_name_victim]</td>
-					<td class='td2'>◄</td>
-					<td class='td'>$sfaction[char_name_killer]</td>
-					<td class='td'><a href='statistic/pages/frac_info.php?s={$sess}&frac_id={$sfaction['faction_id']}'>$sfaction[faction_name]</td>
-					<td class='td1'><img class ='image'src='statistic/images/rating.png'></td>
-					<td class='td1'>$resreit</span></td>
-				</tr>";
-			}
-		}
 	?>
 	<!DOCTYPE html>
 	<html>

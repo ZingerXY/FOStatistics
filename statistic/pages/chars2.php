@@ -64,8 +64,6 @@
 				<td class='td'><a href='statistic/pages/char_info.php?s={$sess}&char_id={$schar['id']}'>$schar[name]</td>
 				<td class='td1'><img class ='image'src='statistic/images/kill.png'></td>
 				<td class='td1'>$schar[kills]</td>
-				<td class='td2'><img class ='image'src='statistic/images/death.png'></td>
-				<td class='td1'>$schar[deaths]</td>
 				<td class='td2'><img class ='image'src='statistic/images/rating.png'></td>
 				<td class='td1'>$resreit</span></td>
 			</tr>";

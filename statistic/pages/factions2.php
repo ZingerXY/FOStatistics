@@ -77,8 +77,6 @@
 				<td class='td'><a href='statistic/pages/frac_info.php?s={$sess}&frac_id={$sfaction['id']}'>$sfaction[name]</td>
 				<td class='td1'><img class ='image'src='statistic/images/kill.png'></td>
 				<td class='td1'>$sfaction[kills]</td>
-				<td class='td2'><img class ='image'src='statistic/images/death.png'></td>
-				<td class='td1'>$sfaction[deaths]</td>
 				<td class='td2'><img class ='image'src='statistic/images/rating.png'></td>
 				<td class='td1'>$resreit</span></td>
 			</tr>";

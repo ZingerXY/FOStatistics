@@ -62,24 +62,6 @@ include_once "formula25.php";
 				</tr>";
 			}
 		}
-		if (isset($list_of_deaths[$char_id])) {
-			krsort($list_of_deaths[$char_id]);
-			foreach ($list_of_deaths[$char_id] as $schar) {
-				$resreit = round($schar['raiting'], 2);
-				$armor = $schar['armor'] ?: 558;
-				$date = $schar['date'];
-				$contDeaths .= "
-				<tr>
-					<td class='td1'><img class ='image'src='statistic/images/kill.png'></td>
-					<td class='td2_char_info'><img class ='image_item' src='https://fonlinew.ru/getinfo.php?picid={$schar['weapon']}'></td>
-					<td class='td'><a href='statistic/pages/char_info.php?s={$sess}&char_id={$schar['id']}'>$schar[name]</td>
-					<td class='td2'><img class ='image'src='statistic/images/death.png' title='$date'></td>
-					<td class='td2_char_info'><img class ='image_item' src='https://fonlinew.ru/getinfo.php?picid=$armor'></td>
-					<td class='td2_char_info'><img class ='image'src='statistic/images/rating.png'></td>
-					<td class='td1'>+$resreit</span></td>
-				</tr>";
-			}
-		}
 	?>
 	<!DOCTYPE html>
 	<html>
@@ -98,12 +80,6 @@ include_once "formula25.php";
 					<div class="block3">Убийства</div>
 					<table align='center' class='table'>
 						<?=$contKills?>
-					</table>
-				</div>
-				<div class="block1">
-					<div class="block4">Смерти</div>
-					<table align='center' class='table'>
-						<?=$contDeaths?>
 					</table>
 				</div>
 			</div>
