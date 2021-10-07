@@ -1,15 +1,16 @@
 <?php
+	/*
 	ini_set('error_reporting', E_ALL);
 	ini_set('display_errors', 1);
 	ini_set('display_startup_errors', 1);
-	$version = 4;
-
+	*/
+	// $version = time(); /* Для разработки */
+	$version = "26.1";
 
 	include_once "../../config.php";
 
 	mysqli_query($link, "SET NAMES utf8");
-	// Текущая ссесия
-
+	
 	$filter = [
 		'options' => [
 			'default' => 0, // значение, возвращаемое, если фильтрация завершилась неудачей
@@ -18,7 +19,8 @@
 		],
 		'flags' => FILTER_FLAG_ALLOW_OCTAL,
 	];
-	$sess = '25';
+	// Текущая ссесия
+	$sess = '26';
 	if (isset($_REQUEST['s'])) {
 		$sess = filter_var(def($_REQUEST['s']), FILTER_VALIDATE_INT, $filter);
 	}
@@ -33,8 +35,10 @@
 			$countBrokenStr++;
 			continue;
 		}
-		if ((int) $res[$statPerk]) {
-			$statChars[] = $row["id"];
+		if (count($res) >= $statPerk) {
+			if ((int) $res[$statPerk]) {
+				$statChars[] = $row["id"];
+			}
 		}
 	}
 
