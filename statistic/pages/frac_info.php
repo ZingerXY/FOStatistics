@@ -3,6 +3,7 @@
 	include_once "app.php";
 	include_once "formula25.php";
 
+	$fracInfoContent = '';
 	// Проверка существования таблицы с префиксом
 	$chrtbl = mysqli_query($link, "SHOW TABLES LIKE 'serv{$sess}_chars'") or die(mysqli_error($link));
 
@@ -61,12 +62,12 @@
 
 		usort($faction_stats, 'myCmp');
 
-		$content = '<tr><td class="th" colspan="6"><div class="title">Убийства</div></td></tr>';
+		$fracInfoContent .= '<tr><td class="th" colspan="6"><div class="title">Убийства</div></td></tr>';
 		if (isset($list_of_faction_kills[$frac_id])) {
 			krsort($list_of_faction_kills[$frac_id]);
 			foreach ($list_of_faction_kills[$frac_id] as $sfaction) {
 				$resreit = round($sfaction['raiting'], 2);
-				$content .= "
+				$fracInfoContent .= "
 				<tr>
 					<td class='td'>$sfaction[char_name_killer]</td>
 					<td class='td2'>►</td>
@@ -92,7 +93,7 @@
 			<div class="title"><?=round($faction_rait, 2)?></div>
 			<div align="center" class="block">
 				<table align='center' class='table'>
-					<?=$content?>
+					<?=$fracInfoContent?>
 				</table>
 			</div>
 		</body>
