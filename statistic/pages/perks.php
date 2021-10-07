@@ -109,6 +109,7 @@
 		7 => ['class' => 'Стрелок', 'count' => 0],
 		8 => ['class' => 'Пироман', 'count' => 0],
 	];
+	$isClasses = 0;
 	$stat = [];
 	$sum = 0;
 	while ($result && $row = mysqli_fetch_assoc($result)) {
@@ -120,6 +121,9 @@
 		foreach ($res as $i => $e) {
 			if ($i == 166) {
 				$classStat[$e]['count']++;
+				if ($e) {
+					$isClasses++;
+				}
 			}
 			if ($e > 0) {
 				if (!array_key_exists($i, $stat)) {
@@ -131,33 +135,36 @@
 		}
 		$sum++;
 	}
-	$classContent = '<div class="turn title ptitle" data-ic="1" data-class="class">
-						<span id="classfh" class="flesh fh">Классы</span>
-						<span id="classsh" class="flesh sh">‹</span>
-					</div>
-					<div id="rollclass" class="roll"><table align="center" class="ptable">
-					<tbody>';
-	foreach ($classStat as $i => $e) {
-		$img = 0;
-		$name = $e['class'];
-		$pr = round($e['count'] / $sum * 100, 2);
-		$classContent .= "
-			<tr class='class perks' data-pid='$i'>
-				<td>
-					<img align ='left' class ='image_perks' src='statistic/images/perks/$img.png'>
-				</td>
-				<td class='td'>$name</td>
-				<td class='td'>$pr%</td>
-			</tr>";
+	$perkContent = "";
+	if ($isClasses) {
+		$classContent = '<div class="turn title ptitle" data-ic="1" data-class="class">
+							<span id="classfh" class="flesh fh">Классы</span>
+							<span id="classsh" class="flesh sh">‹</span>
+						</div>
+						<div id="rollclass" class="roll"><table align="center" class="ptable">
+						<tbody>';
+		foreach ($classStat as $i => $e) {
+			$img = 0;
+			$name = $e['class'];
+			$pr = round($e['count'] / $sum * 100, 2);
+			$classContent .= "
+				<tr class='class perks' data-pid='$i'>
+					<td>
+						<img align ='left' class ='image_perks' src='statistic/images/perks/$img.png'>
+					</td>
+					<td class='td'>$name</td>
+					<td class='td'>$pr%</td>
+				</tr>";
+		}
+		$classContent.= '</tbody></table></div>';
+		$perkContent .= $classContent;
 	}
-	$content = $classContent;
-	$content .= '</tbody></table></div>
-				<div class="turn title ptitle" data-ic="1" data-class="trait">
+	$perkContent .= '<div class="turn title ptitle" data-ic="1" data-class="trait">
 					<span id="traitfh" class="flesh fh">Трейты</span>
 					<span id="traitsh" class="flesh sh">‹</span>
 				</div>
 				<div id="rolltrait" class="roll"><table align="center" class="ptable">';
-	$content .= '<tbody>';
+	$perkContent .= '<tbody>';
 	$class = 'trait';
 	$num = 1;
 	foreach ($perk as $i => $e) {
@@ -172,7 +179,7 @@
 		if (!file_exists("statistic/images/perks/$id.png")) {
 			$img = 0;
 		}
-		$content .= "
+		$perkContent .= "
 			<tr class='$class perks' data-pid='$id' data-num='$i'>
 				<td>
 					<img align ='left' class ='image_perks' src='statistic/images/perks/$img.png'" .
@@ -182,7 +189,7 @@
 				<td class='td'>$pr%</td>
 			</tr>";
 		if ($i == 15) {
-			$content .= '</tbody></table></div>
+			$perkContent .= '</tbody></table></div>
 					<table align="center" class="ptable">
 						<tr class="perks">
 							<td class="th" colspan="3">
@@ -193,9 +200,9 @@
 		}
 		$num++;
 	}
-	$content .= '</tbody>';
+	$perkContent .= '</tbody>';
 
-	$content .= "<tr style='background-color:#444444;border-bottom:none;'><td></td><td class='td'>Всего данных</td><td class='td'>$sum</td></tr></table>";
+	$perkContent .= "<tr style='background-color:#444444;border-bottom:none;'><td></td><td class='td'>Всего данных</td><td class='td'>$sum</td></tr></table>";
 ?>
 	<div align="center" class="block" style="margin: 4px 0px;">Фильтр по <?=$typeStat?> игроков</div>
 	<div align="center">
@@ -222,10 +229,11 @@
 		<input id="uncheck" type="checkbox" checked><label for="uncheck">uncheckall</label>
 	</div>
 	<script>console.log("<?=$countBrokenStr?>")</script>
+	<script src="statistic/js/perktype_<?=($sess < 25 ? 25 : $sess)?>s.js?<?=$version?>"></script>
 	<div align="center" class="block">
 		<?
 		if ($sum > 15) {
-			echo $content;
+			echo $perkContent;
 		} else {
 			echo "<p id='nopes'>Недостаточно данных для вывода статистики</p>";
 		}

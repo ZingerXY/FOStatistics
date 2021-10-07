@@ -71,7 +71,7 @@
 		}
 ?>
 	<div class="title">
-		Stats of <?=$sess?> session
+		Stats of <?=$sess?> session <?=($sess == 24 ? '(проёбана)' : '')?>
 	</div>
 	<div class="block">
 		<table align='center' id='table' class='table'>

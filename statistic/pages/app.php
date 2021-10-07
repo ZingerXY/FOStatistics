@@ -33,8 +33,10 @@
 			$countBrokenStr++;
 			continue;
 		}
-		if ((int) $res[$statPerk]) {
-			$statChars[] = $row["id"];
+		if (count($res) >= $statPerk) {
+			if ((int) $res[$statPerk]) {
+				$statChars[] = $row["id"];
+			}
 		}
 	}
 
