@@ -30,7 +30,7 @@
 					</div>
 				</div>
 			</div>
-			<script src="statistic/js/app.js"></script>
+			<script src="statistic/js/app.js?<?=$version?>"></script>
 		</body>
 	</html>
 <?php
