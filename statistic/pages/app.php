@@ -7,6 +7,7 @@
 	// $version = time(); /* Для разработки */
 	$version = "26.1";
 
+	// include_once "config.php";
 	include_once "../../config.php";
 
 	mysqli_query($link, "SET NAMES utf8");
