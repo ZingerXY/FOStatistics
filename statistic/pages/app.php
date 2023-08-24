@@ -5,7 +5,7 @@
 	ini_set('display_startup_errors', 1);
 	*/
 	// $version = time(); /* Для разработки */
-	$version = "26.1";
+	$version = "28";
 
 	// include_once "config.php";
 	include_once "../../config.php";
@@ -21,7 +21,7 @@
 		'flags' => FILTER_FLAG_ALLOW_OCTAL,
 	];
 	// Текущая ссесия
-	$sess = '26';
+	$sess = '28';
 	if (isset($_REQUEST['s'])) {
 		$sess = filter_var(def($_REQUEST['s']), FILTER_VALIDATE_INT, $filter);
 	}

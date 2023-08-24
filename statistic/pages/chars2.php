@@ -26,7 +26,7 @@
 		$result = mysqli_query($link, $query);
 		for ($data_kills=[]; $row = mysqli_fetch_assoc($result); $data_kills[] = $row);
 
-		$query = "SELECT serv{$sess}_chars.id AS id, serv{$sess}_chars.name AS char_name FROM serv{$sess}_chars";
+		$query = "SELECT chars.id AS id, chars.name AS char_name, perks.id AS build FROM serv{$sess}_chars chars LEFT JOIN serv{$sess}_perks AS perks ON chars.id = perks.id";
 
 		$result = mysqli_query($link, $query);
 
@@ -39,7 +39,8 @@
 				"deaths" => 0,
 				"raiting" => 0,
 				"armorCoefficient" => [],
-				"abuse" => []
+				"abuse" => [],
+				"build" => $row["build"]
 			];
 		}
 
@@ -54,7 +55,7 @@
 		$content = "";
 		$num = 1;
 		foreach ($allstats as $schar) {
-			if ($schar["kills"] == 0 && $schar["deaths"] == 0) {
+			if (!$schar["build"] && $schar["kills"] == 0 && $schar["deaths"] == 0) {
 				continue;
 			}
 			$resreit = round($schar['raiting'], 2);
